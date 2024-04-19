@@ -23,6 +23,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 457ed98115de241fb8cbf1e513db148b
+    m_Address: Paper Knight.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2c9e8330ec11a4dc8bd88341d272481c
+    m_Address: Rock Knight.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c4e496ddc8dd41bfa15b9e05f37529f
+    m_Address: Scissors Knight.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:

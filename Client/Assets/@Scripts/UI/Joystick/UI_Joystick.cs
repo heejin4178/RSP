@@ -20,12 +20,11 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        // Debug.Log("OnPointerClick");
+        
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        // Debug.Log("OnPointerDown");
         _background.transform.position = eventData.position;
         _handler.transform.position = eventData.position;
         _touchPosition = eventData.position;
@@ -33,7 +32,6 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        // Debug.Log("OnPointerUp");
         _handler.transform.position = _touchPosition;
         moveDir = Vector2.zero;
 
@@ -42,7 +40,6 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Debug.Log("OnDrag");
         Vector2 touchDir = eventData.position - _touchPosition;
         
         float moveDist = Mathf.Min(touchDir.magnitude, _joystickRadius);

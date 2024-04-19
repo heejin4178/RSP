@@ -14,17 +14,11 @@ public class GameScene : BaseScene
     {
         base.Init();
         
-        SceneType = Define.Scene.Game;
+        Managers.Network.Init();
         
-        Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) =>
-        {
-            Debug.Log($"{key} {count}/{totalCount}");
+        SceneType = Define.Scene.Game;
 
-            if (count == totalCount)
-            {
-                StartLoaded();
-            }
-        });
+        StartLoaded();
         
         // Screen.SetResolution(1024, 768, false);
 
@@ -57,7 +51,6 @@ public class GameScene : BaseScene
         
         var joystick = Managers.Resource.Instantiate("UI_Joystick.prefab");
         joystick.name = "@UI_Joystick";
-        joystick.GetOrAddComponent<UI_Joystick>();
         
         var map = Managers.Resource.Instantiate("Map.prefab");
         map.name = "@Map";

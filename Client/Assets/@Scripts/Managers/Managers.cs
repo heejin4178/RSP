@@ -7,12 +7,12 @@ public class Managers : MonoBehaviour
 
     #region Contents
     // private MapManager _map = new MapManager();
-    // private ObjectManager _obj = new ObjectManager();
-    // private NetworkManager _network = new NetworkManager();
+    private ObjectManager _obj = new ObjectManager();
+    private NetworkManager _network = new NetworkManager();
 
     // public static MapManager Map => Instance._map;
-    // public static ObjectManager Object => Instance._obj;
-    // public static NetworkManager Network => Instance._network;
+    public static ObjectManager Object => Instance._obj;
+    public static NetworkManager Network => Instance._network;
     #endregion
     
     
@@ -42,7 +42,7 @@ public class Managers : MonoBehaviour
     void Update()
     {
         // _input.OnUpdate();
-        // _network.Update();
+        _network.Update();
     }
 
     static void Init()

@@ -1,0 +1,10 @@
+#!/bin/bash
+# protoc --csharp_out=/Users/heejinkim/mmo_unity_part7/Common/protoc-3.12.3-win64/bin /Users/heejinkim/mmo_unity_part7/Common/protoc-3.12.3-win64/bin/Protocol.proto --proto_path=/Users/heejinkim/mmo_unity_part7/Common/protoc-3.12.3-win64/bin
+
+# Protocol.cs 파일을 클라이언트와 서버에 복사
+cp /Users/heejinkim/mmo_unity_part7/Common/protoc-3.12.3-win64/bin/Protocol.cs /Users/heejinkim/mmo_unity_part7/mmo_unity_part7/Assets/Scripts/Packet
+cp /Users/heejinkim/mmo_unity_part7/Common/protoc-3.12.3-win64/bin/Protocol.cs /Users/heejinkim/mmo_unity_part7/Server/Server/Packet
+
+# ClientPacketManager.cs와 ServerPacketManager.cs 파일을 각각 클라이언트와 서버에 복사
+cp /Users/heejinkim/mmo_unity_part7/Server/PacketGenerator/bin/ClientPacketManager.cs /Users/heejinkim/mmo_unity_part7/mmo_unity_part7/Assets/Scripts/Packet
+cp /Users/heejinkim/mmo_unity_part7/Server/PacketGenerator/bin/ServerPacketManager.cs /Users/heejinkim/mmo_unity_part7/Server/Server/Packet

@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: UI_Prefabs
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: UI_Prefabs
   m_Data:
     m_SerializedData: []
   m_GUID: 6752bfa9575e74bc7a2f16355becb76c
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 9cb72d3f05c654f6abab5174b52a902f
+    m_Address: UI_Joystick.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:

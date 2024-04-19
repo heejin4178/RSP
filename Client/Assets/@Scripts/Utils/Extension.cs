@@ -16,6 +16,11 @@ namespace Utils
         // {
         //     UI_Base.BindEvent(go, action, type);
         // }
+        
+        public static bool IsValid(this BaseController bc)
+        {
+            return bc != null && bc.isActiveAndEnabled;
+        }
 
         public static bool IsValid(this GameObject go)
         {

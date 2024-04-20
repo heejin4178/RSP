@@ -47,14 +47,14 @@ class PacketHandler
 		if (go == null)
 			return;
 		
-		if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
-			return;
+		// if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
+		// 	return;
 
 		BaseController bc = go.GetComponent<BaseController>();
 		if (bc == null)
 			return;
 
-		// bc.PosInfo = movePacket.PosInfo;
+		bc.PosInfo = movePacket.PosInfo;
 	}
 	
 	public static void S_SkillHandler(PacketSession session, IMessage packet)

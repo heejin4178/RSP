@@ -1,0 +1,2 @@
+#!/bin/bash
+protoc --csharp_out=/Users/heejinkim/RSP/Common/protoc-3.12.3/bin /Users/heejinkim/RSP/Common/protoc-3.12.3/bin/Protocol.proto --proto_path=/Users/heejinkim/RSP/Common/protoc-3.12.3/bin

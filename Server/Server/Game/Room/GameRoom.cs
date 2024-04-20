@@ -11,7 +11,6 @@ namespace Server.Game
         public int RoomId { get; set; }
         
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
-        private Dictionary<int, Monster> _monsters = new Dictionary<int, Monster>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
         public Map Map { get; private set; } = new Map();
@@ -21,18 +20,16 @@ namespace Server.Game
             Map.LoadMap(mapId, "../../../../../Common/MapData");
             
             // TEMP
-            Monster monster = ObjectManager.Instance.Add<Monster>();
-            monster.CellPos = new Vector2Int(5, 5);
-            Push(EnterGame, monster);
+            // Push(EnterGame, monster);
         }
 
         // 누군가 주기적으로 호출해줘야 한다.
         public void Update()
         {
-            foreach (Monster monster in _monsters.Values)
-            {
-                monster.Update();
-            }
+            // foreach (Monster monster in _monsters.Values)
+            // {
+            //     monster.Update();
+            // }
             
             foreach (Projectile projectile in _projectiles.Values)
             {
@@ -55,7 +52,7 @@ namespace Server.Game
                 _players.Add(gameObject.Id, player);
                 player.Room = this;
                 
-                Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y));
+                // Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y));
 
             
                 // 본인한테 정보 전송
@@ -73,8 +70,8 @@ namespace Server.Game
                             spawnPacket.Objects.Add(p.Info);
                     }
                     
-                    foreach (Monster m in _monsters.Values)
-                        spawnPacket.Objects.Add(m.Info);
+                    // foreach (Monster m in _monsters.Values)
+                    //     spawnPacket.Objects.Add(m.Info);
 
                     foreach (Projectile p in _projectiles.Values)
                         spawnPacket.Objects.Add(p.Info);
@@ -84,11 +81,11 @@ namespace Server.Game
             }
             else if (type == GameObjectType.Monster)
             {
-                Monster monster = gameObject as Monster;
-                _monsters.Add(gameObject.Id, monster);
-                monster.Room = this;
-                
-                Map.ApplyMove(monster, new Vector2Int(monster.CellPos.x, monster.CellPos.y));
+                // Monster monster = gameObject as Monster;
+                // _monsters.Add(gameObject.Id, monster);
+                // monster.Room = this;
+                //
+                // Map.ApplyMove(monster, new Vector2Int(monster.CellPos.x, monster.CellPos.y));
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -130,12 +127,12 @@ namespace Server.Game
             }
             else if (type == GameObjectType.Monster)
             {
-                Monster monster = null;
-                if (_monsters.Remove(objectId, out monster) == false)
-                    return;
-                
-                Map.ApplyLeave(monster);
-                monster.Room = null;
+                // Monster monster = null;
+                // if (_monsters.Remove(objectId, out monster) == false)
+                //     return;
+                //
+                // Map.ApplyLeave(monster);
+                // monster.Room = null;
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -168,15 +165,15 @@ namespace Server.Game
             ObjectInfo info = player.Info;
             
             // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosY != info.PosInfo.PosY)
+            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosZ != info.PosInfo.PosZ)
             {
-                if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosY)) == false)
-                    return;
+                // if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ)) == false)
+                //     return;
             }
 
             info.PosInfo.State = movePosInfo.State;
             info.PosInfo.MoveDir = movePosInfo.MoveDir;
-            Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosY));
+            // Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ));
 
             // 다른 플레이어한테도 알려준다.
             S_Move resMovePacket = new S_Move();
@@ -212,31 +209,31 @@ namespace Server.Game
             {
                 case SkillType.SkillAuto:
                 {
-                    // 데미지 판정
-                    Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
-                    GameObject target = Map.Find(skillPos);
-                    if (target != null)
-                    {
-                        Console.WriteLine("Hit GameObject!");
-                    }
+                    // // 데미지 판정
+                    // // Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                    // GameObject target = Map.Find(skillPos);
+                    // if (target != null)
+                    // {
+                    //     Console.WriteLine("Hit GameObject!");
+                    // }
                 }
                 break;
                 
                 case SkillType.SkillProjectile:
                 {
                     // Arrow
-                    Arrow arrow = ObjectManager.Instance.Add<Arrow>();
-                    if (arrow == null)
-                        return;
+                    // Arrow arrow = ObjectManager.Instance.Add<Arrow>();
+                    // if (arrow == null)
+                    //     return;
 
-                    arrow.Owner = player;
-                    arrow.Data = skillData;
-                    arrow.PosInfo.State = CreatureState.Moving;
-                    arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
-                    arrow.PosInfo.PosX = player.PosInfo.PosX;
-                    arrow.PosInfo.PosY = player.PosInfo.PosY;
-                    arrow.Speed = skillData.Projectile.speed;
-                    Push(EnterGame, arrow);
+                    // arrow.Owner = player;
+                    // arrow.Data = skillData;
+                    // arrow.PosInfo.State = CreatureState.Moving;
+                    // arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
+                    // arrow.PosInfo.PosX = player.PosInfo.PosX;
+                    // arrow.PosInfo.PosZ = player.PosInfo.PosZ;
+                    // arrow.Speed = skillData.Projectile.speed;
+                    // Push(EnterGame, arrow);
                 }
                 break;
             }

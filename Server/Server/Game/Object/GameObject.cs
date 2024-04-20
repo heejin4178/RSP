@@ -54,44 +54,44 @@ namespace Server.Game
         
         public Vector2Int CellPos
         {
-            get
-            {
-                return new Vector2Int(PosInfo.PosX, PosInfo.PosY);
-            }
+            // get
+            // {
+            //     // return new Vector2Int(PosInfo.PosX, PosInfo.PosZ);
+            // }
             set
             {
                 PosInfo.PosX = value.x;
-                PosInfo.PosY = value.y;
+                PosInfo.PosZ = value.y;
             }
         }
 
-        public Vector2Int GetFrontCellPos()
-        {
-            return GetFrontCellPos(PosInfo.MoveDir);
-        }
+        // public Vector2Int GetFrontCellPos()
+        // {
+        //     return GetFrontCellPos(PosInfo.MoveDir);
+        // }
         
-        public Vector2Int GetFrontCellPos(MoveDir dir)
-        {
-            Vector2Int cellPos = CellPos;
-
-            switch (dir)
-            {
-                case MoveDir.Up:
-                    cellPos += Vector2Int.up;
-                    break;
-                case MoveDir.Down:
-                    cellPos += Vector2Int.down;
-                    break;
-                case MoveDir.Left:
-                    cellPos += Vector2Int.left;
-                    break;
-                case MoveDir.Right:
-                    cellPos += Vector2Int.right;
-                    break;
-            }
-
-            return cellPos;
-        }
+        // public Vector2Int GetFrontCellPos(MoveDir dir)
+        // {
+        //     Vector2Int cellPos = CellPos;
+        //
+        //     switch (dir)
+        //     {
+        //         case MoveDir.Up:
+        //             cellPos += Vector2Int.up;
+        //             break;
+        //         case MoveDir.Down:
+        //             cellPos += Vector2Int.down;
+        //             break;
+        //         case MoveDir.Left:
+        //             cellPos += Vector2Int.left;
+        //             break;
+        //         case MoveDir.Right:
+        //             cellPos += Vector2Int.right;
+        //             break;
+        //     }
+        //
+        //     return cellPos;
+        // }
         
         public static MoveDir GetDirFromVec(Vector2Int dir)
         {
@@ -141,7 +141,7 @@ namespace Server.Game
             PosInfo.State = CreatureState.Idle;
             PosInfo.MoveDir = MoveDir.Down;
             PosInfo.PosX = 0;
-            PosInfo.PosY = 0;
+            PosInfo.PosZ = 0;
             
             room.EnterGame(this);
         }

@@ -7,10 +7,12 @@ public class Managers : MonoBehaviour
 
     #region Contents
     // private MapManager _map = new MapManager();
+    private GameManager _game = new GameManager();
     private ObjectManager _obj = new ObjectManager();
     private NetworkManager _network = new NetworkManager();
 
     // public static MapManager Map => Instance._map;
+    public static GameManager Game => Instance._game;
     public static ObjectManager Object => Instance._obj;
     public static NetworkManager Network => Instance._network;
     #endregion

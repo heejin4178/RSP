@@ -106,14 +106,14 @@ public class Map
 		PositionInfo posInfo = gameObject.PosInfo;
 		if (posInfo.PosX < MinX || posInfo.PosX > MaxX)
 			return false;
-		if (posInfo.PosY < MinY || posInfo.PosY > MaxY)
+		if (posInfo.PosZ < MinY || posInfo.PosZ > MaxY)
 			return false;
 		
 		{
-			int x = posInfo.PosX - MinX;
-			int y = MaxY - posInfo.PosY;
-			if (_objects[y, x] == gameObject)
-				_objects[y, x] = null;
+			// int x = posInfo.PosX - MinX;
+			// int y = MaxY - posInfo.PosZ;
+			// if (_objects[y, x] == gameObject)
+			// 	_objects[y, x] = null;
 		}
 
 		return true;
@@ -140,7 +140,7 @@ public class Map
 		
 		// 실제 좌표 이동
 		posInfo.PosX = dest.x;
-		posInfo.PosY = dest.y;
+		posInfo.PosZ = dest.y;
 		
 		return true;
 	}

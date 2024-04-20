@@ -24,13 +24,11 @@ public class ObjectManager
         {
             // TODO : Data
             GameObject go = Managers.Resource.Instantiate("Scissors Knight.prefab");
-            // go.name = info.Name;
-            // _objects.Add(info.ObjectId, go);
-            //
-            // MyPlayer = go.GetComponent<MyPlayerController>();
-            // MyPlayer.Id = info.ObjectId;
-            // MyPlayer.PosInfo = info.PosInfo;
-            // MyPlayer.Stat = info.StatInfo;
+            go.name = info.Name;
+            _objects.Add(info.ObjectId, go);
+
+            MyPlayer = go.GetOrAddComponent<MyPlayerController>();
+            MyPlayer.Speed = 10.0f;
             // MyPlayer.SyncPos();
         }
         // else if (objectType == GameObjectType.Projectile)

@@ -31,6 +31,13 @@ enum GameObjectType {
   PROJECTILE = 3;
 }
 
+enum MoveDir {
+  Up = 0;
+  Down = 1;
+  Left = 2;
+  Right = 3;
+}
+
 enum SkillType {
   SKILL_NONE = 0;
   SKILL_AUTO = 1;
@@ -90,9 +97,9 @@ message ObjectInfo {
 
 message PositionInfo {
   CreatureState state = 1;
-  int32 posX = 2;
-  int32 posY = 3;
-  int32 posZ = 4;
+  MoveDir moveDir = 2;
+  float posX = 3;
+  float posZ = 4;
 }
 
 message StatInfo {

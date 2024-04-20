@@ -3,15 +3,44 @@ using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public class MyPlayerController : PlayerController
+public class MyPlayerController : CreatureController
 {
     private bool _moveKeyPressed = false;
     protected override bool Init()
     {
-        return base.Init();
+        if (base.Init() == false)
+            return false;
+        
+        Managers.Game.onMoveDirChanged += HandleOnMoveDirChanged;
+
+        return true;
+    }
+    
+    private void OnDestroy()
+    {
+        if (Managers.Game != null)
+            Managers.Game.onMoveDirChanged -= HandleOnMoveDirChanged;
+    }
+    
+    void HandleOnMoveDirChanged(Vector2 dir)
+    {
+        CreatureState = CreatureState.Moving;
+        MoveDir = dir;
     }
 
-    protected override void UpdateController()
+    protected override void UpdateMoving()
+    {
+        base.UpdateMoving();
+        // var myPlayer = Managers.Object.MyPlayer;
+        // myPlayer.CreatureState = CreatureState.Moving;
+        // myPlayer.CellPos = new Vector3(moveDir.x, 0, moveDir.y);
+        //
+        // C_Move movePacket = new C_Move();
+        // movePacket.PosInfo = myPlayer.PosInfo;
+        // Managers.Network.Send(movePacket);
+    }
+
+    public override void UpdateController()
     {
         // switch (State)
         // {
@@ -22,7 +51,7 @@ public class MyPlayerController : PlayerController
         //         GetDirInput();
         //         break;
         // }
-        // base.UpdateController();
+        base.UpdateController();
     }
     
     // protected override void UpdateIdle()

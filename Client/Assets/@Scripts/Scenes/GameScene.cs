@@ -54,8 +54,6 @@ public class GameScene : BaseScene
         
         var map = Managers.Resource.Instantiate("Map.prefab");
         map.name = "@Map";
-
-        // Camera.main.GetComponent<CameraController>().Target = player.gameObject;
         
         // foreach (var playerData in Managers.Data.PlayerDic.Values)
         // {

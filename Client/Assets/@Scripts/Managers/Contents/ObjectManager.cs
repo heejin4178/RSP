@@ -34,6 +34,8 @@ public class ObjectManager
                 MyPlayer.Id = info.ObjectId;
                 MyPlayer.PosInfo = info.PosInfo;
                 // MyPlayer.SyncPos();
+                
+                Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(go);
             }
             else
             {

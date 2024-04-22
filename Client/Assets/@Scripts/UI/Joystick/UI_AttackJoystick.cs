@@ -1,11 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using Google.Protobuf.Protocol;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] private Image _background;
     [SerializeField] private Image _handler;
@@ -21,7 +20,7 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        
+        Managers.Game.AttackKeyPressed = true;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -37,7 +36,7 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
         moveDir = Vector2.zero;
 
         Managers.Game.MoveDir = Vector2.zero;
-        Managers.Game.MoveKeyPressed = false;
+        Managers.Game.AttackKeyPressed = true;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -49,6 +48,6 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
         Vector2 newPosition = _touchPosition + moveDir * moveDist;
         _handler.transform.position = newPosition;
         
-        Managers.Game.MoveDir = moveDir;
+        // TODO : 투사체 경로 표시 작업
     }
 }

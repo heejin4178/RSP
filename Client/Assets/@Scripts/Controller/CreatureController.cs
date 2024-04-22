@@ -54,7 +54,7 @@ public class CreatureController : BaseController
     }
     protected virtual void UpdateSkill()
     {
-        
+        _animator.Play("ATTACK");
     }
     protected virtual void UpdateMoving()
     {

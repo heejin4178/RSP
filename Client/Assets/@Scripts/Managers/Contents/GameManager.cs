@@ -36,6 +36,18 @@ public class GameManager
         }
     }
 
+    private bool _attackKeyPressed = false;
+    public event Action onAttackPointerUp;
+    
+    public bool AttackKeyPressed
+    {
+        get => _attackKeyPressed;
+        set
+        {
+            _attackKeyPressed = value;
+            onAttackPointerUp.Invoke();
+        }
+    }
 
     #endregion
     
@@ -53,7 +65,7 @@ public class GameManager
     }
     
     private bool _moveKeyPressed = false;
-    public event Action onPointerUp;
+    public event Action onMovePointerUp;
     
     public bool MoveKeyPressed
     {
@@ -61,7 +73,7 @@ public class GameManager
         set
         {
             _moveKeyPressed = value;
-            onPointerUp.Invoke();
+            onMovePointerUp.Invoke();
         }
     }
     

@@ -6,13 +6,17 @@ using UnityEngine;
 public class MyPlayerController : CreatureController
 {
     private bool _moveKeyPressed = false;
+    private bool _attackKeyPressed = false;
+    private Coroutine _coSkillCooltime;
+    
     protected override bool Init()
     {
         if (base.Init() == false)
             return false;
         
         Managers.Game.onMoveDirChanged += HandleOnMoveDirChanged;
-        Managers.Game.onPointerUp += HandleOnPointerUp;
+        Managers.Game.onMovePointerUp += HandleOnMovePointerUp;
+        Managers.Game.onAttackPointerUp += HandleOnAttackPressed;
 
         return true;
     }
@@ -22,7 +26,8 @@ public class MyPlayerController : CreatureController
         if (Managers.Game != null)
         {
             Managers.Game.onMoveDirChanged -= HandleOnMoveDirChanged;
-            Managers.Game.onPointerUp -= HandleOnPointerUp;
+            Managers.Game.onMovePointerUp -= HandleOnMovePointerUp;
+            Managers.Game.onAttackPointerUp -= HandleOnAttackPressed;
         }
     }
     
@@ -33,14 +38,41 @@ public class MyPlayerController : CreatureController
         _moveKeyPressed = true;
     }
     
-    void HandleOnPointerUp()
+    void HandleOnMovePointerUp()
     {            
         _moveKeyPressed = false;
+    }
+    
+    void HandleOnAttackPressed()
+    {            
+        _attackKeyPressed = true;
     }
 
     protected override void UpdateIdle()
     {
         base.UpdateIdle();
+        
+        // 스킬 상태로 갈지 확인
+        if (_coSkillCooltime == null && _attackKeyPressed)
+        {
+            State = CreatureState.Skill;
+            _attackKeyPressed = false;
+            Debug.Log("Attack!");
+            
+            // TODO : 공격 패킷 보내기
+            // C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            // skill.Info.SkillId = 2;
+            // Managers.Network.Send(skill);
+
+            _coSkillCooltime = StartCoroutine("CoInputCooltime", 0.5f);
+        }
+    }
+    
+    IEnumerator CoInputCooltime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _coSkillCooltime = null;
+        State = CreatureState.Idle;
     }
 
     protected override void UpdateMoving()

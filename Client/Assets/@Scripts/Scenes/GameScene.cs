@@ -49,8 +49,11 @@ public class GameScene : BaseScene
     {
         // var player = Managers.Object.Spawn<PlayerController>(Vector3.zero);
         
-        var joystick = Managers.Resource.Instantiate("UI_Joystick.prefab");
-        joystick.name = "@UI_Joystick";
+        var moveJoystick = Managers.Resource.Instantiate("UI_MoveJoystick.prefab");
+        moveJoystick.name = "@UI_MoveJoystick";
+        
+        var attackJoystick = Managers.Resource.Instantiate("UI_AttackJoystick.prefab");
+        attackJoystick.name = "@UI_AttackJoystick";
         
         var map = Managers.Resource.Instantiate("Map.prefab");
         map.name = "@Map";

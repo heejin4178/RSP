@@ -17,10 +17,10 @@ public class GameScene : BaseScene
         Managers.Network.Init();
         
         SceneType = Define.Scene.Game;
+        
+        Screen.SetResolution(1024, 768, false);
 
         StartLoaded();
-        
-        // Screen.SetResolution(1024, 768, false);
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";

@@ -38,6 +38,9 @@ public class BaseController : MonoBehaviour
             Stat.Hp = value;
         }
     }
+    
+    protected bool _updated = false;
+
     public Vector3 CellPos
     {
         get
@@ -51,6 +54,7 @@ public class BaseController : MonoBehaviour
             
             PosInfo.PosX = value.x;
             PosInfo.PosZ = value.z;
+            _updated = true;
         }
     }
     
@@ -65,7 +69,7 @@ public class BaseController : MonoBehaviour
             PosInfo.State = value;
         }
     }
-    
+
     private PositionInfo _PositionInfo = new PositionInfo();
 
     public PositionInfo PosInfo
@@ -76,6 +80,7 @@ public class BaseController : MonoBehaviour
             if (_PositionInfo.Equals(value))
                 return;
             
+            CellPos = new Vector3(value.PosX, 0, value.PosZ);
             State = value.State;
         }
     }

@@ -37,6 +37,7 @@ public class UI_Joystick : MonoBehaviour, IPointerClickHandler, IPointerDownHand
         moveDir = Vector2.zero;
 
         Managers.Game.MoveDir = Vector2.zero;
+        Managers.Game.MoveKeyPressed = false;
     }
 
     public void OnDrag(PointerEventData eventData)

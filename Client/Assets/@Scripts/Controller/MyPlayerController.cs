@@ -24,20 +24,25 @@ public class MyPlayerController : CreatureController
     
     void HandleOnMoveDirChanged(Vector2 dir)
     {
-        CreatureState = CreatureState.Moving;
+        State = CreatureState.Moving;
         MoveDir = dir;
     }
 
     protected override void UpdateMoving()
     {
+        Vector3 dir = MoveDir * Speed * Time.deltaTime;
+        Vector3 destPose = new Vector3(dir.x, 0, dir.y);
+        CellPos = destPose + transform.position;
+        
         base.UpdateMoving();
-        // var myPlayer = Managers.Object.MyPlayer;
-        // myPlayer.CreatureState = CreatureState.Moving;
-        // myPlayer.CellPos = new Vector3(moveDir.x, 0, moveDir.y);
-        //
-        // C_Move movePacket = new C_Move();
-        // movePacket.PosInfo = myPlayer.PosInfo;
-        // Managers.Network.Send(movePacket);
+
+        if (_updated)
+        {
+            C_Move movePacket = new C_Move();
+            movePacket.PosInfo = PosInfo;
+            Managers.Network.Send(movePacket);
+            _updated = false;
+        }
     }
 
     public override void UpdateController()

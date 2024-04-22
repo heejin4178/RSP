@@ -172,7 +172,6 @@ namespace Server.Game
             }
 
             info.PosInfo.State = movePosInfo.State;
-            info.PosInfo.MoveDir = movePosInfo.MoveDir;
             // Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ));
 
             // 다른 플레이어한테도 알려준다.

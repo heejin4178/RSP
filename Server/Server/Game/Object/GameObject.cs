@@ -29,12 +29,6 @@ namespace Server.Game
             set { Stat.Hp = Math.Clamp(value, 0 , Stat.MaxHp); }
         }
 
-        public MoveDir Dir
-        {
-            get { return PosInfo.MoveDir; }
-            set { PosInfo.MoveDir = value; }
-        }
-
         public CreatureState State
         {
             get { return PosInfo.State; }
@@ -92,18 +86,6 @@ namespace Server.Game
         //
         //     return cellPos;
         // }
-        
-        public static MoveDir GetDirFromVec(Vector2Int dir)
-        {
-            if (dir.x > 0)
-                return MoveDir.Right;
-            else if (dir.x < 0)
-                return MoveDir.Left;
-            else if (dir.y > 0)
-                return MoveDir.Up;
-            else
-                return MoveDir.Down;
-        }
 
         public virtual void OnDamaged(GameObject attacker, int damage)
         {
@@ -139,7 +121,6 @@ namespace Server.Game
             
             Stat.Hp = Stat.MaxHp;
             PosInfo.State = CreatureState.Idle;
-            PosInfo.MoveDir = MoveDir.Down;
             PosInfo.PosX = 0;
             PosInfo.PosZ = 0;
             

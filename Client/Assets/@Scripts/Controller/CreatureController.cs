@@ -20,17 +20,6 @@ public class CreatureController : BaseController
     }
     
     #region State Pattern
-    private CreatureState _creatureState = CreatureState.Idle;
-    public virtual CreatureState CreatureState
-    {
-        get => _creatureState;
-        set
-        {
-            _creatureState = value;
-            UpdateAnimation();
-        }
-    }
-
     protected Animator _animator;
     public virtual void UpdateAnimation()
     {
@@ -41,7 +30,7 @@ public class CreatureController : BaseController
     {
         base.UpdateController();
 
-        switch (CreatureState)
+        switch (State)
         {
             case CreatureState.Idle:
                 UpdateIdle();
@@ -68,32 +57,11 @@ public class CreatureController : BaseController
     }
     protected virtual void UpdateMoving()
     {
-        // Vector3 moveDir = CellPos - transform.position;
-        //
-        // // 도착 여부 체크
-        // float dist = moveDir.magnitude;
-        // if (dist < Speed * Time.deltaTime)
-        // {
-        //     transform.position = CellPos;
-        // }
-        // else
-        // {
-        //     transform.position += moveDir.normalized * Speed * Time.deltaTime;
-        //     State = CreatureState.Moving;
-        // }
+        Vector3 moveDir = CellPos - transform.position;
+        Vector3 dir = moveDir.normalized * Speed * Time.deltaTime;
+        Vector3 destPose = new Vector3(dir.x, 0, dir.z);
         
-        
-        
-        Vector3 dir = MoveDir * Speed * Time.deltaTime;
-        transform.position += new Vector3(dir.x, 0, dir.y);
-        
-        Debug.Log($"MoveDir {MoveDir}");
-        Debug.Log($"dir {dir}");
-        
-        // if (_moveDir != Vector2.zero)
-        // {
-        //     _indicator.eulerAngles = new Vector3(0, 0, Mathf.Atan2(-dir.x, dir.y) * 180 / Mathf.PI);
-        // }
+        transform.position += destPose;
         
         GetComponent<Rigidbody>().velocity = Vector3.zero;
     }

@@ -15,20 +15,21 @@ public class CreatureController : BaseController
     protected override bool Init()
     {
         base.Init();
+        
+        _animator = GetComponent<Animator>();
 
         return true;
     }
     
     #region State Pattern
     protected Animator _animator;
-    public virtual void UpdateAnimation()
-    {
-        
-    }
 
     public override void UpdateController()
     {
         base.UpdateController();
+        
+        if (_animator == null)
+            return;
 
         switch (State)
         {
@@ -49,7 +50,7 @@ public class CreatureController : BaseController
 
     protected virtual void UpdateIdle()
     {
-        
+        _animator.Play("IDLE");
     }
     protected virtual void UpdateSkill()
     {
@@ -57,12 +58,15 @@ public class CreatureController : BaseController
     }
     protected virtual void UpdateMoving()
     {
+        _animator.Play("RUN");
+        
         Vector3 moveDir = CellPos - transform.position;
         Vector3 dir = moveDir.normalized * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.z);
         
         transform.position += destPose;
-        
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
+
         GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
     protected virtual void UpdateDead()
@@ -71,7 +75,6 @@ public class CreatureController : BaseController
     }
 
     #endregion
-
     public virtual void OnDamaged(BaseController attacker, int damage)
     {
         if (Hp <= 0)
@@ -86,6 +89,11 @@ public class CreatureController : BaseController
     }
 
     protected virtual void OnDead()
+    {
+        
+    }
+    
+    protected virtual void CheckUpdatedFlag()
     {
         
     }

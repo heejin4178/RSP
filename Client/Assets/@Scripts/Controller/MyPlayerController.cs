@@ -12,6 +12,7 @@ public class MyPlayerController : CreatureController
             return false;
         
         Managers.Game.onMoveDirChanged += HandleOnMoveDirChanged;
+        Managers.Game.onPointerUp += HandleOnPointerUp;
 
         return true;
     }
@@ -19,23 +20,48 @@ public class MyPlayerController : CreatureController
     private void OnDestroy()
     {
         if (Managers.Game != null)
+        {
             Managers.Game.onMoveDirChanged -= HandleOnMoveDirChanged;
+            Managers.Game.onPointerUp -= HandleOnPointerUp;
+        }
     }
     
     void HandleOnMoveDirChanged(Vector2 dir)
     {
         State = CreatureState.Moving;
         MoveDir = dir;
+        _moveKeyPressed = true;
+    }
+    
+    void HandleOnPointerUp()
+    {            
+        _moveKeyPressed = false;
+    }
+
+    protected override void UpdateIdle()
+    {
+        base.UpdateIdle();
     }
 
     protected override void UpdateMoving()
     {
+        if (_moveKeyPressed == false)
+        {
+            State = CreatureState.Idle;
+            CheckUpdatedFlag();
+            return;
+        }
+        
         Vector3 dir = MoveDir * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.y);
         CellPos = destPose + transform.position;
-        
         base.UpdateMoving();
-
+        
+        CheckUpdatedFlag();
+    }
+    
+    protected override void CheckUpdatedFlag()
+    {
         if (_updated)
         {
             C_Move movePacket = new C_Move();
@@ -120,52 +146,5 @@ public class MyPlayerController : CreatureController
     //     }
     // }
     //
-    // protected override void MoveToNextPos()
-    // { 
-    //     if (_moveKeyPressed == false)
-    //     {
-    //         State = CreatureState.Idle;
-    //         CheckUpdatedFlag();
-    //         return;
-    //     }
-    //     
-    //     Vector3Int destPose = CellPos;
-    //         
-    //     switch (Dir)
-    //     {
-    //         case MoveDir.Up:
-    //             destPose += Vector3Int.up;
-    //             break;
-    //         case MoveDir.Down:
-    //             destPose += Vector3Int.down;
-    //             break;
-    //         case MoveDir.Left:
-    //             destPose += Vector3Int.left;
-    //             break;
-    //         case MoveDir.Right:
-    //             destPose += Vector3Int.right;
-    //             break;
-    //     }
-    //         
-    //     if (Managers.Map.CanGo(destPose))
-    //     {
-    //         if (Managers.Object.FindCreature(destPose) == null)
-    //         {
-    //             CellPos = destPose;
-    //         }
-    //     }
-    //     
-    //     CheckUpdatedFlag();
-    // }
-    //
-    // protected override void CheckUpdatedFlag()
-    // {
-    //     if (_updated)
-    //     {
-    //         C_Move movePacket = new C_Move();
-    //         movePacket.PosInfo = PosInfo;
-    //         Managers.Network.Send(movePacket);
-    //         _updated = false;
-    //     }
-    // }
+    
 }

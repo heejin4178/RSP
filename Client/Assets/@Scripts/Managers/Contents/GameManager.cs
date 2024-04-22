@@ -51,6 +51,20 @@ public class GameManager
             onMoveDirChanged.Invoke(_moveDir);
         }
     }
+    
+    private bool _moveKeyPressed = false;
+    public event Action onPointerUp;
+    
+    public bool MoveKeyPressed
+    {
+        get => _moveKeyPressed;
+        set
+        {
+            _moveKeyPressed = value;
+            onPointerUp.Invoke();
+        }
+    }
+    
     #endregion
 
 }

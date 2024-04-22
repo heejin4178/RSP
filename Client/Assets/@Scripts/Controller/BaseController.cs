@@ -8,7 +8,7 @@ public class BaseController : MonoBehaviour
 {
     public int Id { get; set; }
 
-    private StatInfo _stat = new StatInfo { Speed = 30.0f };
+    private StatInfo _stat = new StatInfo { Speed = 8.0f };
 
     public virtual StatInfo Stat
     {
@@ -50,7 +50,10 @@ public class BaseController : MonoBehaviour
         set
         {
             if (PosInfo.PosX == value.x && PosInfo.PosZ == value.z)
+            {
+                State = CreatureState.Idle;
                 return;
+            }
             
             PosInfo.PosX = value.x;
             PosInfo.PosZ = value.z;
@@ -67,6 +70,7 @@ public class BaseController : MonoBehaviour
                 return;
 
             PosInfo.State = value;
+            _updated = true;
         }
     }
 

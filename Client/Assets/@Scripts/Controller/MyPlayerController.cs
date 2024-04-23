@@ -16,7 +16,7 @@ public class MyPlayerController : CreatureController
         
         Managers.Game.onMoveDirChanged += HandleOnMoveDirChanged;
         Managers.Game.onMovePointerUp += HandleOnMovePointerUp;
-        Managers.Game.onAttackPointerUp += HandleOnAttackPressed;
+        Managers.Game.onAttackPointerUp += HandleOnAttackPointerUp;
 
         return true;
     }
@@ -27,7 +27,7 @@ public class MyPlayerController : CreatureController
         {
             Managers.Game.onMoveDirChanged -= HandleOnMoveDirChanged;
             Managers.Game.onMovePointerUp -= HandleOnMovePointerUp;
-            Managers.Game.onAttackPointerUp -= HandleOnAttackPressed;
+            Managers.Game.onAttackPointerUp -= HandleOnAttackPointerUp;
         }
     }
     
@@ -43,7 +43,7 @@ public class MyPlayerController : CreatureController
         _moveKeyPressed = false;
     }
     
-    void HandleOnAttackPressed()
+    void HandleOnAttackPointerUp()
     {            
         _attackKeyPressed = true;
     }
@@ -55,7 +55,6 @@ public class MyPlayerController : CreatureController
         // 스킬 상태로 갈지 확인
         if (_coSkillCooltime == null && _attackKeyPressed)
         {
-            State = CreatureState.Skill;
             _attackKeyPressed = false;
             Debug.Log("Attack!");
             
@@ -64,15 +63,16 @@ public class MyPlayerController : CreatureController
             // skill.Info.SkillId = 2;
             // Managers.Network.Send(skill);
 
-            _coSkillCooltime = StartCoroutine("CoInputCooltime", 0.5f);
+            _coSkillCooltime = StartCoroutine("CoInputCooltime", 1.5f);
         }
     }
     
     IEnumerator CoInputCooltime(float time)
     {
+        State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
-        _coSkillCooltime = null;
         State = CreatureState.Idle;
+        _coSkillCooltime = null;
     }
 
     protected override void UpdateMoving()

@@ -20,7 +20,7 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        Managers.Game.AttackKeyPressed = true;
+        // Managers.Game.AttackKeyPressed = true;
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -34,8 +34,7 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
     {
         _handler.transform.position = _touchPosition;
         moveDir = Vector2.zero;
-
-        Managers.Game.MoveDir = Vector2.zero;
+        
         Managers.Game.AttackKeyPressed = true;
     }
 

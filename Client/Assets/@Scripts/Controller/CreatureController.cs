@@ -49,7 +49,7 @@ public class CreatureController : BaseController
     }
 
     protected virtual void UpdateIdle()
-    {
+    { 
         _animator.Play("IDLE");
     }
     protected virtual void UpdateSkill()

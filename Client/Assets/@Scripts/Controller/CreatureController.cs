@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CreatureController : BaseController
 {
-    protected Coroutine _coSkill;
     protected bool _rangeSkill = false;
     
     Vector2 _moveDir = Vector2.zero;
@@ -59,13 +58,9 @@ public class CreatureController : BaseController
     {
         _animator.Play("ATTACK");
         
-        // 현재 회전 각도 가져오기
+        // 공격하는 방향 적용
         Quaternion currentRotation = transform.rotation;
-
-        // 목표 회전 각도 설정
         Quaternion targetRotation = Quaternion.Euler(0, Rotation, 0); // y 축만 회전하도록 설정
-
-        // Quaternion.Slerp를 사용하여 부드러운 회전 적용
         transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, 10 * Time.deltaTime);
     }
     protected virtual void UpdateMoving()
@@ -114,40 +109,5 @@ public class CreatureController : BaseController
             Managers.Network.Send(movePacket);
             _updated = false;
         }
-    }
-    
-    public virtual void UseSkill(int skillId)
-    {
-        if (skillId == 1)
-        {
-            _coSkill = StartCoroutine("CoStartPunch", 1.5f);
-        }
-        else if (skillId == 2)
-        {
-            _coSkill = StartCoroutine("CoStartShootArrow", 2.5f);
-        }
-    }
-    
-    IEnumerator CoStartPunch(float time)
-    {
-        // 대기 시간
-        _rangeSkill = false;
-        State = CreatureState.Skill;
-        // Debug.Log($"Player State {State}!!");
-        yield return new WaitForSeconds(time);
-        State = CreatureState.Idle;
-        _coSkill = null;
-        CheckUpdatedFlag();
-    }
-    
-    IEnumerator CoStartShootArrow(float time)
-    {
-        // 대기 시간
-        _rangeSkill = true;
-        State = CreatureState.Skill;
-        yield return new WaitForSeconds(time);
-        State = CreatureState.Idle;
-        _coSkill = null;
-        CheckUpdatedFlag();
     }
 }

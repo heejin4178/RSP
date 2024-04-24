@@ -71,7 +71,8 @@ class PacketHandler
 		PlayerController pc = go.GetComponent<PlayerController>();
 		if (pc != null)
 		{
-			pc.UseSkill(skillPacket.Info.SkillId);
+			pc.State = CreatureState.Skill;
+			// pc.UseSkill(skillPacket.Info.SkillId);
 		}
 	}
 	

@@ -7,7 +7,8 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PlayerController : CreatureController
-{
+{ 
+    private Coroutine _coSkill;
 
     protected override bool Init()
     {
@@ -27,38 +28,36 @@ public class PlayerController : CreatureController
         base.UpdateIdle();
     }
 
-    // public override void UseSkill(int skillId)
+    // public void UseSkill(int skillId)
     // {
     //     if (skillId == 1)
     //     {
-    //         _coSkill = StartCoroutine("CoStartPunch");
+    //         _coSkill = StartCoroutine("CoStartPunch", 1.5f);
     //     }
     //     else if (skillId == 2)
     //     {
-    //         _coSkill = StartCoroutine("CoStartShootArrow");
+    //         _coSkill = StartCoroutine("CoStartShootArrow", 2.5f);
     //     }
     // }
     //
-    // IEnumerator CoStartPunch()
+    // IEnumerator CoStartPunch(float time)
     // {
     //     // 대기 시간
     //     _rangeSkill = false;
     //     State = CreatureState.Skill;
-    //     Debug.Log($"Player State {State}!!");
-    //     yield return new WaitForSeconds(1.5f);
+    //     // Debug.Log($"Player State {State}!!");
+    //     yield return new WaitForSeconds(time);
     //     State = CreatureState.Idle;
     //     _coSkill = null;
-    //     CheckUpdatedFlag();
     // }
     //
-    // IEnumerator CoStartShootArrow()
+    // IEnumerator CoStartShootArrow(float time)
     // {
     //     // 대기 시간
     //     _rangeSkill = true;
     //     State = CreatureState.Skill;
-    //     yield return new WaitForSeconds(2.3f);
+    //     yield return new WaitForSeconds(time);
     //     State = CreatureState.Idle;
     //     _coSkill = null;
-    //     CheckUpdatedFlag();
     // }
 }

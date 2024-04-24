@@ -64,11 +64,14 @@ class PacketHandler
 		GameObject go = Managers.Object.FindById(skillPacket.ObjectId);
 		if (go == null)
 			return;
+		
+		if (Managers.Object.MyPlayer.Id == skillPacket.ObjectId)
+			return;
 
-		CreatureController cc = go.GetComponent<CreatureController>();
-		if (cc != null)
+		PlayerController pc = go.GetComponent<PlayerController>();
+		if (pc != null)
 		{
-			// cc.UseSkill(skillPacket.Info.SkillId);
+			pc.UseSkill(skillPacket.Info.SkillId);
 		}
 	}
 	

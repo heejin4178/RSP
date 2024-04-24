@@ -61,7 +61,7 @@ public class BaseController : MonoBehaviour
         }
     }
     
-    public virtual CreatureState State
+    public CreatureState State
     {
         get => PosInfo.State;
         set
@@ -70,6 +70,19 @@ public class BaseController : MonoBehaviour
                 return;
 
             PosInfo.State = value;
+            _updated = true;
+        }
+    }
+    
+    public float Rotation
+    {
+        get => PosInfo.Rotation;
+        set
+        {
+            if (PosInfo.Rotation == value)
+                return;
+
+            PosInfo.Rotation = value;
             _updated = true;
         }
     }
@@ -86,6 +99,7 @@ public class BaseController : MonoBehaviour
             
             CellPos = new Vector3(value.PosX, 0, value.PosZ);
             State = value.State;
+            Rotation = value.Rotation;
         }
     }
     

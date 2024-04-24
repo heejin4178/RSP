@@ -164,12 +164,12 @@ namespace Server.Game
             PositionInfo movePosInfo = movePacket.PosInfo;
             ObjectInfo info = player.Info;
             
-            // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-            if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosZ != info.PosInfo.PosZ)
-            {
-                // if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ)) == false)
-                //     return;
-            }
+            // // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
+            // if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosZ != info.PosInfo.PosZ)
+            // {
+            //     // if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ)) == false)
+            //     //     return;
+            // }
 
             info.PosInfo.State = movePosInfo.State;
             // Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ));
@@ -208,8 +208,8 @@ namespace Server.Game
             {
                 case SkillType.SkillAuto:
                 {
-                    // // 데미지 판정
-                    // // Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo.MoveDir);
+                    // 데미지 판정
+                    // Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo);
                     // GameObject target = Map.Find(skillPos);
                     // if (target != null)
                     // {

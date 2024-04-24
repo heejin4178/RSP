@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game
@@ -46,16 +47,16 @@ namespace Server.Game
             
         }
         
-        public Vector2Int CellPos
+        public Vector3 CellPos
         {
-            // get
-            // {
-            //     // return new Vector2Int(PosInfo.PosX, PosInfo.PosZ);
-            // }
+            get
+            {
+                return new Vector3(PosInfo.PosX, 0, PosInfo.PosZ);
+            }
             set
             {
-                PosInfo.PosX = value.x;
-                PosInfo.PosZ = value.y;
+                PosInfo.PosX = value.X;
+                PosInfo.PosZ = value.Z;
             }
         }
 
@@ -64,28 +65,12 @@ namespace Server.Game
         //     return GetFrontCellPos(PosInfo.MoveDir);
         // }
         
-        // public Vector2Int GetFrontCellPos(MoveDir dir)
-        // {
-        //     Vector2Int cellPos = CellPos;
-        //
-        //     switch (dir)
-        //     {
-        //         case MoveDir.Up:
-        //             cellPos += Vector2Int.up;
-        //             break;
-        //         case MoveDir.Down:
-        //             cellPos += Vector2Int.down;
-        //             break;
-        //         case MoveDir.Left:
-        //             cellPos += Vector2Int.left;
-        //             break;
-        //         case MoveDir.Right:
-        //             cellPos += Vector2Int.right;
-        //             break;
-        //     }
-        //
-        //     return cellPos;
-        // }
+        public Vector3 GetFrontCellPos()
+        {
+            Vector3 cellPos = CellPos;
+        
+            return cellPos;
+        }
 
         public virtual void OnDamaged(GameObject attacker, int damage)
         {

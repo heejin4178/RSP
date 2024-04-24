@@ -92,6 +92,7 @@ message PositionInfo {
   CreatureState state = 1;
   float posX = 2;
   float posZ = 3;
+  float rotation = 4;
 }
 
 message StatInfo {

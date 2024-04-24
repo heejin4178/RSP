@@ -7,7 +7,7 @@ public class MyPlayerController : CreatureController
 {
     private bool _moveKeyPressed = false;
     private bool _attackKeyPressed = false;
-    private Coroutine _coSkillCooltime;
+    private Coroutine _coSkillCoolTime;
     
     protected override bool Init()
     {
@@ -53,39 +53,37 @@ public class MyPlayerController : CreatureController
         base.UpdateIdle();
         
         // 스킬 상태로 갈지 확인
-        if (_coSkillCooltime == null && _attackKeyPressed)
+        if (_coSkillCoolTime == null && _attackKeyPressed)
         {
             _attackKeyPressed = false;
-            Debug.Log("Attack!");
-            
-            // TODO : 공격 패킷 보내기
+            State = CreatureState.Skill;
+
+            // 공격 패킷 보내기
             C_Skill skill = new C_Skill() { Info = new SkillInfo() };
             skill.Info.SkillId = 1;
             Managers.Network.Send(skill);
 
-            // rotation 갱신 후 서버에 전송
+            // rotation 갱신
             Rotation = transform.rotation.eulerAngles.y;
             CheckUpdatedFlag();
 
-            UseSkill(skill.Info.SkillId);
-            
-            // _coSkillCooltime = StartCoroutine("CoInputCooltime", 1.5f);
+            _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.5f);
         }
     }
     
-    // IEnumerator CoInputCooltime(float time)
-    // {
-    //     State = CreatureState.Skill;
-    //     yield return new WaitForSeconds(time);
-    //     State = CreatureState.Idle;
-    //     _coSkillCooltime = null;
-    //     
-    //     CheckUpdatedFlag(); // State 갱신 후 서버에 전송
-    // }
+    IEnumerator CoStartPunch(float time)
+    {
+        _rangeSkill = false;
+        State = CreatureState.Skill;
+        yield return new WaitForSeconds(time);
+        State = CreatureState.Idle;
+        _coSkillCoolTime = null;
+        CheckUpdatedFlag();
+    }
 
     protected override void UpdateMoving()
     {
-        if (_moveKeyPressed == false)
+        if (_moveKeyPressed == false && _attackKeyPressed == false)
         {
             State = CreatureState.Idle;
             CheckUpdatedFlag();

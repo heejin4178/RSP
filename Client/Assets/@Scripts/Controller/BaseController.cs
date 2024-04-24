@@ -49,7 +49,7 @@ public class BaseController : MonoBehaviour
         }
         set
         {
-            if (PosInfo.PosX == value.x && PosInfo.PosZ == value.z)
+            if (PosInfo.PosX == value.x && PosInfo.PosZ == value.z && State == CreatureState.Moving)
             {
                 State = CreatureState.Idle;
                 return;

@@ -59,21 +59,29 @@ public class MyPlayerController : CreatureController
             Debug.Log("Attack!");
             
             // TODO : 공격 패킷 보내기
-            // C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-            // skill.Info.SkillId = 2;
-            // Managers.Network.Send(skill);
+            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
+            skill.Info.SkillId = 1;
+            Managers.Network.Send(skill);
 
-            _coSkillCooltime = StartCoroutine("CoInputCooltime", 1.5f);
+            // rotation 갱신 후 서버에 전송
+            Rotation = transform.rotation.eulerAngles.y;
+            CheckUpdatedFlag();
+
+            UseSkill(skill.Info.SkillId);
+            
+            // _coSkillCooltime = StartCoroutine("CoInputCooltime", 1.5f);
         }
     }
     
-    IEnumerator CoInputCooltime(float time)
-    {
-        State = CreatureState.Skill;
-        yield return new WaitForSeconds(time);
-        State = CreatureState.Idle;
-        _coSkillCooltime = null;
-    }
+    // IEnumerator CoInputCooltime(float time)
+    // {
+    //     State = CreatureState.Skill;
+    //     yield return new WaitForSeconds(time);
+    //     State = CreatureState.Idle;
+    //     _coSkillCooltime = null;
+    //     
+    //     CheckUpdatedFlag(); // State 갱신 후 서버에 전송
+    // }
 
     protected override void UpdateMoving()
     {
@@ -87,7 +95,8 @@ public class MyPlayerController : CreatureController
         Vector3 dir = MoveDir * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.y);
         CellPos = destPose + transform.position;
-        
+        // Rotation = destPose.normalized;
+
         // Debug.DrawRay(transform.position + Vector3.up * 1.5f, destPose.normalized, Color.green);
         // 벽이나 건물을 통과하지 못하게 함.
         if (Physics.Raycast(transform.position + Vector3.up * 1.5f, destPose, 2.0f, LayerMask.GetMask("Block")))
@@ -97,92 +106,4 @@ public class MyPlayerController : CreatureController
         
         CheckUpdatedFlag();
     }
-    
-    protected override void CheckUpdatedFlag()
-    {
-        if (_updated)
-        {
-            C_Move movePacket = new C_Move();
-            movePacket.PosInfo = PosInfo;
-            Managers.Network.Send(movePacket);
-            _updated = false;
-        }
-    }
-
-    public override void UpdateController()
-    {
-        // switch (State)
-        // {
-        //     case CreatureState.Idle:
-        //         GetDirInput();
-        //         break;
-        //     case CreatureState.Moving:
-        //         GetDirInput();
-        //         break;
-        // }
-        base.UpdateController();
-    }
-    
-    // protected override void UpdateIdle()
-    // {
-    //     // 이동 상태로 갈지 확인
-    //     if (_moveKeyPressed)
-    //     {
-    //         State = CreatureState.Moving;
-    //         return;
-    //     }
-    //     
-    //     // 스킬 상태로 갈지 확인
-    //     if (_coSkillCooltime == null && Input.GetKey(KeyCode.Space))
-    //     {
-    //         Debug.Log("Skill !");
-    //         
-    //         C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-    //         skill.Info.SkillId = 2;
-    //         Managers.Network.Send(skill);
-    //
-    //         _coSkillCooltime = StartCoroutine("CoInputCooltime", 0.2f);
-    //     }
-    // }
-
-    // private Coroutine _coSkillCooltime;
-    //
-    // IEnumerator CoInputCooltime(float time)
-    // {
-    //     yield return new WaitForSeconds(time);
-    //     _coSkillCooltime = null;
-    // }
-    //
-    // private void LateUpdate()
-    // {
-    //     Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
-    // }
-    //
-    // void GetDirInput()
-    // {
-    //     _moveKeyPressed = true;
-    //     
-    //     if (Input.GetKey(KeyCode.W))
-    //     {
-    //         Dir = MoveDir.Up;
-    //     }
-    //     else if (Input.GetKey(KeyCode.S))
-    //     {
-    //         Dir = MoveDir.Down;
-    //     }
-    //     else if (Input.GetKey(KeyCode.A))
-    //     {
-    //         Dir = MoveDir.Left;
-    //     }
-    //     else if (Input.GetKey(KeyCode.D))
-    //     {
-    //         Dir = MoveDir.Right;
-    //     }
-    //     else
-    //     {
-    //         _moveKeyPressed = false;
-    //     }
-    // }
-    //
-    
 }

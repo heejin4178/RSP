@@ -74,6 +74,8 @@ public class CreatureController : BaseController
         transform.position += destPose;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
 
+        Rotation = transform.rotation.eulerAngles.y;
+
         GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
     protected virtual void UpdateDead()

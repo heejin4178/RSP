@@ -59,17 +59,33 @@ namespace Server.Game
                 PosInfo.PosZ = value.Z;
             }
         }
-
-        // public Vector2Int GetFrontCellPos()
-        // {
-        //     return GetFrontCellPos(PosInfo.MoveDir);
-        // }
         
-        public Vector3 GetFrontCellPos()
+        public Vector3 GetMeleeAttackCellPos()
         {
             Vector3 cellPos = CellPos;
+            
+            // 내가 있는 위치(좌표)에서, 내가 현재 바라보는 방향으로 스킬 범위만큼 더한 값
+            Vector3 skillPos = new Vector3(0.1f, 0, 0.2f);
+
+            return cellPos + skillPos;
         
-            return cellPos;
+            // switch (dir)
+            // {
+            //     case MoveDir.Up:
+            //         cellPos += Vector2Int.up;
+            //         break;
+            //     case MoveDir.Down:
+            //         cellPos += Vector2Int.down;
+            //         break;
+            //     case MoveDir.Left:
+            //         cellPos += Vector2Int.left;
+            //         break;
+            //     case MoveDir.Right:
+            //         cellPos += Vector2Int.right;
+            //         break;
+            // }
+            //
+            // return cellPos;
         }
 
         public virtual void OnDamaged(GameObject attacker, int damage)

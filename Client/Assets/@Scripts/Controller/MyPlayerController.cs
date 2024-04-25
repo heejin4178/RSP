@@ -93,7 +93,6 @@ public class MyPlayerController : CreatureController
         Vector3 dir = MoveDir * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.y);
         CellPos = destPose + transform.position;
-        // Rotation = destPose.normalized;
 
         // Debug.DrawRay(transform.position + Vector3.up * 1.5f, destPose.normalized, Color.green);
         // 벽이나 건물을 통과하지 못하게 함.

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using Server.Data;
@@ -13,11 +14,11 @@ namespace Server.Game
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
-        public Map Map { get; private set; } = new Map();
+        // public Map Map { get; private set; } = new Map();
 
         public void Init(int mapId)
         {
-            Map.LoadMap(mapId, "../../../../../Common/MapData");
+            // Map.LoadMap(mapId, "../../../../../Common/MapData");
             
             // TEMP
             // Push(EnterGame, monster);
@@ -52,9 +53,8 @@ namespace Server.Game
                 _players.Add(gameObject.Id, player);
                 player.Room = this;
                 
-                // Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y));
-
-            
+                ApplyMove(player, new Vector3(player.CellPos.X, 0, player.CellPos.Z), player.PosInfo.Rotation);
+                
                 // 본인한테 정보 전송
                 {
                     // 나에게 나에 대한 정보를 보냄
@@ -116,7 +116,7 @@ namespace Server.Game
                 if (_players.Remove(objectId, out player) == false)
                     return;
             
-                Map.ApplyLeave(player);
+                // Map.ApplyLeave(player);
                 player.Room = null;
             
                 // 본인한테 정보 전송
@@ -172,7 +172,7 @@ namespace Server.Game
             // }
 
             info.PosInfo.State = movePosInfo.State;
-            // Map.ApplyMove(player, new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ));
+            ApplyMove(player, new Vector3(movePosInfo.PosX, 0, movePosInfo.PosZ), movePosInfo.Rotation);
 
             // 다른 플레이어한테도 알려준다.
             S_Move resMovePacket = new S_Move();
@@ -208,9 +208,42 @@ namespace Server.Game
             {
                 case SkillType.SkillAuto:
                 {
+                    List<Player> playersInRange = new List<Player>();
+                    
                     // 데미지 판정
-                    // Vector2Int skillPos = player.GetFrontCellPos(info.PosInfo);
-                    // GameObject target = Map.Find(skillPos);
+                    // Vector3 skillPos = player.GetMeleeAttackCellPos();
+                    Vector3 skillSize = new Vector3(2.0f, 0, 3.0f);
+                    
+                    // 쿼터니언을 생성합니다. 여기서는 y값만 사용하여 회전을 표현합니다.
+                    Quaternion rotation = Quaternion.CreateFromYawPitchRoll(0, info.PosInfo.Rotation * MathF.PI / 180f, 0);
+                    // 생성한 쿼터니언의 forward 속성을 이용하여 캐릭터의 바라보는 방향 벡터를 얻습니다.
+                    Vector3 characterForward = Vector3.Transform(Vector3.UnitZ, rotation);
+                    // 방향 벡터의 x, y 값을 서로 바꿔줍니다.
+                    (characterForward.X, characterForward.Y) = (-characterForward.Y, characterForward.X);
+
+
+                    Vector3 skillPos = player.CellPos + characterForward;
+                    Console.WriteLine("info.PosInfo.Rotation : " + info.PosInfo.Rotation);
+                    Console.WriteLine("CellPos : " + player.CellPos);
+                    Console.WriteLine("characterForward : " + characterForward);
+                    Console.WriteLine("skillPos : " + skillPos);
+                    
+
+
+                    foreach (var p in _players.Values)
+                    {
+                        if (p == player)
+                            continue;
+                        
+                        // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
+                        if (IsPlayerInSkillRange(p.CellPos, skillPos, skillSize))
+                        {
+                            // playersInRange.Add(p);
+                            Console.WriteLine("Hit GameObject!");
+                        }
+                    }
+
+                    // // GameObject target = Find(skillPos);
                     // if (target != null)
                     // {
                     //     Console.WriteLine("Hit GameObject!");
@@ -255,6 +288,38 @@ namespace Server.Game
             {
                 p.Session.Send(packet);
             }
+        }
+        
+        bool IsPlayerInSkillRange(Vector3 playerPos, Vector3 skillPos, Vector3 skillSize)
+        {
+            // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
+            if (playerPos.X >= skillPos.X - skillSize.X / 2 &&
+                playerPos.X <= skillPos.X + skillSize.X / 2 &&
+                playerPos.Z >= skillPos.Z - skillSize.Z / 2 &&
+                playerPos.Z <= skillPos.Z + skillSize.Z / 2)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool ApplyMove(GameObject gameObject, Vector3 dest, float rotation)
+        {
+            if (gameObject.Room == null)
+                return false;
+		
+            PositionInfo posInfo = gameObject.PosInfo;
+            
+            // TODO : 맵의 최대 크기를 알아내 이상하게 이동하는 패킷은 이동하지 못하게 해야함.
+            // if (CanGo(dest, true) == false)
+            //     return false;
+		
+            // 실제 좌표 이동
+            posInfo.PosX = dest.X;
+            posInfo.PosZ = dest.Z;
+            posInfo.Rotation = rotation;
+		
+            return true;
         }
     }
 }

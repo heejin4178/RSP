@@ -15,6 +15,7 @@ namespace Server.Data
 
         public static void LoadConfig()
         {
+            // /Users/heejinkim/RSP/Server/Server/bin/Debug/netcoreapp3.1 경로에 있음
             string text = File.ReadAllText("config.json");
             Config = Newtonsoft.Json.JsonConvert.DeserializeObject<ServerConfig>(text);
         }

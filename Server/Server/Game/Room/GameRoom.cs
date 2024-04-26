@@ -208,11 +208,8 @@ namespace Server.Game
             {
                 case SkillType.SkillAuto:
                 {
-                    List<Player> playersInRange = new List<Player>();
-                    
                     // 데미지 판정
-                    // Vector3 skillPos = player.GetMeleeAttackCellPos();
-                    Vector3 skillSize = new Vector3(2.0f, 0, 3.0f);
+                    Vector3 skillSize = new Vector3(2.0f, 0, 4.0f);
                     
                     // 쿼터니언을 생성합니다. 여기서는 y값만 사용하여 회전을 표현합니다.
                     Quaternion rotation = Quaternion.CreateFromYawPitchRoll(0, info.PosInfo.Rotation * MathF.PI / 180f, 0);
@@ -220,16 +217,9 @@ namespace Server.Game
                     Vector3 characterForward = Vector3.Transform(Vector3.UnitZ, rotation);
                     // 방향 벡터의 x, y 값을 서로 바꿔줍니다.
                     (characterForward.X, characterForward.Y) = (-characterForward.Y, characterForward.X);
-
-
-                    Vector3 skillPos = player.CellPos + characterForward;
-                    Console.WriteLine("info.PosInfo.Rotation : " + info.PosInfo.Rotation);
-                    Console.WriteLine("CellPos : " + player.CellPos);
-                    Console.WriteLine("characterForward : " + characterForward);
-                    Console.WriteLine("skillPos : " + skillPos);
                     
-
-
+                    Vector3 skillPos = player.CellPos + characterForward;
+                    
                     foreach (var p in _players.Values)
                     {
                         if (p == player)
@@ -238,16 +228,9 @@ namespace Server.Game
                         // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
                         if (IsPlayerInSkillRange(p.CellPos, skillPos, skillSize))
                         {
-                            // playersInRange.Add(p);
                             Console.WriteLine("Hit GameObject!");
                         }
                     }
-
-                    // // GameObject target = Find(skillPos);
-                    // if (target != null)
-                    // {
-                    //     Console.WriteLine("Hit GameObject!");
-                    // }
                 }
                 break;
                 

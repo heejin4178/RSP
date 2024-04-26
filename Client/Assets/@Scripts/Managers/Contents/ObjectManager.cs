@@ -27,6 +27,7 @@ public class ObjectManager
                 // TODO : Data
                 GameObject go = Managers.Resource.Instantiate("Scissors Knight.prefab");
                 go.name = info.Name;
+                // go.transform.Find("MeleePreview").gameObject.SetActive(false);
                 _objects.Add(info.ObjectId, go);
 
                 MyPlayer = go.GetOrAddComponent<MyPlayerController>();
@@ -42,6 +43,7 @@ public class ObjectManager
                 // TODO : Data
                 GameObject go = Managers.Resource.Instantiate("Rock Knight.prefab");
                 go.name = info.Name;
+                // go.transform.Find("MeleePreview").gameObject.SetActive(false);
                 _objects.Add(info.ObjectId, go);
                 
                 PlayerController pc = go.GetOrAddComponent<PlayerController>();

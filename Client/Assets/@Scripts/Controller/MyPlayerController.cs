@@ -8,7 +8,8 @@ public class MyPlayerController : CreatureController
     private bool _moveKeyPressed = false;
     private bool _attackKeyPressed = false;
     private Coroutine _coSkillCoolTime;
-    
+    private LineRenderer _lineRenderer;
+
     protected override bool Init()
     {
         if (base.Init() == false)
@@ -17,6 +18,10 @@ public class MyPlayerController : CreatureController
         Managers.Game.onMoveDirChanged += HandleOnMoveDirChanged;
         Managers.Game.onMovePointerUp += HandleOnMovePointerUp;
         Managers.Game.onAttackPointerUp += HandleOnAttackPointerUp;
+        
+        _lineRenderer = transform.Find("AttackLineIndicator").GetComponent<LineRenderer>();
+        _lineRenderer.positionCount = 2;
+        _lineRenderer.enabled = false;
 
         return true;
     }
@@ -29,6 +34,18 @@ public class MyPlayerController : CreatureController
             Managers.Game.onMovePointerUp -= HandleOnMovePointerUp;
             Managers.Game.onAttackPointerUp -= HandleOnAttackPointerUp;
         }
+    }
+    
+    public void PlayAttackIndicator(Vector3 from, Vector3 to)
+    {
+        _lineRenderer.enabled = true;
+        _lineRenderer.SetPosition(0, from);
+        _lineRenderer.SetPosition(1, to);
+    }
+    
+    public void StopAttackIndicator()
+    {
+        _lineRenderer.enabled = false;
     }
     
     void HandleOnMoveDirChanged(Vector2 dir)
@@ -62,9 +79,7 @@ public class MyPlayerController : CreatureController
             C_Skill skill = new C_Skill() { Info = new SkillInfo() };
             skill.Info.SkillId = 1;
             Managers.Network.Send(skill);
-
-            // rotation 갱신
-            Rotation = transform.rotation.eulerAngles.y;
+            
             CheckUpdatedFlag();
 
             _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.5f);
@@ -79,6 +94,11 @@ public class MyPlayerController : CreatureController
         State = CreatureState.Idle;
         _coSkillCoolTime = null;
         CheckUpdatedFlag();
+    }
+
+    protected override void UpdateSkill()
+    {
+        base.UpdateSkill();
     }
 
     protected override void UpdateMoving()

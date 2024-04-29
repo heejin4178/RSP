@@ -188,8 +188,8 @@ namespace Server.Game
                 return;
 
             ObjectInfo info = player.Info;
-            if (info.PosInfo.State != CreatureState.Idle)
-                return;
+            // if (info.PosInfo.State != CreatureState.Idle)
+            //     return;
             
             // TODO : 스킬 사용 가능 여부 체크
             
@@ -209,7 +209,8 @@ namespace Server.Game
                 case SkillType.SkillAuto:
                 {
                     // 데미지 판정
-                    Vector3 skillSize = new Vector3(2.0f, 0, 4.0f);
+                    float width = 1.5f; // 가로
+                    float height = 2.5f; // 세로
                     
                     // 쿼터니언을 생성합니다. 여기서는 y값만 사용하여 회전을 표현합니다.
                     Quaternion rotation = Quaternion.CreateFromYawPitchRoll(0, info.PosInfo.Rotation * MathF.PI / 180f, 0);
@@ -219,16 +220,27 @@ namespace Server.Game
                     (characterForward.X, characterForward.Y) = (-characterForward.Y, characterForward.X);
                     
                     Vector3 skillPos = player.CellPos + characterForward;
+
+                    // 캐릭터가 바라보는 방향 벡터와 오른쪽 방향 벡터를 계산
+                    Vector3 right = Vector3.Cross(Vector3.UnitY, characterForward);
+
+                    // 직사각형의 네 꼭지점 좌표 계산
+                    Vector3 topLeft = skillPos + (-right * (width / 2)) + (characterForward * (height / 2));
+                    Vector3 topRight = skillPos + (right * (width / 2)) + (characterForward * (height / 2));
+                    Vector3 bottomLeft = skillPos + (-right * (width / 2)) + (-characterForward * (height / 2));
+                    Vector3 bottomRight = skillPos + (right * (width / 2)) + (-characterForward * (height / 2));
                     
+                    // Console.WriteLine($"topLeft : {topLeft}, topRight : {topRight}, bottomLeft : {bottomLeft}, bottomRight : {bottomRight}");
+
                     foreach (var p in _players.Values)
                     {
                         if (p == player)
                             continue;
                         
                         // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
-                        if (IsPlayerInSkillRange(p.CellPos, skillPos, skillSize))
+                        if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
-                            Console.WriteLine("Hit GameObject!");
+                            Console.WriteLine($"Hit GameObject!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }
                 }
@@ -273,16 +285,24 @@ namespace Server.Game
             }
         }
         
-        bool IsPlayerInSkillRange(Vector3 playerPos, Vector3 skillPos, Vector3 skillSize)
+        bool IsPointInsideRectangle(Vector3 point, Vector3 topLeft, Vector3 topRight, Vector3 bottomLeft, Vector3 bottomRight)
         {
-            // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
-            if (playerPos.X >= skillPos.X - skillSize.X / 2 &&
-                playerPos.X <= skillPos.X + skillSize.X / 2 &&
-                playerPos.Z >= skillPos.Z - skillSize.Z / 2 &&
-                playerPos.Z <= skillPos.Z + skillSize.Z / 2)
+            // 주어진 점의 x와 z 좌표를 가져옵니다.
+            float x = point.X;
+            float z = point.Z;
+
+            // 직사각형의 x와 z 좌표 범위를 계산합니다.
+            float minX = Math.Min(topLeft.X, Math.Min(topRight.X, Math.Min(bottomLeft.X, bottomRight.X)));
+            float maxX = Math.Max(topLeft.X, Math.Max(topRight.X, Math.Max(bottomLeft.X, bottomRight.X)));
+            float minZ = Math.Min(topLeft.Z, Math.Min(topRight.Z, Math.Min(bottomLeft.Z, bottomRight.Z)));
+            float maxZ = Math.Max(topLeft.Z, Math.Max(topRight.Z, Math.Max(bottomLeft.Z, bottomRight.Z)));
+
+            // 주어진 점이 직사각형의 x와 z 좌표 범위 내에 있는지 확인합니다.
+            if (x >= minX && x <= maxX && z >= minZ && z <= maxZ)
             {
                 return true;
             }
+    
             return false;
         }
 

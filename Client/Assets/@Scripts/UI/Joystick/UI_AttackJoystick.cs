@@ -50,8 +50,10 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
         Vector3 direction = (_endPoint - Managers.Object.MyPlayer.transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         float desiredRotationY = lookRotation.eulerAngles.y;
+
+        if (Managers.Object.MyPlayer.LineRenderer.enabled)
+            Managers.Object.MyPlayer.Rotation = desiredRotationY; // rotation 갱신
         
-        Managers.Object.MyPlayer.Rotation = desiredRotationY; // rotation 갱신
         Managers.Game.AttackKeyPressed = true;
         Managers.Object.MyPlayer.StopAttackIndicator(); // 근접공격 경로 표시 작업 취소
     }
@@ -67,7 +69,7 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
 
         var startPoint = Managers.Object.MyPlayer.transform.position;
         var fireDir = new Vector3(_moveDir.x, 0, _moveDir.y);
-        _endPoint = startPoint + fireDir * 2f;
+        _endPoint = startPoint + fireDir * 2.5f;
         startPoint.y = 0.1f;
         _endPoint.y = 0.1f;
         

@@ -9,6 +9,7 @@ public class MyPlayerController : CreatureController
     private bool _attackKeyPressed = false;
     private Coroutine _coSkillCoolTime;
     private LineRenderer _lineRenderer;
+    public LineRenderer LineRenderer { get => _lineRenderer; }
 
     protected override bool Init()
     {
@@ -74,14 +75,14 @@ public class MyPlayerController : CreatureController
         {
             _attackKeyPressed = false;
             State = CreatureState.Skill;
+            
+            CheckUpdatedFlag();
 
             // 공격 패킷 보내기
             C_Skill skill = new C_Skill() { Info = new SkillInfo() };
             skill.Info.SkillId = 1;
             Managers.Network.Send(skill);
             
-            CheckUpdatedFlag();
-
             _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.5f);
         }
     }

@@ -103,6 +103,11 @@ public class BaseController : MonoBehaviour
         }
     }
     
+    public void SyncPos()
+    {
+        transform.position = CellPos;
+    }
+    
     private void Start()
     {
         Init();

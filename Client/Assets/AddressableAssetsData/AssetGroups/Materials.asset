@@ -10,21 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Default Local Group
+  m_Name: Materials
   m_EditorClassIdentifier: 
-  m_GroupName: Default Local Group
+  m_GroupName: Packed Assets
   m_Data:
     m_SerializedData: []
-  m_GUID: f7598750d399e4362abe9b9fe55ce310
-  m_SerializeEntries:
-  - m_GUID: deebe802ba1954c8597799ff4749db95
-    m_Address: Assets/@Resources/Creatures/Materials/FlashWhite.mat
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_GUID: 43cdd521587a04cc89482cd5843feb30
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 6ae655f484c4a41fe9695e4ff9942fcd, type: 2}
-    - {fileID: 11400000, guid: d570b9b8b5f2e48a99d1768efff77ba9, type: 2}
+    - {fileID: 11400000, guid: 6595c97f80296499989af7837d942f75, type: 2}
+    - {fileID: 11400000, guid: 2578a454cbf0143b3a1e2b9d71ef612e, type: 2}

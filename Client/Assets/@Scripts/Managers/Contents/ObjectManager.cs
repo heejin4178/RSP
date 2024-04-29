@@ -22,36 +22,42 @@ public class ObjectManager
 
         if (objectType == GameObjectType.Player)
         {
+            GameObject go = null;
+
+            switch (info.PlayerType)
+            {
+                case PlayerType.Rock:
+                    go = Managers.Resource.Instantiate("Rock Knight.prefab");
+                    break;
+                case PlayerType.Scissors:
+                    go = Managers.Resource.Instantiate("Scissors Knight.prefab");
+                    break;
+                case PlayerType.Paper:
+                    go = Managers.Resource.Instantiate("Paper Knight.prefab");
+                    break;
+            }
+            
+            go.name = info.Name;
+            _objects.Add(info.ObjectId, go);
+            
             if (myPlayer)
             {
-                // TODO : Data
-                GameObject go = Managers.Resource.Instantiate("Scissors Knight.prefab");
-                go.name = info.Name;
-                // go.transform.Find("MeleePreview").gameObject.SetActive(false);
-                _objects.Add(info.ObjectId, go);
-
                 MyPlayer = go.GetOrAddComponent<MyPlayerController>();
                 MyPlayer.Speed = 10.0f;
                 MyPlayer.Id = info.ObjectId;
                 MyPlayer.PosInfo = info.PosInfo;
-                // MyPlayer.SyncPos();
+                MyPlayer.SyncPos();
                 
                 Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(go);
             }
             else
             {
-                // TODO : Data
-                GameObject go = Managers.Resource.Instantiate("Rock Knight.prefab");
-                go.name = info.Name;
-                // go.transform.Find("MeleePreview").gameObject.SetActive(false);
-                _objects.Add(info.ObjectId, go);
-                
                 PlayerController pc = go.GetOrAddComponent<PlayerController>();
                 pc.Id = info.ObjectId;
                 pc.PosInfo = info.PosInfo;
                 pc.Stat = info.StatInfo;
                 pc.Speed = 10.0f;
-                // MyPlayer.SyncPos();
+                pc.SyncPos();
             }
 
         }

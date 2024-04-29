@@ -29,11 +29,6 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
         _background.transform.position = eventData.position;
         _handler.transform.position = eventData.position;
         _touchPosition = eventData.position;
-        
-        if (Managers.Object.MyPlayer.State == CreatureState.Skill)
-            return;
-        
-        // Managers.Object.MyPlayer.MeleePreview.gameObject.SetActive(true);
     }
 
     public void OnPointerUp(PointerEventData eventData)

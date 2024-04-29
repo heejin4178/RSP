@@ -40,7 +40,8 @@ namespace Server
 			{
 				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
 				MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-				MyPlayer.Info.PosInfo.PosX = 0;
+				MyPlayer.Info.PlayerType = MyPlayer.PlayerType;
+				MyPlayer.Info.PosInfo.PosX = -5;
 				MyPlayer.Info.PosInfo.PosZ = 0;
 
 				StatInfo stat = null;

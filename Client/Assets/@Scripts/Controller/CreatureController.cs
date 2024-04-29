@@ -6,7 +6,8 @@ using UnityEngine;
 public class CreatureController : BaseController
 {
     protected bool _rangeSkill = false;
-    
+    private Coroutine _coHitCoolTime;
+
     Vector2 _moveDir = Vector2.zero;
     public Vector2 MoveDir
     {
@@ -47,6 +48,9 @@ public class CreatureController : BaseController
             case CreatureState.Dead:
                 UpdateDead();
                 break;
+            case CreatureState.Hit:
+                UpdateHit();
+                break;
         }
     }
 
@@ -81,6 +85,20 @@ public class CreatureController : BaseController
     protected virtual void UpdateDead()
     {
         
+    }
+    protected virtual void UpdateHit()
+    {
+        _coHitCoolTime = StartCoroutine("CoStartHitReact", 0.3);
+    }
+    
+    IEnumerator CoStartHitReact(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _animator.Play("REACT");
+        yield return new WaitForSeconds(time);
+        State = CreatureState.Idle;
+        _coHitCoolTime = null;
+        CheckUpdatedFlag();
     }
     #endregion
     

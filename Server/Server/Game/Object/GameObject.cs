@@ -7,6 +7,7 @@ namespace Server.Game
     public class GameObject
     {
         public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
+        public PlayerType PlayerType { get; set; } = PlayerType.NonePlayer;
 
         public int Id
         {
@@ -59,34 +60,6 @@ namespace Server.Game
                 PosInfo.PosZ = value.Z;
             }
         }
-        
-        public Vector3 GetMeleeAttackCellPos()
-        {
-            Vector3 cellPos = CellPos;
-            
-            // 내가 있는 위치(좌표)에서, 내가 현재 바라보는 방향으로 스킬 범위만큼 더한 값
-            Vector3 skillPos = new Vector3(0.1f, 0, 0.2f);
-
-            return cellPos + skillPos;
-        
-            // switch (dir)
-            // {
-            //     case MoveDir.Up:
-            //         cellPos += Vector2Int.up;
-            //         break;
-            //     case MoveDir.Down:
-            //         cellPos += Vector2Int.down;
-            //         break;
-            //     case MoveDir.Left:
-            //         cellPos += Vector2Int.left;
-            //         break;
-            //     case MoveDir.Right:
-            //         cellPos += Vector2Int.right;
-            //         break;
-            // }
-            //
-            // return cellPos;
-        }
 
         public virtual void OnDamaged(GameObject attacker, int damage)
         {
@@ -122,8 +95,7 @@ namespace Server.Game
             
             Stat.Hp = Stat.MaxHp;
             PosInfo.State = CreatureState.Idle;
-            PosInfo.PosX = 0;
-            PosInfo.PosZ = 0;
+            Info.PlayerType = PlayerType;
             
             room.EnterGame(this);
         }

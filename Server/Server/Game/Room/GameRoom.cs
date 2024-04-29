@@ -163,13 +163,6 @@ namespace Server.Game
             // TODO : 검증
             PositionInfo movePosInfo = movePacket.PosInfo;
             ObjectInfo info = player.Info;
-            
-            // // 다른 좌표로 이동할 경우, 갈 수 있는지 체크
-            // if (movePosInfo.PosX != info.PosInfo.PosX || movePosInfo.PosZ != info.PosInfo.PosZ)
-            // {
-            //     // if (Map.CanGo(new Vector2Int(movePosInfo.PosX, movePosInfo.PosZ)) == false)
-            //     //     return;
-            // }
 
             info.PosInfo.State = movePosInfo.State;
             ApplyMove(player, new Vector3(movePosInfo.PosX, 0, movePosInfo.PosZ), movePosInfo.Rotation);
@@ -240,6 +233,7 @@ namespace Server.Game
                         // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
                         if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
+                            p.OnDamaged(player, 1);
                             Console.WriteLine($"Hit GameObject!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 
@@ -8,7 +9,7 @@ namespace Server.Game
         public static ObjectManager Instance { get; } = new ObjectManager();
 
         private object _lock = new object();
-        private Dictionary<int, Player> _players = new Dictionary<int, Player>();
+        private Dictionary<int, Player> _players = new Dictionary<int, Player>(); // 다른 플레이어를 찾아서 무언갈 하고 싶을때 사용
         
         // [UNUSED(1) TYPE(7)] [ID(24)]
         private int _counter = 1;
@@ -23,6 +24,10 @@ namespace Server.Game
 
                 if (gameObject.ObjectType == GameObjectType.Player)
                 {
+                    // 가위, 바위, 보 중 랜덤으로 선택됨
+                    Random random = new Random();
+                    gameObject.PlayerType = (PlayerType)random.Next(1, 4);
+                    
                     _players.Add(gameObject.Id, gameObject as Player);
                 }
             }

@@ -22,6 +22,7 @@ enum CreatureState {
     Moving = 1;
     Skill = 2;
     Dead = 3;
+    Hit = 4;
 }
 
 enum GameObjectType {
@@ -29,6 +30,13 @@ enum GameObjectType {
   PLAYER = 1;
   MONSTER = 2;
   PROJECTILE = 3;
+}
+
+enum PlayerType {
+  NONE_PLAYER = 0;
+  ROCK = 1;
+  SCISSORS = 2;
+  PAPER = 3;
 }
 
 enum SkillType {
@@ -68,7 +76,7 @@ message C_Skill {
 message S_Skill {
  int32 objectId = 1;
  string name = 2;
-  SkillInfo info = 3;
+ SkillInfo info = 3;
 }
 
 message S_ChangeHp {
@@ -86,6 +94,7 @@ message ObjectInfo {
   string name = 2;
   PositionInfo posInfo = 3;
   StatInfo statInfo = 4;
+  PlayerType playerType = 5;
 }
 
 message PositionInfo {

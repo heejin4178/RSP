@@ -20,6 +20,11 @@ public class ResourceManager
                     Vector2.zero);
                 return sprite as T;
             }
+            // Material로 불러와진 경우, 이를 Material로 변환함
+            else if (key.Contains(".mat") && resource is Material material)
+            {
+                return material as T;
+            }
             
             return resource as T;
         }

@@ -87,6 +87,7 @@ class PacketHandler
 		CreatureController cc = go.GetComponent<CreatureController>();
 		if (cc != null)
 		{
+			cc.State = CreatureState.Hit;
 			cc.Hp = changePacket.Hp;
 		}
 	}

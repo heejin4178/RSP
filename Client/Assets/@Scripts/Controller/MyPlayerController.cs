@@ -83,7 +83,7 @@ public class MyPlayerController : CreatureController
             skill.Info.SkillId = 1;
             Managers.Network.Send(skill);
             
-            _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.5f);
+            _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.0f);
         }
     }
     

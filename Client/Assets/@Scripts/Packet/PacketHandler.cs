@@ -10,6 +10,7 @@ class PacketHandler
 		S_EnterGame enterGamePacket = packet as S_EnterGame;
 		
 		Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
+		Managers.Game.PlayerCount++;
 	}
 	
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
@@ -26,6 +27,7 @@ class PacketHandler
 		foreach (ObjectInfo obj in spawnPacket.Objects)
 		{
 			Managers.Object.Add(obj, myPlayer: false);
+			Managers.Game.PlayerCount++;
 		}
 	}
 	
@@ -72,7 +74,6 @@ class PacketHandler
 		if (pc != null)
 		{
 			pc.State = CreatureState.Skill;
-			// pc.UseSkill(skillPacket.Info.SkillId);
 		}
 	}
 	

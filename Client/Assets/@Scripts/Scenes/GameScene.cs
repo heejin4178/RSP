@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using UnityEngine;
 using Utils;
 
@@ -70,11 +71,6 @@ public class GameScene : BaseScene
     public void HandleOnPlayerCountChanged(int playerCount)
     {
         Managers.UI.GetSceneUI<UI_WaitPlayerPopup>().SetPlayerCount(playerCount);
-
-        // if (playerCount == 5)
-        // {
-        //     
-        // }
     }
     
     public override void Clear()

@@ -29,6 +29,8 @@ public class UI_MoveJoystick : MonoBehaviour, IPointerClickHandler, IPointerDown
         _background.transform.position = eventData.position;
         _handler.transform.position = eventData.position;
         _touchPosition = eventData.position;
+        
+        Managers.UI.CloseSceneUI();
     }
 
     public void OnPointerUp(PointerEventData eventData)

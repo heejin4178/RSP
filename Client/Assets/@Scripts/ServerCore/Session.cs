@@ -77,6 +77,7 @@ namespace ServerCore
 			_recvArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnRecvCompleted);
 			_sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
 
+			ChangeFlagConnect();
 			RegisterRecv();
 		}
 
@@ -114,6 +115,11 @@ namespace ServerCore
 			_socket.Shutdown(SocketShutdown.Both);
 			_socket.Close();
 			Clear();
+		}
+
+		public void ChangeFlagConnect()
+		{
+			Interlocked.CompareExchange(ref _disconnected, 0, 1);
 		}
 
 		#region 네트워크 통신
@@ -228,7 +234,7 @@ namespace ServerCore
 			}
 			else
 			{
-				Disconnect();
+				// Disconnect();
 			}
 		}
 

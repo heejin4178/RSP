@@ -50,12 +50,14 @@ public class UI_WaitPlayerPopup : UI_Base
 
         // 정보 취합
         GetText((int)Texts.PlayerCountText).text = $"{_playerCountText}/12";
-        Debug.Log($"_playerCountText : {_playerCountText}");
     }
 
     void OnClickCancelButton()
     {
-        Debug.Log("OnClickCancelButton");
+        Managers.Network.Disconnect();
+        Managers.Game.PlayerCount = 0;
+        Managers.UI.CloseSceneUI();
+        Managers.Scene.LoadScene(Define.Scene.Login);
     }
 
 

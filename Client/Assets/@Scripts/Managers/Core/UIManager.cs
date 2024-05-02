@@ -19,10 +19,15 @@ public class UIManager
             return GetSceneUI<T>();
 
         string key = typeof(T).Name + ".prefab";
-        T ui = Managers.Resource.Instantiate(key, pooling: true).GetOrAddComponent<T>();
+        T ui = Managers.Resource.Instantiate(key, pooling: false).GetOrAddComponent<T>();
         _sceneUI = ui;
 
         return ui;
+    }
+    
+    public void CloseSceneUI()
+    {
+        Managers.Resource.Destroy(_sceneUI.gameObject);
     }
 
     public T ShowPopup<T>() where T : UI_Base

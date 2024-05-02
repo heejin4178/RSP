@@ -18,6 +18,7 @@ class PacketHandler
 		S_LeaveGame leaveGamePacket = packet as S_LeaveGame;
 
 		Managers.Object.Clear();
+		Managers.Game.PlayerCount--;
 	}
 	
 	public static void S_SpawnHandler(PacketSession session, IMessage packet)
@@ -38,6 +39,7 @@ class PacketHandler
 		foreach (int id in despawnPacket.ObjectIds)
 		{
 			Managers.Object.Remove(id);
+			Managers.Game.PlayerCount--;
 		}
 	}
 	

@@ -12,11 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
   m_Name: Materials
   m_EditorClassIdentifier: 
-  m_GroupName: Packed Assets
+  m_GroupName: Materials
   m_Data:
     m_SerializedData: []
   m_GUID: 43cdd521587a04cc89482cd5843feb30
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: deebe802ba1954c8597799ff4749db95
+    m_Address: FlashWhite.mat
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:

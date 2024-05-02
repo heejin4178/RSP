@@ -7,6 +7,7 @@ public class CreatureController : BaseController
 {
     protected bool _rangeSkill = false;
     private Coroutine _coHitCoolTime;
+    private SkinnedMeshRenderer[] _skinnedMeshRenderers;
 
     Vector2 _moveDir = Vector2.zero;
     public Vector2 MoveDir
@@ -20,6 +21,7 @@ public class CreatureController : BaseController
         base.Init();
         
         _animator = GetComponent<Animator>();
+        FindSkinnedMeshRenderer();
 
         return true;
     }
@@ -94,8 +96,10 @@ public class CreatureController : BaseController
     IEnumerator CoStartHitReact(float time)
     {
         yield return new WaitForSeconds(time);
+        PlayFlashEffect();
         _animator.Play("REACT");
         yield return new WaitForSeconds(time);
+        StopFlashEffect();
         State = CreatureState.Idle;
         _coHitCoolTime = null;
         CheckUpdatedFlag();
@@ -128,6 +132,31 @@ public class CreatureController : BaseController
             movePacket.PosInfo = PosInfo;
             Managers.Network.Send(movePacket);
             _updated = false;
+        }
+    }
+
+    private void FindSkinnedMeshRenderer()
+    {
+        // BodyMesh GameObject를 찾습니다.
+        Transform bodyMeshTransform = transform.Find("BodyMesh");
+        
+        // BodyMesh 아래에 있는 모든 SkinnedMeshRenderer 컴포넌트를 찾습니다.
+        _skinnedMeshRenderers = bodyMeshTransform.GetComponentsInChildren<SkinnedMeshRenderer>();
+    }
+
+    private void PlayFlashEffect()
+    {
+        foreach (SkinnedMeshRenderer renderer in _skinnedMeshRenderers)
+        {
+            renderer.material.color = Color.red;
+        }
+    }
+    
+    private void StopFlashEffect()
+    {
+        foreach (SkinnedMeshRenderer renderer in _skinnedMeshRenderers)
+        {
+            renderer.material.color = Color.white;
         }
     }
 }

@@ -47,7 +47,7 @@ public class GameScene : BaseScene
     
     void StartLoaded()
     {
-        // var player = Managers.Object.Spawn<PlayerController>(Vector3.zero);
+        Managers.UI.ShowSceneUI<UI_WaitPlayerPopup>();
         
         var moveJoystick = Managers.Resource.Instantiate("UI_MoveJoystick.prefab");
         moveJoystick.name = "@UI_MoveJoystick";
@@ -62,15 +62,31 @@ public class GameScene : BaseScene
         // {
         //     Debug.Log($"Lvl : {playerData.level}, Hp{playerData.maxHp}");
         // }
+        
+        Managers.Game.OnPlayerCountChanged -= HandleOnPlayerCountChanged;
+        Managers.Game.OnPlayerCountChanged += HandleOnPlayerCountChanged;
+    }
+    
+    public void HandleOnPlayerCountChanged(int playerCount)
+    {
+        Managers.UI.GetSceneUI<UI_WaitPlayerPopup>().SetPlayerCount(playerCount);
 
-        // Managers.Game.OnGemCountChanged -= HandelOnGemCountChanged;
-        // Managers.Game.OnGemCountChanged += HandelOnGemCountChanged;
-        // Managers.Game.OnKillCountChanged -= HandleOnKillCountChanged;
-        // Managers.Game.OnKillCountChanged += HandleOnKillCountChanged;
+        // if (playerCount == 5)
+        // {
+        //     
+        // }
     }
     
     public override void Clear()
     {
         
+    }
+    
+    private void OnDestroy()
+    {
+        if (Managers.Game != null)
+        {
+            Managers.Game.OnPlayerCountChanged -= HandleOnPlayerCountChanged;
+        }
     }
 }

@@ -23,16 +23,16 @@ public class GameManager
     #endregion
 
     #region 전투
-    private int _killCount;
-    public event Action<int> OnKillCountChanged;
+    private int _playerCount;
+    public event Action<int> OnPlayerCountChanged;
 
-    public int KillCount
+    public int PlayerCount
     {
-        get => _killCount;
+        get => _playerCount;
         set
         {
-            _killCount = value;
-            OnKillCountChanged?.Invoke(value);
+            _playerCount = value;
+            OnPlayerCountChanged?.Invoke(value);
         }
     }
 

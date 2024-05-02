@@ -10,12 +10,11 @@ namespace Utils
         {
             return Util.GetOrAddComponent<T>(go);
         }
-
-        // public static void AddUIEvent(this GameObject go, Action<PointerEventData> action,
-        //     Define.UIEvent type = Define.UIEvent.Click)
-        // {
-        //     UI_Base.BindEvent(go, action, type);
-        // }
+        
+        public static void BindEvent(this GameObject go, Action action = null, Action<BaseEventData> dragAction = null, Define.UIEvent type = Define.UIEvent.Click)
+        {
+            UI_Base.BindEvent(go, action, dragAction, type);
+        }
         
         public static bool IsValid(this BaseController bc)
         {

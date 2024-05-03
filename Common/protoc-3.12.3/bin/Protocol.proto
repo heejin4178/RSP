@@ -15,6 +15,8 @@ enum MsgId {
   S_SKILL = 7;
   S_CHANGE_HP = 8;
   S_DIE = 9;
+  C_LEAVE_GAME = 10;
+  C_ENTER_GAME = 11;
 }
 
 enum CreatureState {
@@ -45,11 +47,18 @@ enum SkillType {
   SKILL_PROJECTILE = 2;
 }
 
+message C_EnterGame {
+}
+
 message S_EnterGame {
   ObjectInfo player = 1;
 }
 
 message S_LeaveGame {
+}
+
+message C_LeaveGame {
+  int32 objectId = 1;
 }
 
 message S_Spawn {

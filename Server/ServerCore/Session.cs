@@ -230,7 +230,7 @@ namespace ServerCore
 			}
 			else
 			{
-				// Disconnect();
+				Disconnect();
 			}
 		}
 

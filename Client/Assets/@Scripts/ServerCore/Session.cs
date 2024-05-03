@@ -60,6 +60,7 @@ namespace ServerCore
 		public abstract int  OnRecv(ArraySegment<byte> buffer);
 		public abstract void OnSend(int numOfBytes);
 		public abstract void OnDisconnected(EndPoint endPoint);
+		public Socket SessionSocket { get => _socket; }
 
 		void Clear()
 		{
@@ -234,7 +235,7 @@ namespace ServerCore
 			}
 			else
 			{
-				// Disconnect();
+				Disconnect();
 			}
 		}
 

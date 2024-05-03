@@ -115,9 +115,8 @@ namespace Server.Game
                 Player player = null;
                 if (_players.Remove(objectId, out player) == false)
                     return;
-            
-                // Map.ApplyLeave(player);
-                player.Room = null;
+                
+                // player.Room = null;
             
                 // 본인한테 정보 전송
                 {

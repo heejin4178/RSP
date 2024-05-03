@@ -15,8 +15,6 @@ class PacketHandler
 	
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
 	{
-		S_LeaveGame leaveGamePacket = packet as S_LeaveGame;
-
 		Managers.Object.Clear();
 		Managers.Game.PlayerCount--;
 	}

@@ -15,8 +15,12 @@ public class NetworkManager
 		_session.Send(packet);
 	}
 
-	public void Init()
+	public bool Init()
 	{
+		// 이중 접속을 방지함
+		if (_session.SessionSocket != null)
+			return false;
+		
 		// DNS (Domain Name System)
 		IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
 		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
@@ -26,6 +30,8 @@ public class NetworkManager
 		connector.Connect(endPoint,
 			() => { return _session; },
 			1);
+
+		return true;
 	}
 
 	public void Update()

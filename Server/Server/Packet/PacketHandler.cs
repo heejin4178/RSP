@@ -42,4 +42,37 @@ class PacketHandler
 
 		room.Push(room.HandleSkill, player, skillPacket);
 	}
+	
+	public static void C_LeaveGameHandler(PacketSession session, IMessage packet)
+	{
+		C_LeaveGame leavePacket = packet as C_LeaveGame;
+		ClientSession clientSession = session as ClientSession;
+		
+		Player player = clientSession.MyPlayer;
+		if (player == null)
+			return;
+
+		GameRoom room = player.Room;
+		if (room == null)
+			return;
+		
+		room.Push(room.LeaveGame, leavePacket.ObjectId);
+	}
+	
+	public static void C_EnterGameHandler(PacketSession session, IMessage packet)
+	{
+		C_LeaveGame leavePacket = packet as C_LeaveGame;
+		ClientSession clientSession = session as ClientSession;
+
+		Player player = clientSession.MyPlayer;
+		if (player == null)
+			return;
+		
+		// 여기서 다시 룸을 찾을때 이미 게임이 진행 중인 룸은 제외하고 찾아준다.
+		GameRoom room = player.Room;
+		if (room == null)
+			return;
+
+		room.Push(room.EnterGame, player);
+	}
 }

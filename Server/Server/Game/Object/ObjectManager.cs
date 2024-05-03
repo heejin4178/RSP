@@ -27,10 +27,27 @@ namespace Server.Game
                     // 가위, 바위, 보 중 랜덤으로 선택됨
                     Random random = new Random();
                     gameObject.PlayerType = (PlayerType)random.Next(1, 4);
-                    
+
                     _players.Add(gameObject.Id, gameObject as Player);
                 }
             }
+            
+            
+            // foreach (var player in _players.Values)
+            // {
+            //     switch (player.PlayerType)
+            //     {
+            //         case PlayerType.Rock:
+            //             RockNum++;
+            //             break;
+            //         case PlayerType.Scissors:
+            //             ScissorsNum++;
+            //             break;
+            //         case PlayerType.Paper:
+            //             PaperNum++;
+            //             break;
+            //     }
+            // }
 
             return gameObject;
         }

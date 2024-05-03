@@ -16,9 +16,9 @@ namespace Server.Game
         
         public override void OnDamaged(GameObject attacker, int damage)
         {
-            // // 같은 종족끼리는 공격할 수 없다.
-            // if (attacker.PlayerType == PlayerType)
-            //     return;
+            // 같은 종족끼리는 공격할 수 없다.
+            if (attacker.PlayerType == PlayerType)
+                return;
             
             base.OnDamaged(attacker, damage);
         }

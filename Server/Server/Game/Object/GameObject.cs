@@ -7,7 +7,15 @@ namespace Server.Game
     public class GameObject
     {
         public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
-        public PlayerType PlayerType { get; set; } = PlayerType.NonePlayer;
+
+        public PlayerType PlayerType
+        {
+            get => Info.PlayerType;
+            set
+            {
+                Info.PlayerType = value;
+            }
+        }
 
         public int Id
         {

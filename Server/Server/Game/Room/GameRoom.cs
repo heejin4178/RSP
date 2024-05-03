@@ -10,18 +10,87 @@ namespace Server.Game
     public class GameRoom : JobSerializer
     { 
         public int RoomId { get; set; }
+        public UInt16 RockNum { get; private set; }
+        public UInt16 ScissorsNum { get; private set; }
+        public UInt16 PaperNum { get; private set; }
         
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
-        // public Map Map { get; private set; } = new Map();
-
         public void Init(int mapId)
         {
-            // Map.LoadMap(mapId, "../../../../../Common/MapData");
-            
-            // TEMP
-            // Push(EnterGame, monster);
+            // 룸 하나가 만들어지면, 플레이어 타입 별로 4명씩 반복하여 추가
+            foreach (PlayerType type in Enum.GetValues(typeof(PlayerType)))
+            {
+                if (type == PlayerType.NonePlayer)
+                    continue;
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Player player = CreatePlayer(type);
+                    SetPlayerPose(player, player.PlayerType, i);
+                    _players.Add(player.Id, player);
+                    // Push(EnterGame, player);
+                }
+            }
+        }
+        
+        private Player CreatePlayer(PlayerType type)
+        {
+            Player player = ObjectManager.Instance.Add<Player>();
+
+            // 플레이어 정보 설정
+            player.Info.Name = $"AI_{type.ToString()}_{player.Info.ObjectId}";
+            player.State = CreatureState.Idle;
+            player.PlayerType = type;
+
+            // 스탯 설정
+            StatInfo stat = null;
+            DataManager.StatDict.TryGetValue(1, out stat);
+            player.Stat.MergeFrom(stat);
+
+            return player;
+        }
+        
+        private void SetPlayerPose(Player player, PlayerType type, int playerNumber)
+        {
+            // 플레이어 타입에 기준 위치 설정
+            switch (type)
+            {
+                case PlayerType.Paper:
+                    player.Info.PosInfo.PosX = 0;
+                    player.Info.PosInfo.PosZ = 5;
+                    player.Info.PosInfo.Rotation = 180;
+                    break;
+                case PlayerType.Scissors:
+                    player.Info.PosInfo.PosX = 10;
+                    player.Info.PosInfo.PosZ = -7;
+                    player.Info.PosInfo.Rotation = 270;
+                    break;
+                case PlayerType.Rock:
+                    player.Info.PosInfo.PosX = -10;
+                    player.Info.PosInfo.PosZ = -5;
+                    player.Info.PosInfo.Rotation = 30;
+                    break;
+            }
+
+            // 각 플레이어가 1부터 4까지의 포즈를 가지도록 설정
+            switch (playerNumber)
+            {
+                case 0:
+                    // 기존 포즈 유지
+                    break;
+                case 1:
+                    player.Info.PosInfo.PosX += (type == PlayerType.Rock) ? -2 : 2;
+                    break;
+                case 2:
+                    player.Info.PosInfo.PosZ += (type == PlayerType.Rock) ? -2 : 2;
+                    break;
+                case 3:
+                    player.Info.PosInfo.PosX += (type == PlayerType.Rock) ? -2 : 2;
+                    player.Info.PosInfo.PosZ += (type == PlayerType.Rock) ? -2 : 2;
+                    break;
+            }
         }
 
         // 누군가 주기적으로 호출해줘야 한다.

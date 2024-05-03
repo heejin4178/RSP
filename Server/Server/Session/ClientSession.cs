@@ -34,20 +34,18 @@ namespace Server
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");
-
-			// PROTO Test
+			
 			MyPlayer = ObjectManager.Instance.Add<Player>();
 			{
 				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
-				MyPlayer.Info.PosInfo.State = CreatureState.Idle;
-				MyPlayer.Info.PlayerType = MyPlayer.PlayerType;
+				MyPlayer.State = CreatureState.Idle;
 				MyPlayer.Info.PosInfo.PosX = -5;
 				MyPlayer.Info.PosInfo.PosZ = 0;
 
 				StatInfo stat = null;
 				DataManager.StatDict.TryGetValue(1, out stat);
 				MyPlayer.Stat.MergeFrom(stat);
-				
+
 				MyPlayer.Session = this;
 			}
 

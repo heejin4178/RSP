@@ -106,6 +106,7 @@ public class BaseController : MonoBehaviour
     public void SyncPos()
     {
         transform.position = CellPos;
+        transform.rotation = Quaternion.Euler(0, Rotation, 0); // y 축만 회전하도록 설정
     }
     
     private void Start()

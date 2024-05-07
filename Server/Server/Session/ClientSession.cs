@@ -35,6 +35,15 @@ namespace Server
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");
 			
+			// 아직 플레이전인 룸을 찾고, 없다면 새로운 룸을 생성한다.
+			GameRoom room = RoomManager.Instance.FindCanPlayRoom();
+
+			if (room == null)
+			{
+				room = RoomManager.Instance.Add();
+				Program.TickRoom(room, 50);
+			}
+
 			MyPlayer = ObjectManager.Instance.Add<Player>();
 			{
 				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
@@ -47,14 +56,17 @@ namespace Server
 				MyPlayer.Session = this;
 			}
 
-			GameRoom room = RoomManager.Instance.Find(1);
-			
 			// 플레이어와 종족이 같은 AI 플레이와 교체함.
 			if(room.ReplacePlayer(MyPlayer) == false)
 				Console.WriteLine($"Fail to ReplacePlayer {MyPlayer.Id}");
 			
-
+			// 만약에 새로 생성된 룸이라면 => 그냥 타이머 돌리면 됨
+			// 근데 사람을 기다리고 있던 룸이라면 => 타이머 초기화, 타이머 새로 돌리기
+			// 그리고 런타이머가 폴스라면 트루로 바꾸고 돌리기
+			
 			room.Push(room.EnterGame, MyPlayer);
+			room.RunTimer = true;
+			room.WaitTime = 1;
 			room.WaitPlayerTimer();
 		}
 
@@ -65,7 +77,7 @@ namespace Server
 
 		public override void OnDisconnected(EndPoint endPoint)
 		{
-			GameRoom room = RoomManager.Instance.Find(1);
+			GameRoom room = RoomManager.Instance.Find(MyPlayer.Room.RoomId);
 			room.Push(room.LeaveGame, MyPlayer.Info.ObjectId);
 
 			SessionManager.Instance.Remove(this);

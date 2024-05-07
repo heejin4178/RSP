@@ -46,7 +46,6 @@ public class ObjectManager
                 pc.Speed = 10.0f;
                 pc.SyncPos();
             }
-
         }
         else if (objectType == GameObjectType.Aiplayer)
         {

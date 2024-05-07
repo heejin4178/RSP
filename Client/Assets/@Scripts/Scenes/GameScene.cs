@@ -14,7 +14,7 @@ public class GameScene : BaseScene
     protected override void Init()
     {
         SceneType = Define.Scene.Game;
-        // Screen.SetResolution(1024, 768, false);
+        Screen.SetResolution(1024, 768, false);
         StartLoaded();
         
         if (Managers.Network.Init() == false)

@@ -10,10 +10,10 @@ namespace Server.Game
         private Dictionary<int, GameRoom> _rooms = new Dictionary<int, GameRoom>();
         private int _roomId = 1;
 
-        public GameRoom Add(int mapId)
+        public GameRoom Add()
         {
             GameRoom gameRoom = new GameRoom();
-            gameRoom.Push(gameRoom.Init, mapId);
+            gameRoom.Init();
             
             lock (_lock)
             {
@@ -40,6 +40,20 @@ namespace Server.Game
                 GameRoom room = null;
                 if (_rooms.TryGetValue(roomId, out room))
                     return room;
+                
+                return null;
+            }
+        }
+        
+        public GameRoom FindCanPlayRoom()
+        {
+            lock (_lock)
+            {
+                foreach (var room in _rooms.Values)
+                {
+                    if (room.PlayingGame == false && room.PlayersCount < 12)
+                        return room;
+                }
                 
                 return null;
             }

@@ -11,53 +11,58 @@ namespace Server.Game
     { 
         public int RoomId { get; set; }
         public bool PlayingGame { get; set; }
-        private int _waitTime;
+        public bool RunTimer { get; set; } = true;
+        public int WaitTime { get; set; } = 1;
 
         public UInt16 RockNum { get; private set; }
         public UInt16 ScissorsNum { get; private set; }
         public UInt16 PaperNum { get; private set; }
+        public UInt16 PlayersCount { get => (ushort)_players.Count; }
         
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private Dictionary<int, AIPlayer> _aiPlayers = new Dictionary<int, AIPlayer>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
         
-        // 1초마다 한번씩 실행되면서 타이머에 1을 더한다.
-        // 그 숫자가 10이 되면 해당 타이머를 종료하고 게임 상태를 실행으로 변경한다.
-        // 클라이언트로 패킷을 보내어 컨트롤 UI를 표시하고 게임을 진행할 수 있게한다.
         // TODO : 중간에 새로운 플레이어가 접속 시, waitTime을 초기화? 또는 절반으로 초기화 해야한다.
         public void WaitPlayerTimer()
         {
-            Console.WriteLine($"WaitPlayerTimer : {_waitTime}");
-            if (_waitTime < 2)
+            if (RunTimer == false)
+                return;
+            
+            Console.WriteLine($"WaitPlayerTimer : {WaitTime}");
+            if (WaitTime < 3)
             {
-                _waitTime++;
+                WaitTime++;
                 PushAfter(1000, WaitPlayerTimer);
             }
             else
             {
+                PlayingGame = true;
                 Push(ReadGame); // 게임 준비 완료 패킷 전송
                 PushAfter(1000, BeforeStartGameTimer);
-                _waitTime = 0;
+                WaitTime = 1;
             }
         }
         
         public void BeforeStartGameTimer()
         {
-            Console.WriteLine($"BeforeStartGameTimer : {_waitTime}");
-            if (_waitTime < 2)
+            if (RunTimer == false)
+                return;
+            
+            Console.WriteLine($"BeforeStartGameTimer : {WaitTime}");
+            if (WaitTime < 3)
             {
-                _waitTime++;
+                WaitTime++;
                 PushAfter(1000, BeforeStartGameTimer);
             }
             else
             {
                 Push(StartGame); // 게임 시작 패킷 전송
-                PlayingGame = true;
-                _waitTime = 0;
+                WaitTime = 1;
             }
         }
 
-        public void Init(int mapId)
+        public void Init()
         {
             // 룸 하나가 만들어지면, 플레이어 타입 별로 4명씩 반복하여 추가
             foreach (PlayerType type in Enum.GetValues(typeof(PlayerType)))
@@ -289,6 +294,9 @@ namespace Server.Game
                         p.Session.Send(spawnPacket);
                 }
             }
+            
+            // 누군가 접속하면 타이머 작동 할 수 있게함
+            RunTimer = true;
         }
         
         public void LeaveGame(int objectId)
@@ -308,7 +316,13 @@ namespace Server.Game
                     return;
 
                 if (_players.Count <= 0)
+                {
+                    WaitTime = 1;
+                    RunTimer = false;
+                    PlayingGame = false;
                     ClearRoom();
+                    return;
+                }
                 
                 // player.Room = null;
             

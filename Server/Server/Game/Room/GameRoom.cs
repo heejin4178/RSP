@@ -15,6 +15,7 @@ namespace Server.Game
         public UInt16 PaperNum { get; private set; }
         
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
+        private Dictionary<int, AIPlayer> _aiPlayers = new Dictionary<int, AIPlayer>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
         public void Init(int mapId)
@@ -27,32 +28,32 @@ namespace Server.Game
 
                 for (int i = 0; i < 4; i++)
                 {
-                    Player player = CreatePlayer(type);
-                    SetPlayerPose(player, player.PlayerType, i);
-                    _players.Add(player.Id, player);
-                    // Push(EnterGame, player);
+                    AIPlayer aiPlayer = CreatePlayer(type);
+                    SetPlayerPose(aiPlayer, aiPlayer.PlayerType, i);
+                    _aiPlayers.Add(aiPlayer.Id, aiPlayer);
                 }
             }
         }
-        
-        private Player CreatePlayer(PlayerType type)
+        // ai플레이어는 본인이 맞았을때 어떻게 다른사람들에게 패킷을 전달하는지?
+        private AIPlayer CreatePlayer(PlayerType type)
         {
-            Player player = ObjectManager.Instance.Add<Player>();
+            AIPlayer aiPlayer = ObjectManager.Instance.Add<AIPlayer>();
 
             // 플레이어 정보 설정
-            player.Info.Name = $"AI_{type.ToString()}_{player.Info.ObjectId}";
-            player.State = CreatureState.Idle;
-            player.PlayerType = type;
+            aiPlayer.Info.Name = $"AI_{type.ToString()}_{aiPlayer.Info.ObjectId}";
+            aiPlayer.State = CreatureState.Idle;
+            aiPlayer.PlayerType = type;
+            aiPlayer.Room = this;
 
             // 스탯 설정
             StatInfo stat = null;
             DataManager.StatDict.TryGetValue(1, out stat);
-            player.Stat.MergeFrom(stat);
+            aiPlayer.Stat.MergeFrom(stat);
 
-            return player;
+            return aiPlayer;
         }
         
-        private void SetPlayerPose(Player player, PlayerType type, int playerNumber)
+        private void SetPlayerPose(AIPlayer player, PlayerType type, int playerNumber)
         {
             // 플레이어 타입에 기준 위치 설정
             switch (type)
@@ -92,14 +93,34 @@ namespace Server.Game
                     break;
             }
         }
+        
+        public bool ReplacePlayer(Player replacePlayer)
+        {
+            foreach (var aiPlayer in _aiPlayers.Values)
+            {
+                if (aiPlayer.PlayerType == replacePlayer.PlayerType)
+                {
+                    replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
+                    return _aiPlayers.Remove(aiPlayer.Id);
+                }
+            }
+
+            return false;
+        }
+
+        private void ClearRoom()
+        {
+            _players.Clear();
+            _projectiles.Clear();
+        }
 
         // 누군가 주기적으로 호출해줘야 한다.
         public void Update()
         {
-            // foreach (Monster monster in _monsters.Values)
-            // {
-            //     monster.Update();
-            // }
+            foreach (AIPlayer aiPlayer in _aiPlayers.Values)
+            {
+                aiPlayer.Update();
+            }
             
             foreach (Projectile projectile in _projectiles.Values)
             {
@@ -126,35 +147,35 @@ namespace Server.Game
                 
                 // 본인한테 정보 전송
                 {
-                    // 나에게 나에 대한 정보를 보냄
+                    // 나에게 나에 대한 정보를 전송
                     S_EnterGame enterPacket = new S_EnterGame();
                     enterPacket.Player = player.Info;
                     player.Session.Send(enterPacket);
                 
-                    // 나에게 다른 사람들의 정보를 보냄
+                    // 스폰패킷에 현재 룸에 있는 모든 객체 정보를 담음
                     S_Spawn spawnPacket = new S_Spawn();
+                    
                     foreach (Player p in _players.Values)
-                    {
                         if (player != p)
                             spawnPacket.Objects.Add(p.Info);
-                    }
                     
-                    // foreach (Monster m in _monsters.Values)
-                    //     spawnPacket.Objects.Add(m.Info);
+                    foreach (AIPlayer a in _aiPlayers.Values)
+                        spawnPacket.Objects.Add(a.Info);
 
                     foreach (Projectile p in _projectiles.Values)
                         spawnPacket.Objects.Add(p.Info);
                     
+                    // 나에게 다른 사람의 접속 정보를 전송
                     player.Session.Send(spawnPacket);
                 }
             }
-            else if (type == GameObjectType.Monster)
+            else if (type == GameObjectType.Aiplayer)
             {
-                // Monster monster = gameObject as Monster;
-                // _monsters.Add(gameObject.Id, monster);
-                // monster.Room = this;
-                //
-                // Map.ApplyMove(monster, new Vector2Int(monster.CellPos.x, monster.CellPos.y));
+                AIPlayer aiPlayer = gameObject as AIPlayer;
+                _aiPlayers.Add(gameObject.Id, aiPlayer);
+                aiPlayer.Room = this;
+                
+                ApplyMove(aiPlayer, new Vector3(aiPlayer.CellPos.X, 0, aiPlayer.CellPos.Z), aiPlayer.PosInfo.Rotation);
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -163,7 +184,7 @@ namespace Server.Game
                 projectile.Room = this;
             }
             
-            // 타인에게 정보 전송
+            // 타인에게 내가 접속했다는 정보 전송
             {
                 S_Spawn spawnPacket = new S_Spawn();
                 spawnPacket.Objects.Add(gameObject.Info);
@@ -182,8 +203,17 @@ namespace Server.Game
             if (type == GameObjectType.Player)
             {
                 Player player = null;
+                
+                // 룸에서 제거
                 if (_players.Remove(objectId, out player) == false)
                     return;
+                
+                // 오브젝트 매니저에서 제거
+                if (ObjectManager.Instance.Remove(objectId) == false)
+                    return;
+
+                if (_players.Count <= 0)
+                    ClearRoom();
                 
                 // player.Room = null;
             
@@ -193,14 +223,19 @@ namespace Server.Game
                     player.Session.Send(leavePacket);
                 }
             }
-            else if (type == GameObjectType.Monster)
+            else if (type == GameObjectType.Aiplayer)
             {
-                // Monster monster = null;
-                // if (_monsters.Remove(objectId, out monster) == false)
-                //     return;
-                //
-                // Map.ApplyLeave(monster);
-                // monster.Room = null;
+                AIPlayer aiPlayer = null;
+                if (_aiPlayers.Remove(objectId, out aiPlayer) == false)
+                    return;
+                
+                // aiPlayer.Room = null;
+                
+                // // AI Player가 죽었다고 일반 플레이어들에게 패킷 전송
+                // {
+                //     S_LeaveGame leavePacket = new S_LeaveGame();
+                //     aiPlayer.Room.Broadcast(leavePacket);
+                // }
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -232,7 +267,8 @@ namespace Server.Game
             PositionInfo movePosInfo = movePacket.PosInfo;
             ObjectInfo info = player.Info;
 
-            info.PosInfo.State = movePosInfo.State;
+            info.PosInfo = movePosInfo;
+            player.PosInfo = movePosInfo;
             ApplyMove(player, new Vector3(movePosInfo.PosX, 0, movePosInfo.PosZ), movePosInfo.Rotation);
 
             // 다른 플레이어한테도 알려준다.
@@ -292,7 +328,7 @@ namespace Server.Game
                     Vector3 bottomRight = skillPos + (right * (width / 2)) + (-characterForward * (height / 2));
                     
                     // Console.WriteLine($"topLeft : {topLeft}, topRight : {topRight}, bottomLeft : {bottomLeft}, bottomRight : {bottomRight}");
-
+                    // Console.WriteLine("info.PosInfo.Rotation : " + info.PosInfo.Rotation);
                     foreach (var p in _players.Values)
                     {
                         if (p == player)
@@ -302,7 +338,17 @@ namespace Server.Game
                         if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
                             p.OnDamaged(player, 1);
-                            Console.WriteLine($"Hit GameObject!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
+                            Console.WriteLine($"Hit Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
+                        }
+                    }
+                    
+                    foreach (var p in _aiPlayers.Values)
+                    {
+                        // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
+                        if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
+                        {
+                            p.OnDamaged(player, 1);
+                            Console.WriteLine($"Hit AI Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }
                 }

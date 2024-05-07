@@ -22,20 +22,7 @@ public class ObjectManager
 
         if (objectType == GameObjectType.Player)
         {
-            GameObject go = null;
-
-            switch (info.PlayerType)
-            {
-                case PlayerType.Rock:
-                    go = Managers.Resource.Instantiate("Rock Knight.prefab");
-                    break;
-                case PlayerType.Scissors:
-                    go = Managers.Resource.Instantiate("Scissors Knight.prefab");
-                    break;
-                case PlayerType.Paper:
-                    go = Managers.Resource.Instantiate("Paper Knight.prefab");
-                    break;
-            }
+            GameObject go = CreatureInstantiate(info);
             
             go.name = info.Name;
             _objects.Add(info.ObjectId, go);
@@ -61,6 +48,21 @@ public class ObjectManager
             }
 
         }
+        else if (objectType == GameObjectType.Aiplayer)
+        {
+            GameObject go = CreatureInstantiate(info);
+            
+            go.name = info.Name;
+            _objects.Add(info.ObjectId, go);
+            
+            PlayerController pc = go.GetOrAddComponent<PlayerController>();
+            pc.Id = info.ObjectId;
+            pc.PosInfo = info.PosInfo;
+            pc.Stat = info.StatInfo;
+            pc.Speed = 10.0f;
+            pc.SyncPos();
+        }
+        
         // else if (objectType == GameObjectType.Projectile)
         // {
         //     GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
@@ -72,6 +74,26 @@ public class ObjectManager
         //     ac.Stat = info.StatInfo;
         //     ac.SyncPos();
         // }
+    }
+
+    private GameObject CreatureInstantiate(ObjectInfo info)
+    {
+        GameObject go = null;
+
+        switch (info.PlayerType)
+        {
+            case PlayerType.Rock:
+                go = Managers.Resource.Instantiate("Rock Knight.prefab");
+                break;
+            case PlayerType.Scissors:
+                go = Managers.Resource.Instantiate("Scissors Knight.prefab");
+                break;
+            case PlayerType.Paper:
+                go = Managers.Resource.Instantiate("Paper Knight.prefab");
+                break;
+        }
+
+        return go;
     }
     
     public void Remove(int id)

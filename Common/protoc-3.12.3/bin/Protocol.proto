@@ -17,6 +17,9 @@ enum MsgId {
   S_DIE = 9;
   C_LEAVE_GAME = 10;
   C_ENTER_GAME = 11;
+  S_READY_GAME = 12;
+  S_START_GAME = 13;
+  S_STOP_GAME = 14;
 }
 
 enum CreatureState {
@@ -45,6 +48,15 @@ enum SkillType {
   SKILL_NONE = 0;
   SKILL_AUTO = 1;
   SKILL_PROJECTILE = 2;
+}
+
+message S_ReadyGame {
+}
+
+message S_StartGame {
+}
+
+message S_StopGame {
 }
 
 message C_EnterGame {

@@ -14,7 +14,7 @@ public class GameScene : BaseScene
     protected override void Init()
     {
         SceneType = Define.Scene.Game;
-        Screen.SetResolution(1024, 768, false);
+        // Screen.SetResolution(1024, 768, false);
         StartLoaded();
         
         if (Managers.Network.Init() == false)
@@ -51,20 +51,9 @@ public class GameScene : BaseScene
     void StartLoaded()
     {
         Managers.UI.ShowSceneUI<UI_WaitPlayerPopup>();
-        
-        var moveJoystick = Managers.Resource.Instantiate("UI_MoveJoystick.prefab");
-        moveJoystick.name = "@UI_MoveJoystick";
-        
-        var attackJoystick = Managers.Resource.Instantiate("UI_AttackJoystick.prefab");
-        attackJoystick.name = "@UI_AttackJoystick";
-        
+
         var map = Managers.Resource.Instantiate("Map.prefab");
         map.name = "@Map";
-        
-        // foreach (var playerData in Managers.Data.PlayerDic.Values)
-        // {
-        //     Debug.Log($"Lvl : {playerData.level}, Hp{playerData.maxHp}");
-        // }
         
         Managers.Game.OnPlayerCountChanged -= HandleOnPlayerCountChanged;
         Managers.Game.OnPlayerCountChanged += HandleOnPlayerCountChanged;
@@ -72,7 +61,8 @@ public class GameScene : BaseScene
     
     public void HandleOnPlayerCountChanged(int playerCount)
     {
-        Managers.UI.GetSceneUI<UI_WaitPlayerPopup>().SetPlayerCount(playerCount);
+        if (Managers.UI.GetSceneUI<UI_WaitPlayerPopup>() != null)
+            Managers.UI.GetSceneUI<UI_WaitPlayerPopup>().SetPlayerCount(playerCount);
     }
     
     public override void Clear()

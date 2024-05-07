@@ -1,13 +1,44 @@
 {
-    "m_SelectedDeviceId": "",
+    "m_SelectedDeviceId": "R3CTC05C3WZ",
     "m_SelectedProcess": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
+        "deviceId": "R3CTC05C3WZ",
+        "name": "com.DefaultCompany.Client",
+        "processId": 13905,
         "exited": false
     },
     "m_SelectedPriority": 0,
-    "m_KnownProcessesForSerialization": [],
+    "m_KnownProcessesForSerialization": [
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.DefaultCompany.Client",
+            "processId": 9122,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.DefaultCompany.Client",
+            "processId": 11095,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.DefaultCompany.Client",
+            "processId": 12024,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.DefaultCompany.Client",
+            "processId": 13071,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.DefaultCompany.Client",
+            "processId": 13905,
+            "exited": false
+        }
+    ],
     "m_Tags": {
         "m_Entries": [
             {
@@ -45,8 +76,19 @@
         "Height": 0.0
     },
     "m_MemoryViewerState": {
-        "MemoryWindowWidth": 0.0,
-        "MemoryTypeEnabled": [],
+        "MemoryWindowWidth": 170.0,
+        "MemoryTypeEnabled": [
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true,
+            true
+        ],
         "MemoryGroup": 2,
         "AutoCapture": true
     },

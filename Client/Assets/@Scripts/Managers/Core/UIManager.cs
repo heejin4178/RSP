@@ -28,6 +28,7 @@ public class UIManager
     public void CloseSceneUI()
     {
         Managers.Resource.Destroy(_sceneUI.gameObject);
+        _sceneUI = null;
     }
 
     public T ShowPopup<T>() where T : UI_Base

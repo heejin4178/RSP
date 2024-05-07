@@ -108,4 +108,20 @@ class PacketHandler
 			// cc.OnDead();
 		}
 	}
+	
+	public static void S_ReadyGameHandler(PacketSession session, IMessage packet)
+	{
+		Managers.UI.CloseSceneUI();
+		Managers.UI.ShowSceneUI<UI_GameScene>();
+	}
+	
+	public static void S_StartGameHandler(PacketSession session, IMessage packet)
+	{
+		
+	}
+	
+	public static void S_StopGameHandler(PacketSession session, IMessage packet)
+	{
+		
+	}
 }

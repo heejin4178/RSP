@@ -10,6 +10,9 @@ namespace Server.Game
     public class GameRoom : JobSerializer
     { 
         public int RoomId { get; set; }
+        public bool PlayingGame { get; set; }
+        private int _waitTime;
+
         public UInt16 RockNum { get; private set; }
         public UInt16 ScissorsNum { get; private set; }
         public UInt16 PaperNum { get; private set; }
@@ -17,6 +20,42 @@ namespace Server.Game
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private Dictionary<int, AIPlayer> _aiPlayers = new Dictionary<int, AIPlayer>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
+        
+        // 1초마다 한번씩 실행되면서 타이머에 1을 더한다.
+        // 그 숫자가 10이 되면 해당 타이머를 종료하고 게임 상태를 실행으로 변경한다.
+        // 클라이언트로 패킷을 보내어 컨트롤 UI를 표시하고 게임을 진행할 수 있게한다.
+        // TODO : 중간에 새로운 플레이어가 접속 시, waitTime을 초기화? 또는 절반으로 초기화 해야한다.
+        public void WaitPlayerTimer()
+        {
+            Console.WriteLine($"WaitPlayerTimer : {_waitTime}");
+            if (_waitTime < 2)
+            {
+                _waitTime++;
+                PushAfter(1000, WaitPlayerTimer);
+            }
+            else
+            {
+                Push(ReadGame); // 게임 준비 완료 패킷 전송
+                PushAfter(1000, BeforeStartGameTimer);
+                _waitTime = 0;
+            }
+        }
+        
+        public void BeforeStartGameTimer()
+        {
+            Console.WriteLine($"BeforeStartGameTimer : {_waitTime}");
+            if (_waitTime < 2)
+            {
+                _waitTime++;
+                PushAfter(1000, BeforeStartGameTimer);
+            }
+            else
+            {
+                Push(StartGame); // 게임 시작 패킷 전송
+                PlayingGame = true;
+                _waitTime = 0;
+            }
+        }
 
         public void Init(int mapId)
         {
@@ -34,7 +73,38 @@ namespace Server.Game
                 }
             }
         }
-        // ai플레이어는 본인이 맞았을때 어떻게 다른사람들에게 패킷을 전달하는지?
+
+        #region RoomLogic
+        public bool ReplacePlayer(Player replacePlayer)
+        {
+            foreach (var aiPlayer in _aiPlayers.Values)
+            {
+                if (aiPlayer.PlayerType == replacePlayer.PlayerType)
+                {
+                    replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
+                    return _aiPlayers.Remove(aiPlayer.Id);
+                }
+            }
+
+            return false;
+        }
+
+        
+        // 누군가 주기적으로 호출해줘야 한다.
+        public void Update()
+        {
+            foreach (AIPlayer aiPlayer in _aiPlayers.Values)
+            {
+                aiPlayer.Update();
+            }
+            
+            foreach (Projectile projectile in _projectiles.Values)
+            {
+                projectile.Update();
+            }
+            
+            Flush();
+        }
         private AIPlayer CreatePlayer(PlayerType type)
         {
             AIPlayer aiPlayer = ObjectManager.Instance.Add<AIPlayer>();
@@ -94,42 +164,67 @@ namespace Server.Game
             }
         }
         
-        public bool ReplacePlayer(Player replacePlayer)
+        private bool IsPointInsideRectangle(Vector3 point, Vector3 topLeft, Vector3 topRight, Vector3 bottomLeft, Vector3 bottomRight)
         {
-            foreach (var aiPlayer in _aiPlayers.Values)
-            {
-                if (aiPlayer.PlayerType == replacePlayer.PlayerType)
-                {
-                    replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
-                    return _aiPlayers.Remove(aiPlayer.Id);
-                }
-            }
+            // 주어진 점의 x와 z 좌표를 가져옵니다.
+            float x = point.X;
+            float z = point.Z;
 
+            // 직사각형의 x와 z 좌표 범위를 계산합니다.
+            float minX = Math.Min(topLeft.X, Math.Min(topRight.X, Math.Min(bottomLeft.X, bottomRight.X)));
+            float maxX = Math.Max(topLeft.X, Math.Max(topRight.X, Math.Max(bottomLeft.X, bottomRight.X)));
+            float minZ = Math.Min(topLeft.Z, Math.Min(topRight.Z, Math.Min(bottomLeft.Z, bottomRight.Z)));
+            float maxZ = Math.Max(topLeft.Z, Math.Max(topRight.Z, Math.Max(bottomLeft.Z, bottomRight.Z)));
+
+            // 주어진 점이 직사각형의 x와 z 좌표 범위 내에 있는지 확인합니다.
+            if (x >= minX && x <= maxX && z >= minZ && z <= maxZ)
+            {
+                return true;
+            }
+    
             return false;
         }
 
+        private bool ApplyMove(GameObject gameObject, Vector3 dest, float rotation)
+        {
+            if (gameObject.Room == null)
+                return false;
+		
+            PositionInfo posInfo = gameObject.PosInfo;
+            
+            // TODO : 맵의 최대 크기를 알아내 이상하게 이동하는 패킷은 이동하지 못하게 해야함.
+            // if (CanGo(dest, true) == false)
+            //     return false;
+		
+            // 실제 좌표 이동
+            posInfo.PosX = dest.X;
+            posInfo.PosZ = dest.Z;
+            posInfo.Rotation = rotation;
+		
+            return true;
+        }
+        
         private void ClearRoom()
         {
             _players.Clear();
             _projectiles.Clear();
         }
+        #endregion
 
-        // 누군가 주기적으로 호출해줘야 한다.
-        public void Update()
+
+        #region Packet
+        public void ReadGame()
         {
-            foreach (AIPlayer aiPlayer in _aiPlayers.Values)
-            {
-                aiPlayer.Update();
-            }
-            
-            foreach (Projectile projectile in _projectiles.Values)
-            {
-                projectile.Update();
-            }
-            
-            Flush();
+            S_ReadyGame readyPacket = new S_ReadyGame();
+            Broadcast(readyPacket);
         }
-
+        
+        public void StartGame()
+        {
+            S_StartGame startPacket = new S_StartGame();
+            Broadcast(startPacket);
+        }
+        
         public void EnterGame(GameObject gameObject)
         {
             if (gameObject == null)
@@ -230,12 +325,6 @@ namespace Server.Game
                     return;
                 
                 // aiPlayer.Room = null;
-                
-                // // AI Player가 죽었다고 일반 플레이어들에게 패킷 전송
-                // {
-                //     S_LeaveGame leavePacket = new S_LeaveGame();
-                //     aiPlayer.Room.Broadcast(leavePacket);
-                // }
             }
             else if (type == GameObjectType.Projectile)
             {
@@ -243,7 +332,7 @@ namespace Server.Game
                 if (_projectiles.Remove(objectId, out projectile) == false)
                     return;
 
-                projectile.Room = null;
+                // projectile.Room = null;
             }
             
             // 타인에게 정보 전송
@@ -373,6 +462,18 @@ namespace Server.Game
                 break;
             }
         }
+        
+        public void Broadcast(IMessage packet)
+        {
+            foreach (Player p in _players.Values)
+            {
+                p.Session.Send(packet);
+            }
+        }
+        #endregion
+        
+
+        
 
         public Player FindPlayer(Func<GameObject, bool> condition)
         {
@@ -383,54 +484,6 @@ namespace Server.Game
             }
 
             return null;
-        }
-        
-        public void Broadcast(IMessage packet)
-        {
-            foreach (Player p in _players.Values)
-            {
-                p.Session.Send(packet);
-            }
-        }
-        
-        bool IsPointInsideRectangle(Vector3 point, Vector3 topLeft, Vector3 topRight, Vector3 bottomLeft, Vector3 bottomRight)
-        {
-            // 주어진 점의 x와 z 좌표를 가져옵니다.
-            float x = point.X;
-            float z = point.Z;
-
-            // 직사각형의 x와 z 좌표 범위를 계산합니다.
-            float minX = Math.Min(topLeft.X, Math.Min(topRight.X, Math.Min(bottomLeft.X, bottomRight.X)));
-            float maxX = Math.Max(topLeft.X, Math.Max(topRight.X, Math.Max(bottomLeft.X, bottomRight.X)));
-            float minZ = Math.Min(topLeft.Z, Math.Min(topRight.Z, Math.Min(bottomLeft.Z, bottomRight.Z)));
-            float maxZ = Math.Max(topLeft.Z, Math.Max(topRight.Z, Math.Max(bottomLeft.Z, bottomRight.Z)));
-
-            // 주어진 점이 직사각형의 x와 z 좌표 범위 내에 있는지 확인합니다.
-            if (x >= minX && x <= maxX && z >= minZ && z <= maxZ)
-            {
-                return true;
-            }
-    
-            return false;
-        }
-
-        public bool ApplyMove(GameObject gameObject, Vector3 dest, float rotation)
-        {
-            if (gameObject.Room == null)
-                return false;
-		
-            PositionInfo posInfo = gameObject.PosInfo;
-            
-            // TODO : 맵의 최대 크기를 알아내 이상하게 이동하는 패킷은 이동하지 못하게 해야함.
-            // if (CanGo(dest, true) == false)
-            //     return false;
-		
-            // 실제 좌표 이동
-            posInfo.PosX = dest.X;
-            posInfo.PosZ = dest.Z;
-            posInfo.Rotation = rotation;
-		
-            return true;
         }
     }
 }

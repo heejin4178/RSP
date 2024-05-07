@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using Google.Protobuf.Protocol;
-using Microsoft.VisualBasic.CompilerServices;
 using Server.Data;
 
 namespace Server.Game
@@ -27,6 +27,7 @@ namespace Server.Game
             if (attacker.PlayerType == PlayerType)
                 return;
             
+            State = CreatureState.Hit;
             base.OnDamaged(attacker, damage);
         }
         
@@ -60,18 +61,18 @@ namespace Server.Game
         //         return;
         //     _nextSearchTick = Environment.TickCount64 + 1000;
         //
-        //     // // 몬스터와 플레이어 사이의 거리를 측정하고 범위안에 있으면 true를 리턴함.
-        //     // Player target = Room.FindPlayer(p =>
-        //     // {
-        //     //     Vector2Int dir = p.CellPos - CellPos;
-        //     //     return dir.cellDistFromZero < _searchCellDist;
-        //     // });
+        //     // 몬스터와 플레이어 사이의 거리를 측정하고 범위안에 있으면 true를 리턴함.
+        //     Player target = Room.FindPlayer(p =>
+        //     {
+        //         Vector3 dir = p.CellPos - CellPos;
+        //         return dir.cellDistFromZero < _searchCellDist;
+        //     });
         //     
-        //     // if (target == null)
-        //     //     return;
-        //     //
-        //     // _target = target;
-        //     // State = CreatureState.Moving;
+        //     if (target == null)
+        //         return;
+        //     
+        //     _target = target;
+        //     State = CreatureState.Moving;
         // }
         //
         //

@@ -55,6 +55,7 @@ namespace Server
 			
 
 			room.Push(room.EnterGame, MyPlayer);
+			room.WaitPlayerTimer();
 		}
 
 		public override void OnRecvPacket(ArraySegment<byte> buffer)

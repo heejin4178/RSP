@@ -41,7 +41,7 @@ namespace Server
 			TickRoom(room, 50);
 			
 			// DNS (Domain Name System)
-			IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
+			IPAddress ipAddr = IPAddress.Parse("192.168.45.71");
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 			_listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });

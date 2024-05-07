@@ -61,18 +61,30 @@ class PacketHandler
 	
 	public static void C_EnterGameHandler(PacketSession session, IMessage packet)
 	{
-		C_LeaveGame leavePacket = packet as C_LeaveGame;
 		ClientSession clientSession = session as ClientSession;
 
 		Player player = clientSession.MyPlayer;
 		if (player == null)
 			return;
 		
-		// 여기서 다시 룸을 찾을때 이미 게임이 진행 중인 룸은 제외하고 찾아준다.
-		GameRoom room = player.Room;
+		// 아직 플레이전인 룸을 찾고, 없다면 새로운 룸을 생성한다.
+		GameRoom room = RoomManager.Instance.FindCanPlayRoom();
+			
 		if (room == null)
-			return;
+		{
+			room = RoomManager.Instance.Add();
+			Program.TickRoom(room, 50);
+		}
 
 		room.Push(room.EnterGame, player);
+		room.RunTimer = true;
+		room.WaitTime = 1;
+		room.WaitPlayerTimer();
+		
+		// if (room.RunTimer == false)
+		// {
+		// 	room.RunTimer = true;
+		// 	room.WaitPlayerTimer();
+		// }
 	}
 }

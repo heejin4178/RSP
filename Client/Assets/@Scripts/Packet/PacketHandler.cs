@@ -10,7 +10,10 @@ class PacketHandler
 		S_EnterGame enterGamePacket = packet as S_EnterGame;
 		
 		Managers.Object.Add(enterGamePacket.Player, myPlayer: true);
-		Managers.Game.PlayerCount++;
+		
+		GameObjectType objectType = GetObjectTypeById(enterGamePacket.Player.ObjectId);
+		if (objectType == GameObjectType.Player)
+			Managers.Game.PlayerCount++;
 	}
 	
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
@@ -26,7 +29,10 @@ class PacketHandler
 		foreach (ObjectInfo obj in spawnPacket.Objects)
 		{
 			Managers.Object.Add(obj, myPlayer: false);
-			Managers.Game.PlayerCount++;
+			
+			GameObjectType objectType = GetObjectTypeById(obj.ObjectId);
+			if (objectType == GameObjectType.Player)
+				Managers.Game.PlayerCount++;
 		}
 	}
 	
@@ -37,10 +43,12 @@ class PacketHandler
 		foreach (int id in despawnPacket.ObjectIds)
 		{
 			Managers.Object.Remove(id);
-			Managers.Game.PlayerCount--;
+			GameObjectType objectType = GetObjectTypeById(id);
+			if (objectType == GameObjectType.Player)
+				Managers.Game.PlayerCount--;
 		}
 	}
-	
+
 	public static void S_MoveHandler(PacketSession session, IMessage packet)
 	{
 		S_Move movePacket = packet as S_Move;
@@ -123,5 +131,11 @@ class PacketHandler
 	public static void S_StopGameHandler(PacketSession session, IMessage packet)
 	{
 		
+	}
+	
+	private static GameObjectType GetObjectTypeById(int id)
+	{
+		int type = (id >> 24) & 0x7F;
+		return (GameObjectType)type;
 	}
 }

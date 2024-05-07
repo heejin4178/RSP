@@ -21,7 +21,7 @@ namespace Server
 		static Listener _listener = new Listener();
 		private static List<Timer> _timers = new List<Timer>();
 
-		static void TickRoom(GameRoom room, int tick = 100)
+		public static void TickRoom(GameRoom room, int tick = 100)
 		{
 			var timer = new System.Timers.Timer();
 			timer.Interval = tick;
@@ -37,8 +37,8 @@ namespace Server
 			ConfigManager.LoadConfig();
 			DataManager.LoadData();
 			
-			GameRoom room = RoomManager.Instance.Add(1);
-			TickRoom(room, 50);
+			// GameRoom room = RoomManager.Instance.Add(1);
+			// TickRoom(room, 50);
 			
 			// DNS (Domain Name System)
 			IPAddress ipAddr = IPAddress.Parse("192.168.45.71");

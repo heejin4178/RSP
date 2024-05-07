@@ -6,7 +6,7 @@ namespace Server.Game
 {
     public class Player : GameObject
     { 
-        public ClientSession Session { get; set; }
+        // public ClientSession Session { get; set; }
         
         public Player()
         {

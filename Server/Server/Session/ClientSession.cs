@@ -39,8 +39,6 @@ namespace Server
 			{
 				MyPlayer.Info.Name = $"Player_{MyPlayer.Info.ObjectId}";
 				MyPlayer.State = CreatureState.Idle;
-				MyPlayer.Info.PosInfo.PosX = -5;
-				MyPlayer.Info.PosInfo.PosZ = 0;
 
 				StatInfo stat = null;
 				DataManager.StatDict.TryGetValue(1, out stat);
@@ -50,6 +48,12 @@ namespace Server
 			}
 
 			GameRoom room = RoomManager.Instance.Find(1);
+			
+			// 플레이어와 종족이 같은 AI 플레이와 교체함.
+			if(room.ReplacePlayer(MyPlayer) == false)
+				Console.WriteLine($"Fail to ReplacePlayer {MyPlayer.Id}");
+			
+
 			room.Push(room.EnterGame, MyPlayer);
 		}
 

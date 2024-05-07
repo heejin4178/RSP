@@ -51,13 +51,13 @@ namespace Google.Protobuf.Protocol {
             "BBIKCgZTX01PVkUQBRILCgdDX1NLSUxMEAYSCwoHU19TS0lMTBAHEg8KC1Nf",
             "Q0hBTkdFX0hQEAgSCQoFU19ESUUQCRIQCgxDX0xFQVZFX0dBTUUQChIQCgxD",
             "X0VOVEVSX0dBTUUQCypDCg1DcmVhdHVyZVN0YXRlEggKBElkbGUQABIKCgZN",
-            "b3ZpbmcQARIJCgVTa2lsbBACEggKBERlYWQQAxIHCgNIaXQQBCpDCg5HYW1l",
-            "T2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoHTU9OU1RFUhAC",
-            "Eg4KClBST0pFQ1RJTEUQAypACgpQbGF5ZXJUeXBlEg8KC05PTkVfUExBWUVS",
-            "EAASCAoEUk9DSxABEgwKCFNDSVNTT1JTEAISCQoFUEFQRVIQAypBCglTa2ls",
-            "bFR5cGUSDgoKU0tJTExfTk9ORRAAEg4KClNLSUxMX0FVVE8QARIUChBTS0lM",
-            "TF9QUk9KRUNUSUxFEAJCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIG",
-            "cHJvdG8z"));
+            "b3ZpbmcQARIJCgVTa2lsbBACEggKBERlYWQQAxIHCgNIaXQQBCpECg5HYW1l",
+            "T2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESDAoIQUlQTEFZRVIQ",
+            "AhIOCgpQUk9KRUNUSUxFEAMqQAoKUGxheWVyVHlwZRIPCgtOT05FX1BMQVlF",
+            "UhAAEggKBFJPQ0sQARIMCghTQ0lTU09SUxACEgkKBVBBUEVSEAMqQQoJU2tp",
+            "bGxUeXBlEg4KClNLSUxMX05PTkUQABIOCgpTS0lMTF9BVVRPEAESFAoQU0tJ",
+            "TExfUFJPSkVDVElMRRACQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.CreatureState), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.PlayerType), typeof(global::Google.Protobuf.Protocol.SkillType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -109,7 +109,7 @@ namespace Google.Protobuf.Protocol {
   public enum GameObjectType {
     [pbr::OriginalName("NONE")] None = 0,
     [pbr::OriginalName("PLAYER")] Player = 1,
-    [pbr::OriginalName("MONSTER")] Monster = 2,
+    [pbr::OriginalName("AIPLAYER")] Aiplayer = 2,
     [pbr::OriginalName("PROJECTILE")] Projectile = 3,
   }
 

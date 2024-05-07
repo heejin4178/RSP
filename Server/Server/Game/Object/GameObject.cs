@@ -7,6 +7,8 @@ namespace Server.Game
     public class GameObject
     {
         public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
+        
+        public ClientSession Session { get; set; }
 
         public PlayerType PlayerType
         {
@@ -24,7 +26,7 @@ namespace Server.Game
         }
         public GameRoom Room { get; set; }
         public ObjectInfo Info { get; set; } = new ObjectInfo();
-        public PositionInfo PosInfo { get; private set; } = new PositionInfo();
+        public PositionInfo PosInfo { get; set; } = new PositionInfo();
         public StatInfo Stat { get; private set; } = new StatInfo();
 
         public float Speed
@@ -103,7 +105,7 @@ namespace Server.Game
             
             Stat.Hp = Stat.MaxHp;
             PosInfo.State = CreatureState.Idle;
-            Info.PlayerType = PlayerType;
+            Info.PlayerType = attacker.PlayerType;
             
             room.EnterGame(this);
         }

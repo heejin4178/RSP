@@ -30,7 +30,7 @@ enum CreatureState {
 enum GameObjectType {
   NONE = 0;
   PLAYER = 1;
-  MONSTER = 2;
+  AIPLAYER = 2;
   PROJECTILE = 3;
 }
 

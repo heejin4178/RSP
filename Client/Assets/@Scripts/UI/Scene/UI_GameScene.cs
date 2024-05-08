@@ -13,6 +13,7 @@ public class UI_GameScene : UI_Base
     // 나의 킬수
     
 
+    private TextMeshProUGUI _gameTimerDisplay;
     private TextMeshProUGUI _countDownDisplay;
     
     enum GameObjects
@@ -23,6 +24,7 @@ public class UI_GameScene : UI_Base
 
     enum Texts
     {
+        GameTimerText,
         CountDownText,
     }
 
@@ -66,6 +68,11 @@ public class UI_GameScene : UI_Base
     
     private int _countDownTime = 3;
     
+    private float time;
+    private float curTime;
+    int minute;
+    int second;
+    
     // public void SetCountDownTime(int time)
     // {
     //     _countDownTime = time;
@@ -90,7 +97,34 @@ public class UI_GameScene : UI_Base
         GetText((int)Texts.CountDownText).text = "Game Start!";
         yield return new WaitForSeconds(1f);
         GetText((int)Texts.CountDownText).gameObject.SetActive(false);
+    }
+    
+    public void StartGameTimer()
+    {
         GetObject((int)GameObjects.UI_MoveJoystick).gameObject.SetActive(true);
         GetObject((int)GameObjects.UI_AttackJoystick).gameObject.SetActive(true);
+        time = 60;
+        StartCoroutine("StartTimer");
+    }
+    
+    IEnumerator StartTimer()
+    {
+        curTime = time;
+        while(curTime > 0)
+        {
+            curTime -= Time.deltaTime;
+            minute = (int)curTime / 60;
+            second = (int)curTime % 60;
+            GetText((int)Texts.GameTimerText).text = minute.ToString("00") + ":" + second.ToString("00");
+            yield return null;
+
+            if(curTime <= 0)
+            {
+                Debug.Log("시간 종료");
+                Time.timeScale = 0; // 클라 타이머가 종료되면 자체적으로 게임을 멈춤.
+                curTime = 0;
+                yield break;
+            }
+        }
     }
 }

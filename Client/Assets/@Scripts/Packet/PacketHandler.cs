@@ -125,13 +125,18 @@ class PacketHandler
 	
 	public static void S_StartGameHandler(PacketSession session, IMessage packet)
 	{
-		
+		// 여기서 2분 타이머를 실행한다.
+		Managers.UI.GetSceneUI<UI_GameScene>().StartGameTimer();
 	}
 	
 	public static void S_StopGameHandler(PacketSession session, IMessage packet)
 	{
-		
+		// 여기서 시간 멈추고 게임 결과 UI 보여준다.
+		// Managers.UI.RefreshTimeScale();
+		Time.timeScale = 0; // 혹시 모르니 서버에서도 게임이 종료되었다고 알려주고, 게임이 중단되지 않았다면 게임을 중단.
 	}
+	
+	
 	
 	private static GameObjectType GetObjectTypeById(int id)
 	{

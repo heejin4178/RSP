@@ -17,13 +17,12 @@ public class GameScene : BaseScene
         Screen.SetResolution(1024, 768, false);
         StartLoaded();
         
+        // 재접속 패킷을 보냄
         if (Managers.Network.Init() == false)
         {
             C_EnterGame enter = new C_EnterGame();
             Managers.Network.Send(enter);
         }
-            
-        // 여기서 재접속 패킷을 보냄
 
         // GameObject player = Managers.Resource.Instantiate("Creature/Player");
         // player.name = "Player";

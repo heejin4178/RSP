@@ -13,6 +13,7 @@ namespace Server.Game
         public bool PlayingGame { get; set; }
         public bool RunTimer { get; set; } = true;
         public int WaitTime { get; set; } = 1;
+        public int GameTime { get; set; } = 1;
 
         public UInt16 RockNum { get; private set; }
         public UInt16 ScissorsNum { get; private set; }
@@ -22,8 +23,8 @@ namespace Server.Game
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private Dictionary<int, AIPlayer> _aiPlayers = new Dictionary<int, AIPlayer>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
-        
-        // TODO : 중간에 새로운 플레이어가 접속 시, waitTime을 초기화? 또는 절반으로 초기화 해야한다.
+
+        #region Timer
         public void WaitPlayerTimer()
         {
             if (RunTimer == false)
@@ -38,7 +39,7 @@ namespace Server.Game
             else
             {
                 PlayingGame = true;
-                Push(ReadGame); // 게임 준비 완료 패킷 전송
+                Push(ReadyGame); // 게임 준비 완료 패킷 전송
                 PushAfter(1000, BeforeStartGameTimer);
                 WaitTime = 1;
             }
@@ -58,10 +59,32 @@ namespace Server.Game
             else
             {
                 Push(StartGame); // 게임 시작 패킷 전송
+                Push(GameTimer); // 게임 타이머 실행
                 WaitTime = 1;
             }
         }
-
+        
+        public void GameTimer()
+        {
+            if (RunTimer == false)
+                return;
+            
+            Console.WriteLine($"GameTimer : {GameTime}");
+            if (GameTime < 60)
+            {
+                GameTime++;
+                PushAfter(1000, GameTimer);
+            }
+            else
+            {
+                Push(StopGame); // 게임 종료 패킷 전송
+                GameTime = 1;
+            }
+        }
+        #endregion
+        
+        
+        #region RoomLogic
         public void Init()
         {
             // 룸 하나가 만들어지면, 플레이어 타입 별로 4명씩 반복하여 추가
@@ -78,8 +101,7 @@ namespace Server.Game
                 }
             }
         }
-
-        #region RoomLogic
+        
         public bool ReplacePlayer(Player replacePlayer)
         {
             foreach (var aiPlayer in _aiPlayers.Values)
@@ -214,11 +236,22 @@ namespace Server.Game
             _players.Clear();
             _projectiles.Clear();
         }
-        #endregion
+        
+        public Player FindPlayer(Func<GameObject, bool> condition)
+        {
+            foreach (Player player in _players.Values)
+            {
+                if (condition.Invoke(player))
+                    return player;
+            }
 
+            return null;
+        }
+        #endregion
+        
 
         #region Packet
-        public void ReadGame()
+        public void ReadyGame()
         {
             S_ReadyGame readyPacket = new S_ReadyGame();
             Broadcast(readyPacket);
@@ -228,6 +261,20 @@ namespace Server.Game
         {
             S_StartGame startPacket = new S_StartGame();
             Broadcast(startPacket);
+        }
+        
+        public void StopGame()
+        {
+            S_StopGame stopPacket = new S_StopGame();
+            Broadcast(stopPacket);
+            
+            S_LeaveGame leavePacket = new S_LeaveGame();
+            Broadcast(leavePacket);
+            
+            WaitTime = 1;
+            RunTimer = false;
+            PlayingGame = false;
+            ClearRoom();
         }
         
         public void EnterGame(GameObject gameObject)
@@ -485,19 +532,5 @@ namespace Server.Game
             }
         }
         #endregion
-        
-
-        
-
-        public Player FindPlayer(Func<GameObject, bool> condition)
-        {
-            foreach (Player player in _players.Values)
-            {
-                if (condition.Invoke(player))
-                    return player;
-            }
-
-            return null;
-        }
     }
 }

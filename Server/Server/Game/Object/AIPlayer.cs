@@ -27,6 +27,23 @@ namespace Server.Game
             if (attacker.PlayerType == PlayerType)
                 return;
             
+            // 나를 공격할 수 있는 종족이 아니라면 공격할 수 없도록 한다.
+            switch (PlayerType)
+            {
+                case PlayerType.Rock:
+                    if (attacker.PlayerType == PlayerType.Scissors)
+                        return;
+                    break;
+                case PlayerType.Scissors:
+                    if (attacker.PlayerType == PlayerType.Paper)
+                        return;
+                    break;
+                case PlayerType.Paper:
+                    if (attacker.PlayerType == PlayerType.Rock)
+                        return;
+                    break;
+            }
+            
             State = CreatureState.Hit;
             base.OnDamaged(attacker, damage);
         }

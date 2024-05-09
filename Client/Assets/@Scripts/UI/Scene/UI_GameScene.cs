@@ -101,7 +101,7 @@ public class UI_GameScene : UI_Base
     public void StartGameTimer()
     {
         OnOffJoystickUI(true);
-        time = 3;
+        time = 7;
         StartCoroutine("StartTimer");
     }
     

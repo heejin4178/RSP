@@ -13,7 +13,10 @@ class PacketHandler
 		
 		GameObjectType objectType = GetObjectTypeById(enterGamePacket.Player.ObjectId);
 		if (objectType == GameObjectType.Player)
+		{
+			Managers.Game.PlayerCount = 0;
 			Managers.Game.PlayerCount++;
+		}
 	}
 	
 	public static void S_LeaveGameHandler(PacketSession session, IMessage packet)

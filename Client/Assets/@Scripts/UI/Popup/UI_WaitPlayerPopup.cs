@@ -39,18 +39,12 @@ public class UI_WaitPlayerPopup : UI_Base
         return true;
     }
 
-    public void SetInfo()
-    {
-        RefreshUI();
-    }
-
     void RefreshUI()
     {
         if (_init == false)
             return;
 
         // 정보 취합
-        GetText((int)Texts.PlayerCountText).text = $"{_playerCountText}/12";
     }
 
     void OnClickCancelButton()
@@ -71,12 +65,8 @@ public class UI_WaitPlayerPopup : UI_Base
         Managers.Scene.LoadScene(Define.Scene.Login);
     }
 
-
-    private int _playerCountText;
-
     public void SetPlayerCount(int playerCount)
     {
-        _playerCountText = playerCount;
-        SetInfo();
+        GetText((int)Texts.PlayerCountText).text = $"{playerCount}/12";
     }
 }

@@ -55,19 +55,12 @@ namespace Server
 
 				MyPlayer.Session = this;
 			}
-
-			// 플레이어와 종족이 같은 AI 플레이와 교체함.
-			if(room.ReplacePlayer(MyPlayer) == false)
-				Console.WriteLine($"Fail to ReplacePlayer {MyPlayer.Id}");
 			
-			// 만약에 새로 생성된 룸이라면 => 그냥 타이머 돌리면 됨
-			// 근데 사람을 기다리고 있던 룸이라면 => 타이머 초기화, 타이머 새로 돌리기
-			// 그리고 런타이머가 폴스라면 트루로 바꾸고 돌리기
-			
+			room.Push(room.ReplacePlayer, MyPlayer); // 플레이어와 종족이 같은 AI 플레이와 교체함.
 			room.Push(room.EnterGame, MyPlayer);
 			room.RunTimer = true;
 			room.WaitTime = 1;
-			room.WaitPlayerTimer();
+			room.Push(room.WaitPlayerTimer);
 		}
 
 		public override void OnRecvPacket(ArraySegment<byte> buffer)

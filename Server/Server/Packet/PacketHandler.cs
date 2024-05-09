@@ -5,6 +5,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Server.Data;
 using Server.Game;
 
 class PacketHandler
@@ -70,21 +71,31 @@ class PacketHandler
 		// 아직 플레이전인 룸을 찾고, 없다면 새로운 룸을 생성한다.
 		GameRoom room = RoomManager.Instance.FindCanPlayRoom();
 			
-		// 룸이 없다면 새로생성
+		// 룸이 없다면 새로생성 & AI 플레이어 넣어줌
 		if (room == null)
 		{
 			room = RoomManager.Instance.Add();
 			Program.TickRoom(room, 50);
 		}
-		// 룸이 있다면 AI 플레이어 넣어줌
-		else
+		// 룸이 있고 내가 첫번째 입장 유저라면, AI 플레이어 넣어줌
+		else if (room.PlayersCount == 0)
 		{
 			room.Push(room.Init);
 		}
 		
 		Console.WriteLine($"FindRoom C_EnterGameHandler : {room.RoomId}");
 
-		room.Push(room.ReplacePlayer, player); // 플레이어와 종족이 같은 AI 플레이와 교체함.
+		// clientSession.MyPlayer = ObjectManager.Instance.Add<Player>();
+		// {
+		// 	clientSession.MyPlayer.Info.Name = $"Player_{clientSession.MyPlayer.Info.ObjectId}";
+		// 	clientSession.MyPlayer.State = CreatureState.Idle;
+		//
+		// 	StatInfo stat = null;
+		// 	DataManager.StatDict.TryGetValue(1, out stat);
+		// 	clientSession.MyPlayer.Stat.MergeFrom(stat);
+		// }
+		
+		// room.Push(room.ReplacePlayer, player); // 플레이어와 종족이 같은 AI 플레이와 교체함.
 		room.Push(room.EnterGame, player);
 		
 		if (room.RunTimer == false)

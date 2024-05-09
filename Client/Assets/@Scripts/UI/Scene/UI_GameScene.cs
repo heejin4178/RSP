@@ -8,7 +8,7 @@ using Utils;
 public class UI_GameScene : UI_Base
 {
     // 여기에 필요한 UI
-    // 3분 타이머
+    // 3분 타이머 -> 완료
     // 현재 각 종족별 인원 수
     // 나의 킬수
     
@@ -44,8 +44,7 @@ public class UI_GameScene : UI_Base
         // BindButton(typeof(Buttons));
         // GetButton((int)Buttons.CancelButton).gameObject.BindEvent(OnClickCancelButton);
         
-        GetObject((int)GameObjects.UI_MoveJoystick).gameObject.SetActive(false);
-        GetObject((int)GameObjects.UI_AttackJoystick).gameObject.SetActive(false);
+        OnOffJoystickUI(false);
 
         // 게임 시작전 3초 카운트다운
         CountDown();
@@ -68,8 +67,8 @@ public class UI_GameScene : UI_Base
     
     private int _countDownTime = 3;
     
-    private float time;
-    private float curTime;
+    private int time;
+    private int curTime;
     int minute;
     int second;
     
@@ -101,30 +100,37 @@ public class UI_GameScene : UI_Base
     
     public void StartGameTimer()
     {
-        GetObject((int)GameObjects.UI_MoveJoystick).gameObject.SetActive(true);
-        GetObject((int)GameObjects.UI_AttackJoystick).gameObject.SetActive(true);
-        time = 60;
+        OnOffJoystickUI(true);
+        time = 3;
         StartCoroutine("StartTimer");
     }
     
     IEnumerator StartTimer()
     {
         curTime = time;
-        while(curTime > 0)
+        while(curTime >= 0)
         {
-            curTime -= Time.deltaTime;
+            curTime--;
             minute = (int)curTime / 60;
             second = (int)curTime % 60;
             GetText((int)Texts.GameTimerText).text = minute.ToString("00") + ":" + second.ToString("00");
-            yield return null;
 
             if(curTime <= 0)
             {
-                Debug.Log("시간 종료");
-                Time.timeScale = 0; // 클라 타이머가 종료되면 자체적으로 게임을 멈춤.
+                OnOffJoystickUI(false);
+                Managers.UI.ShowPopup<UI_GameResultPopup>(); // 클라 타이머가 종료되면 자체적으로 게임을 멈춤.
                 curTime = 0;
                 yield break;
             }
+            
+            yield return new WaitForSeconds(1f);
         }
+    }
+
+
+    private void OnOffJoystickUI(bool toggle)
+    {
+        GetObject((int)GameObjects.UI_MoveJoystick).gameObject.SetActive(toggle);
+        GetObject((int)GameObjects.UI_AttackJoystick).gameObject.SetActive(toggle);
     }
 }

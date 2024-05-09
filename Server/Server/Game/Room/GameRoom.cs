@@ -70,7 +70,7 @@ namespace Server.Game
                 return;
             
             Console.WriteLine($"GameTimer : {GameTime}");
-            if (GameTime < 60)
+            if (GameTime < 3)
             {
                 GameTime++;
                 PushAfter(1000, GameTimer);
@@ -102,18 +102,17 @@ namespace Server.Game
             }
         }
         
-        public bool ReplacePlayer(Player replacePlayer)
+        public void ReplacePlayer(Player replacePlayer)
         {
             foreach (var aiPlayer in _aiPlayers.Values)
             {
                 if (aiPlayer.PlayerType == replacePlayer.PlayerType)
                 {
                     replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
-                    return _aiPlayers.Remove(aiPlayer.Id);
+                    _aiPlayers.Remove(aiPlayer.Id);
+                    return;
                 }
             }
-
-            return false;
         }
 
         
@@ -234,6 +233,7 @@ namespace Server.Game
         private void ClearRoom()
         {
             _players.Clear();
+            _aiPlayers.Clear();
             _projectiles.Clear();
         }
         

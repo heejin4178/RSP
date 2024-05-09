@@ -54,4 +54,13 @@ public class NetworkManager
 		_session.Disconnect();
 	}
 
+	public bool CheckSessionConnected()
+	{
+		// 이중 접속을 방지함
+		if (_session.SessionSocket != null)
+			return true;
+
+		return false;
+	}
+
 }

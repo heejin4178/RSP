@@ -13,7 +13,7 @@ namespace Server.Game
         public GameRoom Add()
         {
             GameRoom gameRoom = new GameRoom();
-            gameRoom.Init();
+            gameRoom.Push(gameRoom.Init);
             
             lock (_lock)
             {

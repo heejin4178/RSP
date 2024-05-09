@@ -60,6 +60,7 @@ public class GameScene : BaseScene
     
     public void HandleOnPlayerCountChanged(int playerCount)
     {
+        Debug.Log($"playerCount : {playerCount}");
         if (Managers.UI.GetSceneUI<UI_WaitPlayerPopup>() != null)
             Managers.UI.GetSceneUI<UI_WaitPlayerPopup>().SetPlayerCount(playerCount);
     }

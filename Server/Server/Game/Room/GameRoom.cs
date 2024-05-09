@@ -25,11 +25,20 @@ namespace Server.Game
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
         #region Timer
+
+        public void ResetWaitTime()
+        {
+            WaitTime = 1;
+            RunTimer = true;
+        }
         public void WaitPlayerTimer()
         {
-            if (RunTimer == false)
+            if (RunTimer == false || _players.Count <= 0)
+            {
+                ClearRoom();
                 return;
-            
+            }
+
             Console.WriteLine($"WaitPlayerTimer : {WaitTime}");
             if (WaitTime < 3)
             {
@@ -47,8 +56,11 @@ namespace Server.Game
         
         public void BeforeStartGameTimer()
         {
-            if (RunTimer == false)
+            if (RunTimer == false || _players.Count <= 0)
+            {
+                ClearRoom();
                 return;
+            }
             
             Console.WriteLine($"BeforeStartGameTimer : {WaitTime}");
             if (WaitTime < 3)
@@ -66,11 +78,14 @@ namespace Server.Game
         
         public void GameTimer()
         {
-            if (RunTimer == false)
+            if (RunTimer == false || _players.Count <= 0)
+            {
+                ClearRoom();
                 return;
+            }
             
             Console.WriteLine($"GameTimer : {GameTime}");
-            if (GameTime < 3)
+            if (GameTime < 7)
             {
                 GameTime++;
                 PushAfter(1000, GameTimer);
@@ -232,6 +247,10 @@ namespace Server.Game
         
         private void ClearRoom()
         {
+            WaitTime = 1;
+            RunTimer = false;
+            PlayingGame = false;
+            
             _players.Clear();
             _aiPlayers.Clear();
             _projectiles.Clear();
@@ -271,9 +290,6 @@ namespace Server.Game
             S_LeaveGame leavePacket = new S_LeaveGame();
             Broadcast(leavePacket);
             
-            WaitTime = 1;
-            RunTimer = false;
-            PlayingGame = false;
             ClearRoom();
         }
         
@@ -281,11 +297,16 @@ namespace Server.Game
         {
             if (gameObject == null)
                 return;
+            
+            if (_players.Count >= 12)
+                return;
 
             GameObjectType type = ObjectManager.GetObjectTypeById(gameObject.Id);
             
             if (type == GameObjectType.Player)
             {
+                WaitTime = 1; // 누군가 새로 들어오면 웨이팅 타임 초기화
+                
                 Player player = gameObject as Player;
                 _players.Add(gameObject.Id, player);
                 player.Room = this;
@@ -364,9 +385,6 @@ namespace Server.Game
 
                 if (_players.Count <= 0)
                 {
-                    WaitTime = 1;
-                    RunTimer = false;
-                    PlayingGame = false;
                     ClearRoom();
                     return;
                 }

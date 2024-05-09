@@ -17,14 +17,8 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 6752bfa9575e74bc7a2f16355becb76c
   m_SerializeEntries:
-  - m_GUID: 9cb72d3f05c654f6abab5174b52a902f
-    m_Address: UI_MoveJoystick.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - PreLoad
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e289474c5b013486abf00619f2ea1fe6
-    m_Address: UI_AttackJoystick.prefab
+  - m_GUID: 3fe30fcff172a4c1cba0b126f8cbe74d
+    m_Address: UI_GameResultPopup.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - PreLoad

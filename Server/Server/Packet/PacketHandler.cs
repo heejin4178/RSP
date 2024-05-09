@@ -81,17 +81,17 @@ class PacketHandler
 		{
 			room.Push(room.Init);
 		}
+		
+		Console.WriteLine($"FindRoom C_EnterGameHandler : {room.RoomId}");
 
 		room.Push(room.ReplacePlayer, player); // 플레이어와 종족이 같은 AI 플레이와 교체함.
 		room.Push(room.EnterGame, player);
-		room.RunTimer = true;
-		room.WaitTime = 1;
-		room.Push(room.WaitPlayerTimer);
 		
-		// if (room.RunTimer == false)
-		// {
-		// 	room.RunTimer = true;
-		// 	room.WaitPlayerTimer();
-		// }
+		if (room.RunTimer == false)
+			room.Push(room.ResetWaitTime);
+
+		// 내가 첫번째로 들어가는 거라면, 웨이팅 타이머 실행
+		if (room.PlayersCount == 0)
+			room.Push(room.WaitPlayerTimer);
 	}
 }

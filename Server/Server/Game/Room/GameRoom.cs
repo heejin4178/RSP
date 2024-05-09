@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
@@ -119,14 +120,63 @@ namespace Server.Game
         
         public void ReplacePlayer(Player replacePlayer)
         {
+            if (PlayersCount == 0) // 가장 첫번째 입장 유저라면
+            {
+                // 가위, 바위, 보 중 랜덤으로 선택됨
+                Random random = new Random();
+                replacePlayer.PlayerType = (PlayerType)random.Next(1, 4);
+            }
+            else // 사람 수가 가장 적은것으로 정하고, 사람 수가 같다면 랜덤으로 정한다.
+            {
+                // 종족별 인원수를 배열에 담습니다.
+                int[] counts = { RockNum, ScissorsNum, PaperNum };
+
+                // 종족 중 인원이 가장 적은 종족을 찾습니다.
+                int minCount = counts.Min();
+
+                // 최소값과 같은 변수들의 인덱스를 찾습니다.
+                var minIndexes = Enumerable.Range(0, counts.Length)
+                    .Where(i => counts[i] == minCount)
+                    .ToList();
+
+                // 모든 종족의 수가 같다면
+                if (minIndexes.Count == counts.Length)
+                {
+                    // 가위, 바위, 보 중 랜덤으로 선택됨
+                    Random random = new Random();
+                    replacePlayer.PlayerType = (PlayerType)random.Next(1, 4);
+                }
+                else
+                {
+                    // 수가 가장 적은 종족을 선택합니다.
+                    int selectedIndex = Array.IndexOf(counts, minCount);
+                    replacePlayer.PlayerType = (PlayerType)selectedIndex + 1;
+                }
+            }
+
             foreach (var aiPlayer in _aiPlayers.Values)
             {
                 if (aiPlayer.PlayerType == replacePlayer.PlayerType)
                 {
                     replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
-                    _aiPlayers.Remove(aiPlayer.Id);
+                    Console.WriteLine($"Remove!! : {aiPlayer.Id}, Count : {_aiPlayers.Count}");
+                    LeaveGame(aiPlayer.Id); // AI 유저 내보내기
                     return;
                 }
+            }
+            
+            // 종족 수 업데이트
+            switch (replacePlayer.PlayerType)
+            {
+                case PlayerType.Paper:
+                    PaperNum++;
+                    break;
+                case PlayerType.Scissors:
+                    ScissorsNum++;
+                    break;
+                case PlayerType.Rock:
+                    RockNum++;
+                    break;
             }
         }
 
@@ -310,7 +360,8 @@ namespace Server.Game
                 Player player = gameObject as Player;
                 _players.Add(gameObject.Id, player);
                 player.Room = this;
-                
+
+                ReplacePlayer(player);
                 ApplyMove(player, new Vector3(player.CellPos.X, 0, player.CellPos.Z), player.PosInfo.Rotation);
                 
                 // 본인한테 정보 전송

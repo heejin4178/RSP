@@ -37,8 +37,10 @@ public class MyPlayerController : CreatureController
         }
     }
     
-    public void PlayAttackIndicator(Vector3 from, Vector3 to)
+    public void PlayAttackIndicator(Color color, Vector3 from, Vector3 to)
     {
+        _lineRenderer.startColor = color;
+        _lineRenderer.endColor = color;
         _lineRenderer.enabled = true;
         _lineRenderer.SetPosition(0, from);
         _lineRenderer.SetPosition(1, to);

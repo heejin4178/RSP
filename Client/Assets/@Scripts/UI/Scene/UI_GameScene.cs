@@ -19,7 +19,8 @@ public class UI_GameScene : UI_Base
     enum GameObjects
     {
         UI_MoveJoystick,
-        UI_AttackJoystick
+        UI_AttackJoystick,
+        UI_ProjectileJoystick
     }
 
     enum Texts
@@ -101,7 +102,7 @@ public class UI_GameScene : UI_Base
     public void StartGameTimer()
     {
         OnOffJoystickUI(true);
-        time = 7;
+        time = 70;
         StartCoroutine("StartTimer");
     }
     
@@ -132,5 +133,6 @@ public class UI_GameScene : UI_Base
     {
         GetObject((int)GameObjects.UI_MoveJoystick).gameObject.SetActive(toggle);
         GetObject((int)GameObjects.UI_AttackJoystick).gameObject.SetActive(toggle);
+        GetObject((int)GameObjects.UI_ProjectileJoystick).gameObject.SetActive(toggle);
     }
 }

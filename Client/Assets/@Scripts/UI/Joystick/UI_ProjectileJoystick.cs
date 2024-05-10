@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
+public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     [SerializeField] private Image _background;
     [SerializeField] private Image _handler;
@@ -14,12 +14,10 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
     private Vector2 _touchPosition;
     private Vector2 _moveDir;
     private Vector3 _endPoint;
-    private Color _color;
     
     void Start()
     {
         _joystickRadius = _background.gameObject.GetComponent<RectTransform>().sizeDelta.y / 2;
-        ColorUtility.TryParseHtmlString("#D9D9D9", out _color);
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -41,7 +39,7 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
         
         if (Managers.Object.MyPlayer.State == CreatureState.Skill)
         {
-            Managers.Object.MyPlayer.StopAttackIndicator(); // 근접공격 경로 표시 작업 취소
+            Managers.Object.MyPlayer.StopAttackIndicator(); // 투사체 경로 표시 작업 취소
             return;
         }
         
@@ -53,7 +51,7 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
             Managers.Object.MyPlayer.Rotation = desiredRotationY; // rotation 갱신
         
         Managers.Game.AttackKeyPressed = true;
-        Managers.Object.MyPlayer.StopAttackIndicator(); // 근접공격 경로 표시 작업 취소
+        Managers.Object.MyPlayer.StopAttackIndicator(); // 투사체 경로 표시 작업 취소
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -67,11 +65,11 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
 
         var startPoint = Managers.Object.MyPlayer.transform.position;
         var fireDir = new Vector3(_moveDir.x, 0, _moveDir.y);
-        _endPoint = startPoint + fireDir * 2.5f;
+        _endPoint = startPoint + fireDir * 10.0f;
         startPoint.y = 0.1f;
         _endPoint.y = 0.1f;
         
-        // 근접공격 경로 표시 작업
-        Managers.Object.MyPlayer.PlayAttackIndicator(_color, startPoint, _endPoint);
+        // 투사체 경로 표시 작업
+        Managers.Object.MyPlayer.PlayAttackIndicator(Color.yellow, startPoint, _endPoint);
     }
 }

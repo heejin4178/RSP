@@ -86,7 +86,7 @@ namespace Server.Game
             }
             
             Console.WriteLine($"GameTimer : {GameTime}");
-            if (GameTime < 7)
+            if (GameTime < 70)
             {
                 GameTime++;
                 PushAfter(1000, GameTimer);

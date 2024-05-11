@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Google.Protobuf.Protocol;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -48,6 +49,7 @@ public class GameManager
             onAttackPointerUp.Invoke();
         }
     }
+    public SkillType SkillType { get; set; }
 
     #endregion
     

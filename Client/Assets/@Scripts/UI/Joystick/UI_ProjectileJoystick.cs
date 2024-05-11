@@ -49,8 +49,12 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
 
         if (Managers.Object.MyPlayer.LineRenderer.enabled)
             Managers.Object.MyPlayer.Rotation = desiredRotationY; // rotation 갱신
-        
+
+        Debug.Log("pro direction :" + desiredRotationY);
+
+        Managers.Game.SkillType = SkillType.SkillProjectile; // 스킬 타입 설정
         Managers.Game.AttackKeyPressed = true;
+        
         Managers.Object.MyPlayer.StopAttackIndicator(); // 투사체 경로 표시 작업 취소
     }
 

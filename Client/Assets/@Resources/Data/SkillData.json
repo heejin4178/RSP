@@ -9,15 +9,14 @@
         },
         {
             "id": "2",
-            "name": "화살 공격",
+            "name": "투척 공격",
             "cooldown": "2.5",
             "damage": "5",
             "skillType": "SkillProjectile",
             "projectile": {
-                "name" : "화살",
+                "name" : "투척손",
                 "speed" : "20.0",
-                "range" : "10",
-                "prefab" : "Creature/Arrow"
+                "range" : "10"
             }
         }
     ]

@@ -159,6 +159,7 @@ namespace Server.Game
                 if (aiPlayer.PlayerType == replacePlayer.PlayerType)
                 {
                     replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
+                    replacePlayer.PosInfo = aiPlayer.PosInfo;
                     Console.WriteLine($"Remove!! : {aiPlayer.Id}, Count : {_aiPlayers.Count}");
                     LeaveGame(aiPlayer.Id); // AI 유저 내보내기
                     return;
@@ -280,7 +281,8 @@ namespace Server.Game
         {
             if (gameObject.Room == null)
                 return false;
-		
+
+            gameObject.Info.PosInfo = gameObject.PosInfo;
             PositionInfo posInfo = gameObject.PosInfo;
             
             // TODO : 맵의 최대 크기를 알아내 이상하게 이동하는 패킷은 이동하지 못하게 해야함.
@@ -401,6 +403,8 @@ namespace Server.Game
                 Projectile projectile = gameObject as Projectile;
                 _projectiles.Add(gameObject.Id, projectile);
                 projectile.Room = this;
+                
+                ApplyMove(projectile, new Vector3(projectile.CellPos.X, 0, projectile.CellPos.Z), projectile.PosInfo.Rotation);
             }
             
             // 타인에게 내가 접속했다는 정보 전송
@@ -575,19 +579,18 @@ namespace Server.Game
                 
                 case SkillType.SkillProjectile:
                 {
-                    // Arrow
-                    // Arrow arrow = ObjectManager.Instance.Add<Arrow>();
-                    // if (arrow == null)
-                    //     return;
+                    // Hand Projectile
+                    Hand hand = ObjectManager.Instance.Add<Hand>();
+                    if (hand == null)
+                        return;
 
-                    // arrow.Owner = player;
-                    // arrow.Data = skillData;
-                    // arrow.PosInfo.State = CreatureState.Moving;
-                    // arrow.PosInfo.MoveDir = player.PosInfo.MoveDir;
-                    // arrow.PosInfo.PosX = player.PosInfo.PosX;
-                    // arrow.PosInfo.PosZ = player.PosInfo.PosZ;
-                    // arrow.Speed = skillData.Projectile.speed;
-                    // Push(EnterGame, arrow);
+                    hand.Owner = player;
+                    hand.Data = skillData;
+                    hand.PosInfo = player.PosInfo;
+                    hand.State = CreatureState.Moving;
+                    hand.Speed = skillData.Projectile.speed;
+                    hand.PlayerType = player.PlayerType;
+                    Push(EnterGame, hand);
                 }
                 break;
             }

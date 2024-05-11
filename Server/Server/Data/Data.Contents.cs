@@ -41,7 +41,6 @@ namespace Server.Data
         public string name;
         public float speed;
         public int range;
-        public string prefab;
     }
     
     [Serializable]

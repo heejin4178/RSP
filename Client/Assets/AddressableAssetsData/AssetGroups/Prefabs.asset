@@ -41,6 +41,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a4a94c50c0ae42e9b9efc8637ba5854
+    m_Address: Scissors Hand.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 13d292125861a4e98b92bc9bd00067eb
+    m_Address: Rock Hand.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1558f62eed26b42dbb5ecfc3ae2db34a
+    m_Address: Paper Hand.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:

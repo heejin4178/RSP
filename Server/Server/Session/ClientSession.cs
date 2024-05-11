@@ -64,7 +64,6 @@ namespace Server
 				MyPlayer.Session = this;
 			}
 			
-			// room.Push(room.ReplacePlayer, MyPlayer); // 플레이어와 종족이 같은 AI 플레이와 교체함.
 			room.Push(room.EnterGame, MyPlayer);
 			
 			if (room.RunTimer == false)

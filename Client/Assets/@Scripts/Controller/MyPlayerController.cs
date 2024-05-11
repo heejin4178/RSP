@@ -81,10 +81,21 @@ public class MyPlayerController : CreatureController
             CheckUpdatedFlag();
 
             // 공격 패킷 보내기
-            C_Skill skill = new C_Skill() { Info = new SkillInfo() };
-            skill.Info.SkillId = 1;
-            Managers.Network.Send(skill);
+            {
+                C_Skill skill = new C_Skill() { Info = new SkillInfo() };
             
+                switch (Managers.Game.SkillType)
+                {
+                    case SkillType.SkillAuto:
+                        skill.Info.SkillId = 1;
+                        break;
+                    case SkillType.SkillProjectile:
+                        skill.Info.SkillId = 2;
+                        break;
+                }
+                Managers.Network.Send(skill);
+            }
+
             _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.0f);
         }
     }
@@ -92,7 +103,7 @@ public class MyPlayerController : CreatureController
     IEnumerator CoStartPunch(float time)
     {
         _rangeSkill = false;
-        State = CreatureState.Skill;
+        // State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
         State = CreatureState.Idle;
         _coSkillCoolTime = null;

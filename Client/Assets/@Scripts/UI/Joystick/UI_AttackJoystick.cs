@@ -52,7 +52,11 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
         if (Managers.Object.MyPlayer.LineRenderer.enabled)
             Managers.Object.MyPlayer.Rotation = desiredRotationY; // rotation 갱신
         
+        Debug.Log("meele direction :" + desiredRotationY);
+        
+        Managers.Game.SkillType = SkillType.SkillAuto; // 스킬 타입 설정
         Managers.Game.AttackKeyPressed = true;
+        
         Managers.Object.MyPlayer.StopAttackIndicator(); // 근접공격 경로 표시 작업 취소
     }
 

@@ -62,17 +62,18 @@ public class ObjectManager
             pc.SyncPos();
         }
         
-        // else if (objectType == GameObjectType.Projectile)
-        // {
-        //     GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
-        //     go.name = "Arrow";
-        //     _objects.Add(info.ObjectId, go);
-        //
-        //     ArrowController ac = go.GetComponent<ArrowController>();
-        //     ac.PosInfo = info.PosInfo;
-        //     ac.Stat = info.StatInfo;
-        //     ac.SyncPos();
-        // }
+        else if (objectType == GameObjectType.Projectile)
+        {
+            GameObject go = ProjectileInstantiate(info);
+            go.name = $"{info.PlayerType}_Arrow";
+            _objects.Add(info.ObjectId, go);
+        
+            HandController hc = go.GetOrAddComponent<HandController>();
+            hc.Id = info.ObjectId;
+            hc.PosInfo = info.PosInfo;
+            hc.Stat = info.StatInfo;
+            hc.SyncPos();
+        }
     }
 
     private GameObject CreatureInstantiate(ObjectInfo info)
@@ -82,13 +83,33 @@ public class ObjectManager
         switch (info.PlayerType)
         {
             case PlayerType.Rock:
-                go = Managers.Resource.Instantiate("Rock Knight.prefab");
+                go = Managers.Resource.Instantiate("Rock Knight.prefab", pooling: true);
                 break;
             case PlayerType.Scissors:
-                go = Managers.Resource.Instantiate("Scissors Knight.prefab");
+                go = Managers.Resource.Instantiate("Scissors Knight.prefab", pooling: true);
                 break;
             case PlayerType.Paper:
-                go = Managers.Resource.Instantiate("Paper Knight.prefab");
+                go = Managers.Resource.Instantiate("Paper Knight.prefab", pooling: true);
+                break;
+        }
+
+        return go;
+    }
+    
+    private GameObject ProjectileInstantiate(ObjectInfo info)
+    {
+        GameObject go = null;
+
+        switch (info.PlayerType)
+        {
+            case PlayerType.Rock:
+                go = Managers.Resource.Instantiate("Rock Hand.prefab", pooling: true);
+                break;
+            case PlayerType.Scissors:
+                go = Managers.Resource.Instantiate("Scissors Hand.prefab", pooling: true);
+                break;
+            case PlayerType.Paper:
+                go = Managers.Resource.Instantiate("Paper Hand.prefab", pooling: true);
                 break;
         }
 

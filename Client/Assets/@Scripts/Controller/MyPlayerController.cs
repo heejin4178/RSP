@@ -70,6 +70,9 @@ public class MyPlayerController : CreatureController
 
     protected override void UpdateIdle()
     {
+        if (State == CreatureState.Stun)
+            return;
+        
         base.UpdateIdle();
         
         // 스킬 상태로 갈지 확인
@@ -112,11 +115,17 @@ public class MyPlayerController : CreatureController
 
     protected override void UpdateSkill()
     {
+        if (State == CreatureState.Stun)
+            return;
+        
         base.UpdateSkill();
     }
 
     protected override void UpdateMoving()
     {
+        if (State == CreatureState.Stun)
+            return;
+        
         if (_moveKeyPressed == false && _attackKeyPressed == false)
         {
             State = CreatureState.Idle;

@@ -49,8 +49,6 @@ public class HandController : BaseController
         }
         
         transform.position += destPose;
-        // CellPos += destPose;
-        // CheckUpdatedFlag(); // 여기서 패킷을 보내면 너무 많이 보내서 안됨 -> 서버에서 보내는걸로 바꿔야함
     }
 
     private void UpdateHit()
@@ -62,16 +60,5 @@ public class HandController : BaseController
     {
         transform.position = new Vector3(CellPos.x, 1.5f, CellPos.z);
         transform.rotation = Quaternion.Euler(180, Rotation, 0); // y 축만 회전하도록 설정
-    }
-    
-    protected virtual void CheckUpdatedFlag()
-    {
-        if (_updated)
-        {
-            C_Move movePacket = new C_Move();
-            movePacket.PosInfo = PosInfo;
-            Managers.Network.Send(movePacket);
-            _updated = false;
-        }
     }
 }

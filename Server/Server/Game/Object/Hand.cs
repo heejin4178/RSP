@@ -31,38 +31,24 @@ namespace Server.Game
 
             CellPos += characterForward;
             
-            Console.WriteLine($"Hit Player!, CellPos : {CellPos}, SkillPos : {skillPos}, Rotation : {Info.PosInfo.Rotation}");
-            
-            
             S_Move movePacket = new S_Move();
             movePacket.ObjectId = Id;
             movePacket.PosInfo = PosInfo;
             Room.Broadcast(movePacket);
             Console.WriteLine("Move Hand");
             
-            // Vector2Int destPos = GetFrontCellPos();
-            // if (Room.Map.CanGo(destPos))
-            // {
-            //     CellPos = destPos;
-            //
-            //     S_Move movePacket = new S_Move();
-            //     movePacket.ObjectId = Id;
-            //     movePacket.PosInfo = PosInfo;
-            //     Room.Broadcast(movePacket);
-            //     Console.WriteLine("Move Arrow");
-            // }
-            // else
-            // {
-            //     GameObject target = Room.Map.Find(destPos);
-            //     if (target != null)
-            //     {
-            //         // 피격판정
-            //         target.OnDamaged(this, Data.damage + Owner.Stat.Attack);
-            //     }
-            //     
-            //     // 소멸
-            //     Room.Push(Room.LeaveGame, Id);
-            // }
+            
+            GameObject target = Room.IsPointInsideCircle(Owner, CellPos, 1f);
+            if (target != null)
+            {
+                // 피격판정
+                target.OnHitProjectile(Owner);
+                
+                Console.WriteLine($"Hit Player!, CellPos : {CellPos}, SkillPos : {skillPos}, Rotation : {Info.PosInfo.Rotation}");
+
+                // 소멸
+                Room.Push(Room.LeaveGame, Id);
+            }
         }
     }
 }

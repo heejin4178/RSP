@@ -89,6 +89,16 @@ namespace Server.Game
                 OnDead(attacker);
             }
         }
+        
+        public virtual void OnHitProjectile(GameObject attacker)
+        {
+            if (Room == null)
+                return;
+
+            S_Stun stunPacket = new S_Stun();
+            stunPacket.ObjectId = Id;
+            Room.Broadcast(stunPacket);
+        }
 
         public virtual void OnDead(GameObject attacker)
         {

@@ -47,7 +47,12 @@ namespace Server.Game
             State = CreatureState.Hit;
             base.OnDamaged(attacker, damage);
         }
-        
+
+        public override void OnHitProjectile(GameObject attacker)
+        {
+            base.OnHitProjectile(attacker);
+        }
+
         // FSM (Finite State Machine)
         public override void Update()
         {

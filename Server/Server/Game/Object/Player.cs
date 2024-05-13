@@ -39,6 +39,11 @@ namespace Server.Game
             
             base.OnDamaged(attacker, damage);
         }
+        
+        public override void OnHitProjectile(GameObject attacker)
+        {
+            base.OnHitProjectile(attacker);
+        }
 
         public override void OnDead(GameObject attacker)
         {

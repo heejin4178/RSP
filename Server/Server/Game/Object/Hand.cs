@@ -9,6 +9,8 @@ namespace Server.Game
         public GameObject Owner { get; set; }
 
         private long _nextMoveTick = 0;
+        private Vector3 _originCellPos;
+        private bool _isFirst;
         public override void Update()
         {
             if (Data == null || Data.Projectile == null || Owner == null || Room == null)
@@ -19,6 +21,12 @@ namespace Server.Game
             
             long tick = (long)(1000 / Data.Projectile.speed);
             _nextMoveTick = Environment.TickCount64 + tick;
+
+            if (_isFirst == false)
+            {
+                _originCellPos = CellPos;
+                _isFirst = true;
+            }
 
             // 쿼터니언을 생성합니다. 여기서는 y값만 사용하여 회전을 표현합니다.
             Quaternion rotation = Quaternion.CreateFromYawPitchRoll(0, Info.PosInfo.Rotation * MathF.PI / 180f, 0);
@@ -31,14 +39,21 @@ namespace Server.Game
 
             CellPos += characterForward;
             
+            // 투사체의 최대 사정거리를 넘으면 투사체를 소멸시킴
+            if (Vector3.Distance(_originCellPos, CellPos) > 11f)
+            {
+                // 소멸
+                Room.Push(Room.LeaveGame, Id);
+                return;
+            }
+
             S_Move movePacket = new S_Move();
             movePacket.ObjectId = Id;
             movePacket.PosInfo = PosInfo;
             Room.Broadcast(movePacket);
             Console.WriteLine("Move Hand");
             
-            
-            GameObject target = Room.IsPointInsideCircle(Owner, CellPos, 1f);
+            GameObject target = Room.IsPointInsideCircle(Owner, CellPos, 0.5f);
             if (target != null)
             {
                 // 피격판정

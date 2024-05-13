@@ -30,14 +30,10 @@ public class HandController : BaseController
     
     private void UpdateMoving()
     {
-
         Vector3 moveDir = CellPos - transform.position;
         Vector3 dir = moveDir.normalized * Speed * Time.deltaTime;
         // Vector3 dir = -(transform.forward) * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.z);
-        
-        Debug.Log($"CellPos : {CellPos}");
-        Debug.Log($"transform.position : {transform.position}");
         
         // 벽이나 건물을 통과하지 못하게 함.
         if (Physics.Raycast(transform.position + Vector3.up, -(transform.forward), 0.1f, LayerMask.GetMask("Block")))

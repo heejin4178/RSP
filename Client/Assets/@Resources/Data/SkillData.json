@@ -15,7 +15,7 @@
             "skillType": "SkillProjectile",
             "projectile": {
                 "name" : "투척손",
-                "speed" : "20.0",
+                "speed" : "30.0",
                 "range" : "10"
             }
         }

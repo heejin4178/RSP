@@ -276,6 +276,55 @@ namespace Server.Game
     
             return false;
         }
+        
+        public GameObject IsPointInsideCircle(GameObject player, Vector3 circleCenter, float radius)
+        {
+            GameObject target = null;
+            
+            foreach (var p in _players.Values)
+            {
+                if (p == player)
+                    continue;
+                
+                if (p.PlayerType == player.PlayerType)
+                    continue;
+                
+                // 원의 중심과 주어진 점 사이의 거리를 계산합니다.
+                float distanceSquared = (p.CellPos.X - circleCenter.X) * (p.CellPos.X - circleCenter.X) +
+                                        (p.CellPos.Z - circleCenter.Z) * (p.CellPos.Z - circleCenter.Z);
+
+                // 거리가 반지름보다 작거나 같으면 원 안에 있는 것으로 판정합니다.
+                bool check = distanceSquared <= radius * radius;
+
+                // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
+                if (check)
+                {
+                    target = p;
+                }
+            }
+                    
+            foreach (var p in _aiPlayers.Values)
+            {
+                if (p.PlayerType == player.PlayerType)
+                    continue;
+                
+                // 원의 중심과 주어진 점 사이의 거리를 계산합니다.
+                float distanceSquared = (p.CellPos.X - circleCenter.X) * (p.CellPos.X - circleCenter.X) +
+                                        (p.CellPos.Z - circleCenter.Z) * (p.CellPos.Z - circleCenter.Z);
+
+                // 거리가 반지름보다 작거나 같으면 원 안에 있는 것으로 판정합니다.
+                bool check = distanceSquared <= radius * radius;
+                
+                // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
+                if (check)
+                {
+                    target = p;
+                }
+            }
+
+            return target;
+        }
+
 
         private bool ApplyMove(GameObject gameObject, Vector3 dest, float rotation)
         {

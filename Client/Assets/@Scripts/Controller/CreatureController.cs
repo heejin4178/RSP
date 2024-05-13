@@ -53,10 +53,13 @@ public class CreatureController : BaseController
             case CreatureState.Hit:
                 UpdateHit();
                 break;
+            case CreatureState.Stun:
+                UpdateStun();
+                break;
         }
     }
 
-    protected virtual void UpdateIdle()
+    protected virtual void  UpdateIdle()
     { 
         _animator.Play("IDLE");
     }
@@ -93,11 +96,27 @@ public class CreatureController : BaseController
         _coHitCoolTime = StartCoroutine("CoStartHitReact", 0.3);
     }
     
+    protected virtual void UpdateStun()
+    {
+        _coHitCoolTime = StartCoroutine("CoStartStunReact", 2.0);
+    }
+    
     IEnumerator CoStartHitReact(float time)
     {
         yield return new WaitForSeconds(time);
-        PlayFlashEffect();
+        PlayFlashEffect(Color.red);
         _animator.Play("REACT");
+        yield return new WaitForSeconds(time);
+        StopFlashEffect();
+        State = CreatureState.Idle;
+        _coHitCoolTime = null;
+        CheckUpdatedFlag();
+    }
+    
+    IEnumerator CoStartStunReact(float time)
+    {
+        PlayFlashEffect(Color.blue);
+        _animator.Play("REACT"); // TODO : 스턴 애니메이션 변경하기
         yield return new WaitForSeconds(time);
         StopFlashEffect();
         State = CreatureState.Idle;
@@ -144,11 +163,11 @@ public class CreatureController : BaseController
         _skinnedMeshRenderers = bodyMeshTransform.GetComponentsInChildren<SkinnedMeshRenderer>();
     }
 
-    private void PlayFlashEffect()
+    private void PlayFlashEffect(Color color)
     {
         foreach (SkinnedMeshRenderer renderer in _skinnedMeshRenderers)
         {
-            renderer.material.color = Color.red;
+            renderer.material.color = color;
         }
     }
     

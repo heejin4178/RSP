@@ -138,6 +138,21 @@ class PacketHandler
 		// Time.timeScale = 0; // 혹시 모르니 서버에서도 게임이 종료되었다고 알려주고, 게임이 중단되지 않았다면 게임을 중단.
 	}
 	
+	public static void S_StunHandler(PacketSession session, IMessage packet)
+	{
+		S_Stun stunPacket = packet as S_Stun;
+
+		GameObject go = Managers.Object.FindById(stunPacket.ObjectId);
+		if (go == null)
+			return;
+
+		CreatureController cc = go.GetComponent<CreatureController>();
+		if (cc != null)
+		{
+			cc.State = CreatureState.Stun;
+		}
+	}
+	
 	
 	
 	private static GameObjectType GetObjectTypeById(int id)

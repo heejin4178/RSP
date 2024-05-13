@@ -20,6 +20,7 @@ enum MsgId {
   S_READY_GAME = 12;
   S_START_GAME = 13;
   S_STOP_GAME = 14;
+  S_STUN = 15;
 }
 
 enum CreatureState {
@@ -28,6 +29,7 @@ enum CreatureState {
     Skill = 2;
     Dead = 3;
     Hit = 4;
+    Stun = 5;
 }
 
 enum GameObjectType {
@@ -103,6 +105,10 @@ message S_Skill {
 message S_ChangeHp {
   int32 objectId = 1;
   int32 hp = 2;
+}
+
+message S_Stun {
+  int32 objectId = 1;
 }
 
 message S_Die {

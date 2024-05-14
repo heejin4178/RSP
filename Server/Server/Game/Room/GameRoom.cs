@@ -23,6 +23,7 @@ namespace Server.Game
         
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
         private Dictionary<int, AIPlayer> _aiPlayers = new Dictionary<int, AIPlayer>();
+        private Dictionary<int, GameObject> _allPlayers = new Dictionary<int, GameObject>();
         private Dictionary<int, Projectile> _projectiles = new Dictionary<int, Projectile>();
 
         #region Timer
@@ -48,7 +49,6 @@ namespace Server.Game
             }
             else
             {
-                PlayingGame = true;
                 Push(ReadyGame); // 게임 준비 완료 패킷 전송
                 PushAfter(1000, BeforeStartGameTimer);
                 WaitTime = 1;
@@ -71,6 +71,7 @@ namespace Server.Game
             }
             else
             {
+                PlayingGame = true;
                 Push(StartGame); // 게임 시작 패킷 전송
                 Push(GameTimer); // 게임 타이머 실행
                 WaitTime = 1;
@@ -114,6 +115,7 @@ namespace Server.Game
                     AIPlayer aiPlayer = CreatePlayer(type);
                     SetPlayerPose(aiPlayer, aiPlayer.PlayerType, i);
                     _aiPlayers.Add(aiPlayer.Id, aiPlayer);
+                    _allPlayers.Add(aiPlayer.Id, aiPlayer);
                 }
             }
         }
@@ -185,6 +187,12 @@ namespace Server.Game
         // 누군가 주기적으로 호출해줘야 한다.
         public void Update()
         {
+            if (PlayingGame == false)
+            {
+                Flush();
+                return;
+            }
+            
             foreach (AIPlayer aiPlayer in _aiPlayers.Values)
             {
                 aiPlayer.Update();
@@ -326,7 +334,7 @@ namespace Server.Game
         }
 
 
-        private bool ApplyMove(GameObject gameObject, Vector3 dest, float rotation)
+        public bool ApplyMove(GameObject gameObject, Vector3 dest, float rotation)
         {
             if (gameObject.Room == null)
                 return false;
@@ -354,13 +362,21 @@ namespace Server.Game
             
             _players.Clear();
             _aiPlayers.Clear();
+            _allPlayers.Clear();
             _projectiles.Clear();
         }
         
-        public Player FindPlayer(Func<GameObject, bool> condition)
+        /// <summary>
+        /// 사람과 AI플레이어 구분하지 않고 그중에서 찾아줌.
+        /// </summary>
+        public GameObject FindPlayer(Func<GameObject, bool> condition)
         {
-            foreach (Player player in _players.Values)
+            foreach (GameObject player in _allPlayers.Values)
             {
+                // 타겟이 될 플레이어를 찾는데 그 플레이에어 타켓이 붙어 있으면 안찾는다.
+                if (player.Chaser != null)
+                    continue;
+
                 if (condition.Invoke(player))
                     return player;
             }
@@ -410,6 +426,7 @@ namespace Server.Game
                 
                 Player player = gameObject as Player;
                 _players.Add(gameObject.Id, player);
+                _allPlayers.Add(gameObject.Id, player);
                 player.Room = this;
 
                 ReplacePlayer(player);
@@ -443,6 +460,7 @@ namespace Server.Game
             {
                 AIPlayer aiPlayer = gameObject as AIPlayer;
                 _aiPlayers.Add(gameObject.Id, aiPlayer);
+                _allPlayers.Add(gameObject.Id, aiPlayer);
                 aiPlayer.Room = this;
                 
                 ApplyMove(aiPlayer, new Vector3(aiPlayer.CellPos.X, 0, aiPlayer.CellPos.Z), aiPlayer.PosInfo.Rotation);
@@ -483,6 +501,10 @@ namespace Server.Game
                 if (_players.Remove(objectId, out player) == false)
                     return;
                 
+                // 룸에서 제거
+                if (_allPlayers.Remove(objectId) == false)
+                    return;
+                
                 // 오브젝트 매니저에서 제거
                 if (ObjectManager.Instance.Remove(objectId) == false)
                     return;
@@ -505,6 +527,10 @@ namespace Server.Game
             {
                 AIPlayer aiPlayer = null;
                 if (_aiPlayers.Remove(objectId, out aiPlayer) == false)
+                    return;
+                
+                // 룸에서 제거
+                if (_allPlayers.Remove(objectId) == false)
                     return;
                 
                 // aiPlayer.Room = null;
@@ -530,7 +556,7 @@ namespace Server.Game
             }
         }
 
-        public void HandleMove(Player player, C_Move movePacket)
+        public void HandleMove(GameObject player, C_Move movePacket)
         {
             if (player == null)
                 return;
@@ -549,6 +575,21 @@ namespace Server.Game
             resMovePacket.PosInfo = movePacket.PosInfo;
 
             Broadcast(resMovePacket);
+        }
+        
+        public void HandleS_Move(GameObject player, S_Move movePacket)
+        {
+            if (player == null)
+                return;
+            
+            // TODO : 검증
+            PositionInfo movePosInfo = movePacket.PosInfo;
+            ObjectInfo info = player.Info;
+
+            info.PosInfo = movePosInfo;
+            player.PosInfo = movePosInfo;
+            ApplyMove(player, new Vector3(movePosInfo.PosX, 0, movePosInfo.PosZ), movePosInfo.Rotation);
+            Broadcast(movePacket);
         }
         
         public void HandleSkill(Player player, C_Skill skillPacket)

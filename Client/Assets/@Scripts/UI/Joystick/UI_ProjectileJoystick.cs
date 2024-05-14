@@ -9,6 +9,7 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
 {
     [SerializeField] private Image _background;
     [SerializeField] private Image _handler;
+    [SerializeField] private Image _coolTimeBar;
 
     private float _joystickRadius;
     private Vector2 _touchPosition;
@@ -18,6 +19,14 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
     void Start()
     {
         _joystickRadius = _background.gameObject.GetComponent<RectTransform>().sizeDelta.y / 2;
+                
+        Managers.Game.OnCoolTimeValueChanged -= OnCoolTimeValueChanged;
+        Managers.Game.OnCoolTimeValueChanged += OnCoolTimeValueChanged;
+    }
+    
+    private void OnCoolTimeValueChanged(float value)
+    {
+        _coolTimeBar.fillAmount = value / 100;
     }
     
     public void OnPointerClick(PointerEventData eventData)
@@ -29,12 +38,14 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
     {
         _background.transform.position = eventData.position;
         _handler.transform.position = eventData.position;
+        _coolTimeBar.transform.position = eventData.position;
         _touchPosition = eventData.position;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
         _handler.transform.position = _touchPosition;
+        _coolTimeBar.transform.position = _touchPosition;
         _moveDir = Vector2.zero;
         
         if (Managers.Object.MyPlayer.State == CreatureState.Skill)
@@ -66,6 +77,7 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
         _moveDir = touchDir.normalized;
         Vector2 newPosition = _touchPosition + _moveDir * moveDist;
         _handler.transform.position = newPosition;
+        _coolTimeBar.transform.position = _touchPosition;
 
         var startPoint = Managers.Object.MyPlayer.transform.position;
         var fireDir = new Vector3(_moveDir.x, 0, _moveDir.y);

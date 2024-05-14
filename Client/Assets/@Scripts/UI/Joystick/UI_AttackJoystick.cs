@@ -21,7 +21,7 @@ public class UI_AttackJoystick : MonoBehaviour, IPointerClickHandler, IPointerDo
         _joystickRadius = _background.gameObject.GetComponent<RectTransform>().sizeDelta.y / 2;
         ColorUtility.TryParseHtmlString("#D9D9D9", out _color);
     }
-    
+
     public void OnPointerClick(PointerEventData eventData)
     {
         

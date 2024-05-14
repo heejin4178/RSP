@@ -8,6 +8,7 @@ public class MyPlayerController : CreatureController
     private bool _moveKeyPressed = false;
     private bool _attackKeyPressed = false;
     private Coroutine _coSkillCoolTime;
+    private Coroutine _coPorjectileSkillCoolTime;
     private LineRenderer _lineRenderer;
     public LineRenderer LineRenderer { get => _lineRenderer; }
 
@@ -91,26 +92,60 @@ public class MyPlayerController : CreatureController
                 {
                     case SkillType.SkillAuto:
                         skill.Info.SkillId = 1;
+                        _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.0f);
                         break;
                     case SkillType.SkillProjectile:
-                        skill.Info.SkillId = 2;
+                        if (_coPorjectileSkillCoolTime == null)
+                        {
+                            skill.Info.SkillId = 2;
+                            _coSkillCoolTime = StartCoroutine("CoStartProjectile", 1.0f);
+                        }
+                        else
+                        {
+                            State = CreatureState.Idle;
+                            return;
+                        }
                         break;
                 }
                 Managers.Network.Send(skill);
             }
-
-            _coSkillCoolTime = StartCoroutine("CoStartPunch", 1.0f);
         }
     }
     
     IEnumerator CoStartPunch(float time)
     {
         _rangeSkill = false;
-        // State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
         State = CreatureState.Idle;
         _coSkillCoolTime = null;
         CheckUpdatedFlag();
+    }
+    
+    IEnumerator CoStartProjectile(float time)
+    {
+        _rangeSkill = true;
+        _coPorjectileSkillCoolTime = StartCoroutine("CoStartProjectileCoolTime", 5.0f);
+        yield return new WaitForSeconds(time);
+        State = CreatureState.Idle;
+        _coSkillCoolTime = null;
+        CheckUpdatedFlag();
+    }
+    
+    IEnumerator CoStartProjectileCoolTime(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _coPorjectileSkillCoolTime = null;
+        Managers.Game.CoolTimeValue = 0;
+    }
+
+    public override void UpdateController()
+    {
+        if (_coPorjectileSkillCoolTime != null)
+        {
+            Managers.Game.CoolTimeValue += 20 * Time.deltaTime;
+        }
+        
+        base.UpdateController();
     }
 
     protected override void UpdateSkill()

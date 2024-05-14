@@ -22,6 +22,8 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
                 
         Managers.Game.OnCoolTimeValueChanged -= OnCoolTimeValueChanged;
         Managers.Game.OnCoolTimeValueChanged += OnCoolTimeValueChanged;
+        
+        _coolTimeBar.fillAmount = 0;
     }
     
     private void OnCoolTimeValueChanged(float value)
@@ -60,9 +62,7 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
 
         if (Managers.Object.MyPlayer.LineRenderer.enabled)
             Managers.Object.MyPlayer.Rotation = desiredRotationY; // rotation 갱신
-
-        Debug.Log("pro direction :" + desiredRotationY);
-
+        
         Managers.Game.SkillType = SkillType.SkillProjectile; // 스킬 타입 설정
         Managers.Game.AttackKeyPressed = true;
         

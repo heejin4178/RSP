@@ -70,6 +70,8 @@ namespace Server.Game
                 PosInfo.PosZ = value.Z;
             }
         }
+        
+        public GameObject Chaser { get; set; }
 
         public virtual void OnDamaged(GameObject attacker, int damage)
         {

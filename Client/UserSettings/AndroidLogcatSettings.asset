@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R3CTC05C3WZ",
         "name": "com.DefaultCompany.Client",
-        "processId": 13905,
+        "processId": 11276,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -36,6 +36,12 @@
             "deviceId": "R3CTC05C3WZ",
             "name": "com.DefaultCompany.Client",
             "processId": 13905,
+            "exited": false
+        },
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.DefaultCompany.Client",
+            "processId": 11276,
             "exited": false
         }
     ],

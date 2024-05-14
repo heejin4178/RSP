@@ -17,15 +17,15 @@ public class PlayerController : CreatureController
 
         return true;
     }
-    
-    public override void UpdateController()
-    {
-        base.UpdateController();
-    }
 
     protected override void UpdateIdle()
     {
         base.UpdateIdle();
+    }
+
+    protected override void UpdateMoving()
+    {
+        base.UpdateMoving();
     }
 
     // public void UseSkill(int skillId)

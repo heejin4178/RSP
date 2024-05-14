@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
@@ -40,12 +41,15 @@ public class CreatureController : BaseController
         {
             case CreatureState.Idle:
                 UpdateIdle();
+                // Debug.Log("Idle");
                 break;
             case CreatureState.Skill:
                 UpdateSkill();
+                // Debug.Log("Skill");
                 break;
             case CreatureState.Moving:
-                UpdateMoving();
+                UpdateMoving();          
+                // Debug.Log("Moving");
                 break;
             case CreatureState.Dead:
                 UpdateDead();
@@ -79,9 +83,10 @@ public class CreatureController : BaseController
         Vector3 moveDir = CellPos - transform.position;
         Vector3 dir = moveDir.normalized * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.z);
-        
+
+        Debug.Log(CellPos);
         transform.position += destPose;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 10 * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Speed * Time.deltaTime);
 
         Rotation = transform.rotation.eulerAngles.y;
 

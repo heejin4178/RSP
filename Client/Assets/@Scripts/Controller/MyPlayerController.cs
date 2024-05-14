@@ -20,7 +20,7 @@ public class MyPlayerController : CreatureController
         Managers.Game.onMoveDirChanged += HandleOnMoveDirChanged;
         Managers.Game.onMovePointerUp += HandleOnMovePointerUp;
         Managers.Game.onAttackPointerUp += HandleOnAttackPointerUp;
-        
+
         _lineRenderer = transform.Find("AttackLineIndicator").GetComponent<LineRenderer>();
         _lineRenderer.positionCount = 2;
         _lineRenderer.enabled = false;

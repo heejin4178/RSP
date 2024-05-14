@@ -30,9 +30,9 @@ public class ObjectManager
             if (myPlayer)
             {
                 MyPlayer = go.GetOrAddComponent<MyPlayerController>();
-                MyPlayer.Speed = 10.0f;
                 MyPlayer.Id = info.ObjectId;
                 MyPlayer.PosInfo = info.PosInfo;
+                MyPlayer.Stat = info.StatInfo;
                 MyPlayer.SyncPos();
                 
                 Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(go);
@@ -43,7 +43,6 @@ public class ObjectManager
                 pc.Id = info.ObjectId;
                 pc.PosInfo = info.PosInfo;
                 pc.Stat = info.StatInfo;
-                pc.Speed = 10.0f;
                 pc.SyncPos();
             }
         }
@@ -58,7 +57,6 @@ public class ObjectManager
             pc.Id = info.ObjectId;
             pc.PosInfo = info.PosInfo;
             pc.Stat = info.StatInfo;
-            pc.Speed = 10.0f;
             pc.SyncPos();
         }
         

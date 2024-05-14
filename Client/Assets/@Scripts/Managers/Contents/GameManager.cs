@@ -51,6 +51,18 @@ public class GameManager
     }
     public SkillType SkillType { get; set; }
 
+    private float _coolTimeValue;
+    public event Action<float> OnCoolTimeValueChanged; 
+    public float CoolTimeValue
+    {
+        get => _coolTimeValue;
+        set
+        {
+            _coolTimeValue = value;
+            OnCoolTimeValueChanged.Invoke(value);
+        }
+    }
+
     #endregion
     
     #region 이동

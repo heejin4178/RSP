@@ -155,18 +155,6 @@ namespace Server.Game
                     replacePlayer.PlayerType = (PlayerType)selectedIndex + 1;
                 }
             }
-
-            foreach (var aiPlayer in _aiPlayers.Values)
-            {
-                if (aiPlayer.PlayerType == replacePlayer.PlayerType)
-                {
-                    replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
-                    replacePlayer.PosInfo = aiPlayer.PosInfo;
-                    Console.WriteLine($"Remove!! : {aiPlayer.Id}, Count : {_aiPlayers.Count}");
-                    LeaveGame(aiPlayer.Id); // AI 유저 내보내기
-                    return;
-                }
-            }
             
             // 종족 수 업데이트
             switch (replacePlayer.PlayerType)
@@ -181,6 +169,19 @@ namespace Server.Game
                     RockNum++;
                     break;
             }
+
+            foreach (var aiPlayer in _aiPlayers.Values)
+            {
+                if (aiPlayer.PlayerType == replacePlayer.PlayerType)
+                {
+                    replacePlayer.Info.PosInfo = aiPlayer.PosInfo;
+                    replacePlayer.PosInfo = aiPlayer.PosInfo;
+                    Console.WriteLine($"Remove!! : {aiPlayer.Id}, Count : {_aiPlayers.Count}");
+                    LeaveGame(aiPlayer.Id); // AI 유저 내보내기
+                    return;
+                }
+            }
+            
         }
 
         
@@ -428,7 +429,7 @@ namespace Server.Game
                 _players.Add(gameObject.Id, player);
                 _allPlayers.Add(gameObject.Id, player);
                 player.Room = this;
-
+                
                 ReplacePlayer(player);
                 ApplyMove(player, new Vector3(player.CellPos.X, 0, player.CellPos.Z), player.PosInfo.Rotation);
                 
@@ -445,7 +446,7 @@ namespace Server.Game
                     foreach (Player p in _players.Values)
                         if (player != p)
                             spawnPacket.Objects.Add(p.Info);
-                    
+
                     foreach (AIPlayer a in _aiPlayers.Values)
                         spawnPacket.Objects.Add(a.Info);
 
@@ -555,6 +556,20 @@ namespace Server.Game
                 }
             }
         }
+        
+        public void SpawnGame(GameObject gameObject)
+        {
+            S_Spawn spawnPacket = new S_Spawn();
+            spawnPacket.Objects.Add(gameObject.Info);
+            Broadcast(spawnPacket);
+        }
+        
+        public void DeSpawnGame(int objectId)
+        {
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjectIds.Add(objectId);
+            Broadcast(despawnPacket);
+        }
 
         public void HandleMove(GameObject player, C_Move movePacket)
         {
@@ -642,11 +657,9 @@ namespace Server.Game
                     
                     // Console.WriteLine($"topLeft : {topLeft}, topRight : {topRight}, bottomLeft : {bottomLeft}, bottomRight : {bottomRight}");
                     // Console.WriteLine("info.PosInfo.Rotation : " + info.PosInfo.Rotation);
-                    foreach (var p in _players.Values)
+                    
+                    foreach (var p in _allPlayers.Values)
                     {
-                        if (p == player)
-                            continue;
-                        
                         // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
                         if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
@@ -654,14 +667,87 @@ namespace Server.Game
                             Console.WriteLine($"Hit Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }
+                }
+                break;
+                
+                case SkillType.SkillProjectile:
+                {
+                    // Hand Projectile
+                    Hand hand = ObjectManager.Instance.Add<Hand>();
+                    if (hand == null)
+                        return;
+
+                    hand.Owner = player;
+                    hand.Data = skillData;
+                    hand.PosInfo = player.PosInfo;
+                    hand.State = CreatureState.Moving;
+                    hand.Speed = skillData.Projectile.speed;
+                    hand.PlayerType = player.PlayerType;
+                    Push(EnterGame, hand);
+                }
+                break;
+            }
+        }
+        
+        public void HandleS_Skill(GameObject player, S_Skill skillPacket)
+        {
+            if (player == null)
+                return;
+
+            ObjectInfo info = player.Info;
+            // if (info.PosInfo.State != CreatureState.Idle)
+            //     return;
+            
+            // TODO : 스킬 사용 가능 여부 체크
+            
+            info.PosInfo.State = CreatureState.Skill;
+            
+            Broadcast(skillPacket);
+
+            Skill skillData = null;
+            if (DataManager.SkillDict.TryGetValue(skillPacket.Info.SkillId, out skillData) == false)
+                return;
+
+            switch (skillData.SkillType)
+            {
+                case SkillType.SkillAuto:
+                {
+                    // 데미지 판정
+                    float width = 1.5f; // 가로
+                    float height = 2.5f; // 세로
                     
-                    foreach (var p in _aiPlayers.Values)
+                    // 쿼터니언을 생성합니다. 여기서는 y값만 사용하여 회전을 표현합니다.
+                    Quaternion rotation = Quaternion.CreateFromYawPitchRoll(0, info.PosInfo.Rotation * MathF.PI / 180f, 0);
+                    // 생성한 쿼터니언의 forward 속성을 이용하여 캐릭터의 바라보는 방향 벡터를 얻습니다.
+                    Vector3 characterForward = Vector3.Transform(Vector3.UnitZ, rotation);
+                    // 방향 벡터의 x, y 값을 서로 바꿔줍니다.
+                    (characterForward.X, characterForward.Y) = (-characterForward.Y, characterForward.X);
+                    
+                    Vector3 skillPos = player.CellPos + characterForward;
+
+                    // 캐릭터가 바라보는 방향 벡터와 오른쪽 방향 벡터를 계산
+                    Vector3 right = Vector3.Cross(Vector3.UnitY, characterForward);
+
+                    // 직사각형의 네 꼭지점 좌표 계산
+                    Vector3 topLeft = skillPos + (-right * (width / 2)) + (characterForward * (height / 2));
+                    Vector3 topRight = skillPos + (right * (width / 2)) + (characterForward * (height / 2));
+                    Vector3 bottomLeft = skillPos + (-right * (width / 2)) + (-characterForward * (height / 2));
+                    Vector3 bottomRight = skillPos + (right * (width / 2)) + (-characterForward * (height / 2));
+                    
+                    // Console.WriteLine($"topLeft : {topLeft}, topRight : {topRight}, bottomLeft : {bottomLeft}, bottomRight : {bottomRight}");
+                    // Console.WriteLine("info.PosInfo.Rotation : " + info.PosInfo.Rotation);
+                    
+                    foreach (var p in _allPlayers.Values)
                     {
                         // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
                         if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
                             p.OnDamaged(player, 1);
-                            Console.WriteLine($"Hit AI Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
+                            GameObjectType type = ObjectManager.GetObjectTypeById(p.Id);
+                            if (type == GameObjectType.Player)
+                                Console.WriteLine($"Hit AI Player!, Player CellPos : {p.CellPos}, AI CellPos : {player.CellPos}, AI SkillPos : {skillPos}, AI Rotation : {info.PosInfo.Rotation}");
+                            
+                            // Console.WriteLine($"Hit AI Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }
                 }

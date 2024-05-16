@@ -41,15 +41,12 @@ public class CreatureController : BaseController
         {
             case CreatureState.Idle:
                 UpdateIdle();
-                // Debug.Log("Idle");
                 break;
             case CreatureState.Skill:
                 UpdateSkill();
-                // Debug.Log("Skill");
                 break;
             case CreatureState.Moving:
-                UpdateMoving();          
-                // Debug.Log("Moving");
+                UpdateMoving();
                 break;
             case CreatureState.Dead:
                 UpdateDead();
@@ -83,8 +80,14 @@ public class CreatureController : BaseController
         Vector3 moveDir = CellPos - transform.position;
         Vector3 dir = moveDir.normalized * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.z);
-
-        Debug.Log(CellPos);
+        
+        // 벽이나 건물을 통과하지 못하게 함.
+        if (Physics.Raycast(transform.position + Vector3.up * 1.5f, destPose, 2.0f, LayerMask.GetMask("Block")))
+        {
+            State = CreatureState.Idle;
+            return;
+        }
+        
         transform.position += destPose;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), Speed * Time.deltaTime);
 
@@ -115,7 +118,6 @@ public class CreatureController : BaseController
         StopFlashEffect();
         State = CreatureState.Idle;
         _coHitCoolTime = null;
-        CheckUpdatedFlag();
     }
     
     IEnumerator CoStartStunReact(float time)
@@ -126,7 +128,6 @@ public class CreatureController : BaseController
         StopFlashEffect();
         State = CreatureState.Idle;
         _coHitCoolTime = null;
-        CheckUpdatedFlag();
     }
     #endregion
     
@@ -146,17 +147,6 @@ public class CreatureController : BaseController
     protected virtual void OnDead()
     {
         
-    }
-    
-    protected virtual void CheckUpdatedFlag()
-    {
-        if (_updated)
-        {
-            C_Move movePacket = new C_Move();
-            movePacket.PosInfo = PosInfo;
-            Managers.Network.Send(movePacket);
-            _updated = false;
-        }
     }
 
     private void FindSkinnedMeshRenderer()

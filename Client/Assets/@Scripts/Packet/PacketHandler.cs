@@ -29,13 +29,18 @@ class PacketHandler
 	{
 		S_Spawn spawnPacket = packet as S_Spawn;
 
+		bool myPlayer = false;
+
 		foreach (ObjectInfo obj in spawnPacket.Objects)
 		{
-			Managers.Object.Add(obj, myPlayer: false);
-			
 			GameObjectType objectType = GetObjectTypeById(obj.ObjectId);
 			if (objectType == GameObjectType.Player)
 				Managers.Game.PlayerCount++;
+			
+			if (obj.ObjectId == Managers.Object.MyPlayer.Id)
+				myPlayer = true;
+
+			Managers.Object.Add(obj, myPlayer);
 		}
 	}
 	
@@ -111,7 +116,7 @@ class PacketHandler
 		GameObject go = Managers.Object.FindById(diePacket.ObjectId);
 		if (go == null)
 			return;
-
+		
 		CreatureController cc = go.GetComponent<CreatureController>();
 		if (cc != null)
 		{

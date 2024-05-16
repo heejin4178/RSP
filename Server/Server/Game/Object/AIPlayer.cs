@@ -67,6 +67,9 @@ namespace Server.Game
                 case CreatureState.Skill:
                     UpdateSkill();
                     break;
+                case CreatureState.Stun:
+                    UpdateStun();
+                    break;
                 case CreatureState.Dead:
                     UpdateDead();
                     break;
@@ -126,7 +129,7 @@ namespace Server.Game
         }
         
         
-        private float _skillRange = 0.2f;
+        private float _skillRange = 1.0f;
         private long _nextMoveTick = 0;
         protected virtual void UpdateMoving()
         {
@@ -141,7 +144,6 @@ namespace Server.Game
                 _target = null;
                 State = CreatureState.Idle;
                 BroadcastMove();
-                Console.WriteLine("Here1");
                 return;
             }
         
@@ -156,15 +158,12 @@ namespace Server.Game
             // }
             
             // 스킬로 넘어갈지 체크
-            if (dist <= _skillRange) // 대각선 공격을 막음
+            if (dist <= _skillRange)
             {
                 _coolTick = 0;
                 State = CreatureState.Skill;
-                Console.WriteLine("Here4");
                 return;
             }
-            
-            // Vector3 distVector3 = _target.CellPos - CellPos;
             
             Vector3 moveDirection = _target.CellPos - CellPos;
             float distance = (float)Math.Sqrt(moveDirection.X * moveDirection.X + moveDirection.Y * moveDirection.Y + moveDirection.Z * moveDirection.Z);
@@ -175,12 +174,8 @@ namespace Server.Game
 
             // 현재 위치에 이동량을 더합니다.
             CellPos += moveAmount;
-            if (PlayerType == PlayerType.Paper)
-            {
-                Console.WriteLine($"MyId :{Id}, Find TargetId : {_target.Id}, MyPos :{CellPos}, TargetPos :{_target.CellPos}");
-            }
 
-            // 여기까지 오면 몬스터를 이동함.
+            // 여기까지 오면 AI 플레이어를 이동함.
             BroadcastMove();
         }
         
@@ -200,12 +195,19 @@ namespace Server.Game
             if (_coolTick == 0)
             {
                 // 유효한 타겟인지
-                if (_target == null || _target.Room != Room || _target.Hp == 0)
+                if (_target == null || _target.Room != Room || _target.PlayerType == PlayerType)
                 {
                     _target = null;
-                    State = CreatureState.Moving;
+                    State = CreatureState.Idle;
                     BroadcastMove();
                     return;
+                }
+
+                if (Hp <= 1)
+                {
+                    State = CreatureState.Moving;
+                    BroadcastMove();
+                    RunAway();
                 }
         
                 // 스킬이 아직 사용 가능한지
@@ -221,15 +223,12 @@ namespace Server.Game
                 
                 Skill skillData = null;
                 DataManager.SkillDict.TryGetValue(1, out skillData);
-        
-                // 데미지 판정
-                _target.OnDamaged(this, Stat.Attack);
-        
+
                 // 스킬 사용 모두에게 알림
                 S_Skill skill = new S_Skill() { Info = new SkillInfo() };
                 skill.ObjectId = Id;
                 skill.Info.SkillId = skillData.id;
-                Room.Broadcast(skill);
+                Room.Push(Room.HandleS_Skill, this, skill);
         
                 // 스킬 쿨타임 적용
                 int coolTick = (int)(1000 * skillData.cooldown);
@@ -241,8 +240,36 @@ namespace Server.Game
         
             _coolTick = 0;
         }
+
+        private long _stunCoolTick = 0;
+        protected virtual void UpdateStun()
+        {
+            if (_stunCoolTick == 0)
+            {
+                // 스킬 쿨타임 적용
+                int coolTick = (int)(1000 * 5f);
+                _stunCoolTick = Environment.TickCount64 + coolTick;
+            }
+
+            if (_stunCoolTick > Environment.TickCount64)
+            {
+                if (_target != null)
+                {
+                    State = CreatureState.Moving;
+                    return;
+                }
+            }
+
+        
+            _stunCoolTick = 0;
+        }
         
         protected virtual void UpdateDead()
+        {
+            
+        }
+
+        private void RunAway()
         {
             
         }

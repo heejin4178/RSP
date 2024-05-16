@@ -63,7 +63,7 @@ namespace Server
 
 				MyPlayer.Session = this;
 			}
-			
+
 			room.Push(room.EnterGame, MyPlayer);
 			
 			if (room.RunTimer == false)

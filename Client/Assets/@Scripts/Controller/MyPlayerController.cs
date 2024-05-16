@@ -171,14 +171,20 @@ public class MyPlayerController : CreatureController
         Vector3 dir = MoveDir * Speed * Time.deltaTime;
         Vector3 destPose = new Vector3(dir.x, 0, dir.y);
         CellPos = destPose + transform.position;
-
-        // Debug.DrawRay(transform.position + Vector3.up * 1.5f, destPose.normalized, Color.green);
-        // 벽이나 건물을 통과하지 못하게 함.
-        if (Physics.Raycast(transform.position + Vector3.up * 1.5f, destPose, 2.0f, LayerMask.GetMask("Block")))
-            return;
         
         base.UpdateMoving();
         
         CheckUpdatedFlag();
+    }
+    
+    private void CheckUpdatedFlag()
+    {
+        if (_updated)
+        {
+            C_Move movePacket = new C_Move();
+            movePacket.PosInfo = PosInfo;
+            Managers.Network.Send(movePacket);
+            _updated = false;
+        }
     }
 }

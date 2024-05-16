@@ -97,6 +97,8 @@ namespace Server.Game
             if (Room == null)
                 return;
 
+            State = CreatureState.Stun;
+
             S_Stun stunPacket = new S_Stun();
             stunPacket.ObjectId = Id;
             Room.Broadcast(stunPacket);
@@ -106,6 +108,8 @@ namespace Server.Game
         {
             if (Room == null)
                 return;
+
+            Chaser = null;
             
             S_Die diePacket = new S_Die();
             diePacket.ObjectId = Id;
@@ -113,13 +117,14 @@ namespace Server.Game
             Room.Broadcast(diePacket);
 
             GameRoom room = Room;
-            room.LeaveGame(Id);
+            room.Push(room.DeSpawnGame, Id);
             
             Stat.Hp = Stat.MaxHp;
             PosInfo.State = CreatureState.Idle;
             Info.PlayerType = attacker.PlayerType;
+            Info.PosInfo = PosInfo;
             
-            room.EnterGame(this);
+            room.Push(room.SpawnGame, this);
         }
     }
 }

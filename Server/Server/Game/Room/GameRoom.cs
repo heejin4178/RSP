@@ -290,7 +290,7 @@ namespace Server.Game
         {
             GameObject target = null;
             
-            foreach (var p in _players.Values)
+            foreach (var p in _allPlayers.Values)
             {
                 if (p == player)
                     continue;
@@ -305,25 +305,6 @@ namespace Server.Game
                 // 거리가 반지름보다 작거나 같으면 원 안에 있는 것으로 판정합니다.
                 bool check = distanceSquared <= radius * radius;
 
-                // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
-                if (check)
-                {
-                    target = p;
-                }
-            }
-                    
-            foreach (var p in _aiPlayers.Values)
-            {
-                if (p.PlayerType == player.PlayerType)
-                    continue;
-                
-                // 원의 중심과 주어진 점 사이의 거리를 계산합니다.
-                float distanceSquared = (p.CellPos.X - circleCenter.X) * (p.CellPos.X - circleCenter.X) +
-                                        (p.CellPos.Z - circleCenter.Z) * (p.CellPos.Z - circleCenter.Z);
-
-                // 거리가 반지름보다 작거나 같으면 원 안에 있는 것으로 판정합니다.
-                bool check = distanceSquared <= radius * radius;
-                
                 // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
                 if (check)
                 {
@@ -370,15 +351,18 @@ namespace Server.Game
         /// <summary>
         /// 사람과 AI플레이어 구분하지 않고 그중에서 찾아줌.
         /// </summary>
-        public GameObject FindPlayer(Func<GameObject, bool> condition)
+        public GameObject FindPlayer(Func<GameObject, bool> condition1, Func<GameObject, bool> condition2)
         {
-            foreach (GameObject player in _allPlayers.Values)
+            foreach (GameObject player in _players.Values)
             {
                 // 타겟이 될 플레이어를 찾는데 그 플레이에어 타켓이 붙어 있으면 안찾는다.
                 if (player.Chaser != null)
                     continue;
 
-                if (condition.Invoke(player))
+                if (condition1.Invoke(player) == false)
+                    continue;
+
+                if (condition2.Invoke(player))
                     return player;
             }
 
@@ -664,7 +648,7 @@ namespace Server.Game
                         if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
                             p.OnDamaged(player, 1);
-                            Console.WriteLine($"Hit Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
+                            // Console.WriteLine($"Hit Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }
                 }
@@ -689,12 +673,12 @@ namespace Server.Game
             }
         }
         
-        public void HandleS_Skill(GameObject player, S_Skill skillPacket)
+        public void HandleS_Skill(GameObject aiPlayer, GameObject target, S_Skill skillPacket)
         {
-            if (player == null)
+            if (aiPlayer == null)
                 return;
 
-            ObjectInfo info = player.Info;
+            ObjectInfo info = aiPlayer.Info;
             // if (info.PosInfo.State != CreatureState.Idle)
             //     return;
             
@@ -723,7 +707,7 @@ namespace Server.Game
                     // 방향 벡터의 x, y 값을 서로 바꿔줍니다.
                     (characterForward.X, characterForward.Y) = (-characterForward.Y, characterForward.X);
                     
-                    Vector3 skillPos = player.CellPos + characterForward;
+                    Vector3 skillPos = aiPlayer.CellPos + characterForward;
 
                     // 캐릭터가 바라보는 방향 벡터와 오른쪽 방향 벡터를 계산
                     Vector3 right = Vector3.Cross(Vector3.UnitY, characterForward);
@@ -739,17 +723,19 @@ namespace Server.Game
                     
                     foreach (var p in _allPlayers.Values)
                     {
+                        if (p.PlayerType == aiPlayer.PlayerType)
+                            continue;
+                        
                         // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
                         if (IsPointInsideRectangle(p.CellPos, topLeft, topRight, bottomLeft, bottomRight))
                         {
-                            p.OnDamaged(player, 1);
-                            GameObjectType type = ObjectManager.GetObjectTypeById(p.Id);
-                            if (type == GameObjectType.Player)
-                                Console.WriteLine($"Hit AI Player!, Player CellPos : {p.CellPos}, AI CellPos : {player.CellPos}, AI SkillPos : {skillPos}, AI Rotation : {info.PosInfo.Rotation}");
-                            
+                            p.OnDamaged(aiPlayer, skillData.damage);
                             // Console.WriteLine($"Hit AI Player!, CellPos : {p.CellPos}, SkillPos : {skillPos}, Rotation : {info.PosInfo.Rotation}");
                         }
                     }
+                    // 플레이어의 위치가 skillPos 범위 안에 있는지 확인
+                    if (IsPointInsideRectangle(target.CellPos, topLeft, topRight, bottomLeft, bottomRight) == false)
+                        aiPlayer.Info.PosInfo.State = CreatureState.Moving;
                 }
                 break;
                 
@@ -760,12 +746,18 @@ namespace Server.Game
                     if (hand == null)
                         return;
 
-                    hand.Owner = player;
+                    hand.Owner = aiPlayer;
                     hand.Data = skillData;
-                    hand.PosInfo = player.PosInfo;
+                    hand.PosInfo = new PositionInfo() // 값 복사
+                    { 
+                        PosX = aiPlayer.CellPos.X, 
+                        PosZ = aiPlayer.CellPos.Z, 
+                        Rotation = aiPlayer.PosInfo.Rotation, 
+                        State = CreatureState.Moving
+                    };
                     hand.State = CreatureState.Moving;
                     hand.Speed = skillData.Projectile.speed;
-                    hand.PlayerType = player.PlayerType;
+                    hand.PlayerType = aiPlayer.PlayerType;
                     Push(EnterGame, hand);
                 }
                 break;

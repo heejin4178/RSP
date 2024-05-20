@@ -51,7 +51,6 @@ namespace Server.Game
             movePacket.ObjectId = Id;
             movePacket.PosInfo = PosInfo;
             Room.Broadcast(movePacket);
-            Console.WriteLine("Move Hand");
             
             GameObject target = Room.IsPointInsideCircle(Owner, CellPos, 0.5f);
             if (target != null)
@@ -63,6 +62,12 @@ namespace Server.Game
 
                 // 소멸
                 Room.Push(Room.LeaveGame, Id);
+
+                Owner.State = CreatureState.Moving;
+            }
+            else
+            {
+                Owner.State = CreatureState.Moving;
             }
         }
     }

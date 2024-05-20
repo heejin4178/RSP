@@ -54,6 +54,9 @@ public class MyPlayerController : CreatureController
     
     void HandleOnMoveDirChanged(Vector2 dir)
     {
+        if (State == CreatureState.Stun)
+            return;
+        
         State = CreatureState.Moving;
         MoveDir = dir;
         _moveKeyPressed = true;
@@ -65,15 +68,15 @@ public class MyPlayerController : CreatureController
     }
     
     void HandleOnAttackPointerUp()
-    {            
+    {
+        if (State == CreatureState.Stun)
+            return;
+        
         _attackKeyPressed = true;
     }
 
     protected override void UpdateIdle()
     {
-        if (State == CreatureState.Stun)
-            return;
-        
         base.UpdateIdle();
         
         // 스킬 상태로 갈지 확인
@@ -148,19 +151,8 @@ public class MyPlayerController : CreatureController
         base.UpdateController();
     }
 
-    protected override void UpdateSkill()
-    {
-        if (State == CreatureState.Stun)
-            return;
-        
-        base.UpdateSkill();
-    }
-
     protected override void UpdateMoving()
     {
-        if (State == CreatureState.Stun)
-            return;
-        
         if (_moveKeyPressed == false && _attackKeyPressed == false)
         {
             State = CreatureState.Idle;

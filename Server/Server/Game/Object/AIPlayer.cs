@@ -79,13 +79,11 @@ namespace Server.Game
             if (target == null)
             {
                 State = CreatureState.Idle;
-                Console.WriteLine("target null");
                 return;
             }
             
             Random random = new Random();
             _skillId = random.Next(1, 3);
-            // _skillId = 2;
             
             // 타겟을 설정하고, 타겟의 추격자에 AI 플레이어를 설정해준다.
             _target = target;
@@ -145,9 +143,9 @@ namespace Server.Game
                 BroadcastMove();
                 return;
             }
-        
+            
             float dist = Vector3.Distance(_target.CellPos, CellPos);
-
+            
             switch (_skillId)
             {
                 case 1:
@@ -168,7 +166,7 @@ namespace Server.Game
                     }
                     break;
             }
-
+            
             Vector3 moveDirection = _target.CellPos - CellPos;
             float distance = (float)Math.Sqrt(moveDirection.X * moveDirection.X + moveDirection.Y * moveDirection.Y + moveDirection.Z * moveDirection.Z);
             moveDirection /= distance;
@@ -231,7 +229,7 @@ namespace Server.Game
 
             if (_coolTick > Environment.TickCount64)
             {
-                if (_coolTick - Environment.TickCount64 <= 4000 && _skillId == 2)
+                if (_coolTick - Environment.TickCount64 <= 4000 && _skillId == 2) // 투사체를 발사하고 쿨타임을 기다리지 않고 근접공격으로 넘어감
                 {
                     _skillId = 1;
                     State = CreatureState.Moving;
@@ -248,19 +246,16 @@ namespace Server.Game
         {
             if (_stunCoolTick == 0)
             {
-                // 스킬 쿨타임 적용
-                int coolTick = (int)(1000 * 5f);
+                // 스턴 쿨타임 적용
+                int coolTick = (int)(1000 * 1f);
                 _stunCoolTick = Environment.TickCount64 + coolTick;
             }
 
             if (_stunCoolTick > Environment.TickCount64)
-            {
-                if (_target != null)
-                {
-                    State = CreatureState.Moving;
-                    return;
-                }
-            }
+                return;
+            
+            State = CreatureState.Moving;
+            BroadcastMove();
             
             _stunCoolTick = 0;
         }

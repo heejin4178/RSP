@@ -26,6 +26,15 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
         _coolTimeBar.fillAmount = 0;
     }
     
+    private void OnDestroy()
+    {
+        if (Managers.Game != null)
+        {
+            Managers.Game.OnCoolTimeValueChanged -= OnCoolTimeValueChanged;
+        }
+    }
+    
+    
     private void OnCoolTimeValueChanged(float value)
     {
         _coolTimeBar.fillAmount = value / 100;

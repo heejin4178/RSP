@@ -8,6 +8,7 @@ public class CreatureController : BaseController
 {
     protected bool _rangeSkill = false;
     private Coroutine _coHitCoolTime;
+    private Coroutine _coStunCoolTime;
     private SkinnedMeshRenderer[] _skinnedMeshRenderers;
 
     Vector2 _moveDir = Vector2.zero;
@@ -61,7 +62,7 @@ public class CreatureController : BaseController
     }
 
     protected virtual void  UpdateIdle()
-    { 
+    {
         _animator.Play("IDLE");
     }
     protected virtual void UpdateSkill()
@@ -106,7 +107,7 @@ public class CreatureController : BaseController
     
     protected virtual void UpdateStun()
     {
-        _coHitCoolTime = StartCoroutine("CoStartStunReact", 2.0);
+        _coStunCoolTime = StartCoroutine("CoStartStunReact", 1.0);
     }
     
     IEnumerator CoStartHitReact(float time)
@@ -127,7 +128,7 @@ public class CreatureController : BaseController
         yield return new WaitForSeconds(time);
         StopFlashEffect();
         State = CreatureState.Idle;
-        _coHitCoolTime = null;
+        _coStunCoolTime = null;
     }
     #endregion
     

@@ -353,7 +353,7 @@ namespace Server.Game
         /// </summary>
         public GameObject FindPlayer(Func<GameObject, bool> condition1, Func<GameObject, bool> condition2)
         {
-            foreach (GameObject player in _players.Values)
+            foreach (GameObject player in _allPlayers.Values)
             {
                 // 타겟이 될 플레이어를 찾는데 그 플레이에어 타켓이 붙어 있으면 안찾는다.
                 if (player.Chaser != null)

@@ -35,6 +35,7 @@ public class MyPlayerController : CreatureController
             Managers.Game.onMoveDirChanged -= HandleOnMoveDirChanged;
             Managers.Game.onMovePointerUp -= HandleOnMovePointerUp;
             Managers.Game.onAttackPointerUp -= HandleOnAttackPointerUp;
+            Managers.Game.CoolTimeValue = 0;
         }
     }
     

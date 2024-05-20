@@ -34,7 +34,8 @@ public class ObjectManager
                 MyPlayer.PosInfo = info.PosInfo;
                 MyPlayer.Stat = info.StatInfo;
                 MyPlayer.SyncPos();
-                
+                MyPlayer.transform.Find("UI_MyCharacterIndicator").gameObject.SetActive(true);
+
                 Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(go);
             }
             else

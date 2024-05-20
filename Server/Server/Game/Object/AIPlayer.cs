@@ -11,14 +11,6 @@ namespace Server.Game
         public AIPlayer()
         {
             ObjectType = GameObjectType.Aiplayer;
-
-            // TEMP
-            Stat.Level = 1;
-            Stat.Hp = 2;
-            Stat.MaxHp = 2;
-            Stat.Speed = 10.0f;
-
-            State = CreatureState.Idle;
         }
         
         public override void OnDamaged(GameObject attacker, int damage)
@@ -44,13 +36,7 @@ namespace Server.Game
                     break;
             }
             
-            State = CreatureState.Hit;
             base.OnDamaged(attacker, damage);
-        }
-
-        public override void OnHitProjectile(GameObject attacker)
-        {
-            base.OnHitProjectile(attacker);
         }
 
         // FSM (Finite State Machine)
@@ -88,39 +74,18 @@ namespace Server.Game
         
             // 몬스터와 플레이어 사이의 거리를 측정하고 범위안에 있으면 true.
             // 내가 공격 할 수 있는 종족일때만 true.
-            GameObject target = Room.FindPlayer(p =>
-            {
-                // 본인은 제외함.
-                if (p.Id == Id)
-                    return false;
-                
-                bool checkDist = false;
-                bool checkPlayerType = false;
+            GameObject target = Room.FindPlayer(FindTargetCondition1, FindTargetCondition2);
 
-                if (Vector3.Distance(p.CellPos, CellPos) < _searchCellDist)
-                    checkDist = true;
-                
-                switch (PlayerType)
-                {
-                    case PlayerType.Rock:
-                        if (p.PlayerType == PlayerType.Scissors)
-                            checkPlayerType = true;
-                        break;
-                    case PlayerType.Scissors:
-                        if (p.PlayerType == PlayerType.Paper)
-                            checkPlayerType = true;
-                        break;
-                    case PlayerType.Paper:
-                        if (p.PlayerType == PlayerType.Rock)
-                            checkPlayerType = true;
-                        break;
-                }
-                
-                return checkDist && checkPlayerType;
-            });
-            
             if (target == null)
+            {
+                State = CreatureState.Idle;
+                Console.WriteLine("target null");
                 return;
+            }
+            
+            Random random = new Random();
+            _skillId = random.Next(1, 3);
+            // _skillId = 2;
             
             // 타겟을 설정하고, 타겟의 추격자에 AI 플레이어를 설정해준다.
             _target = target;
@@ -128,8 +93,42 @@ namespace Server.Game
             State = CreatureState.Moving;
         }
         
-        
-        private float _skillRange = 1.0f;
+        private bool FindTargetCondition1(GameObject player)
+        {
+            // 본인은 제외함.
+            if (player.Id == Id)
+                return false;
+            
+            switch (PlayerType)
+            {
+                case PlayerType.Rock:
+                    if (player.PlayerType == PlayerType.Scissors)
+                        return true;
+                    break;
+                case PlayerType.Scissors:
+                    if (player.PlayerType == PlayerType.Paper)
+                        return true;
+                    break;
+                case PlayerType.Paper:
+                    if (player.PlayerType == PlayerType.Rock)
+                        return true;
+                    break;
+            }
+
+            return false;
+        }
+
+        private bool FindTargetCondition2(GameObject player)
+        {
+            if (Vector3.Distance(player.CellPos, CellPos) < _searchCellDist)
+                return true;
+
+            return false;
+        }
+
+        private float _meleeSkillRange = 1.2f;
+        private float _proSkillRange = 10.0f;
+        private int _skillId;
         private long _nextMoveTick = 0;
         protected virtual void UpdateMoving()
         {
@@ -148,23 +147,28 @@ namespace Server.Game
             }
         
             float dist = Vector3.Distance(_target.CellPos, CellPos);
-            // if (dist == 0 || dist > _chaseCellDist)
-            // {
-            //     _target = null;
-            //     State = CreatureState.Idle;
-            //     BroadcastMove();
-            //     Console.WriteLine("Here2");
-            //     return;
-            // }
-            
-            // 스킬로 넘어갈지 체크
-            if (dist <= _skillRange)
+
+            switch (_skillId)
             {
-                _coolTick = 0;
-                State = CreatureState.Skill;
-                return;
+                case 1:
+                    // 스킬로 넘어갈지 체크
+                    if (dist <= _meleeSkillRange)
+                    {
+                        _coolTick = 0;
+                        State = CreatureState.Skill;
+                        return;
+                    }
+                    break;
+                case 2:
+                    // 스킬로 넘어갈지 체크
+                    if (dist <= _proSkillRange)
+                    {
+                        State = CreatureState.Skill;
+                        return;
+                    }
+                    break;
             }
-            
+
             Vector3 moveDirection = _target.CellPos - CellPos;
             float distance = (float)Math.Sqrt(moveDirection.X * moveDirection.X + moveDirection.Y * moveDirection.Y + moveDirection.Z * moveDirection.Z);
             moveDirection /= distance;
@@ -174,6 +178,14 @@ namespace Server.Game
 
             // 현재 위치에 이동량을 더합니다.
             CellPos += moveAmount;
+            
+            Vector3 forward = new Vector3(moveDirection.X, 0, moveDirection.Z);
+            if (forward.Length() > 0)
+            {
+                // Y축 중심으로 회전 계산
+                float targetAngle = (float)Math.Atan2(forward.X, forward.Z) * (180f / (float)Math.PI);
+                Info.PosInfo.Rotation = targetAngle;
+            }
 
             // 여기까지 오면 AI 플레이어를 이동함.
             BroadcastMove();
@@ -202,41 +214,31 @@ namespace Server.Game
                     BroadcastMove();
                     return;
                 }
-
-                if (Hp <= 1)
-                {
-                    State = CreatureState.Moving;
-                    BroadcastMove();
-                    RunAway();
-                }
-        
-                // 스킬이 아직 사용 가능한지
-                // Vector2Int dir = _target.CellPos - CellPos;
-                // int dist = dir.cellDistFromZero;
-                // bool canUseSkill = dist <= _skillRange && (dir.x == 0 || dir.y == 0);
-                // if (canUseSkill == false)
-                // {
-                //     State = CreatureState.Moving;
-                //     BroadcastMove();
-                //     return;
-                // }
                 
                 Skill skillData = null;
-                DataManager.SkillDict.TryGetValue(1, out skillData);
+                DataManager.SkillDict.TryGetValue(_skillId, out skillData);
 
                 // 스킬 사용 모두에게 알림
                 S_Skill skill = new S_Skill() { Info = new SkillInfo() };
                 skill.ObjectId = Id;
                 skill.Info.SkillId = skillData.id;
-                Room.Push(Room.HandleS_Skill, this, skill);
+                Room.Push(Room.HandleS_Skill, this, _target, skill);
         
                 // 스킬 쿨타임 적용
                 int coolTick = (int)(1000 * skillData.cooldown);
                 _coolTick = Environment.TickCount64 + coolTick;
             }
-            
+
             if (_coolTick > Environment.TickCount64)
+            {
+                if (_coolTick - Environment.TickCount64 <= 4000 && _skillId == 2)
+                {
+                    _skillId = 1;
+                    State = CreatureState.Moving;
+                    BroadcastMove();
+                }
                 return;
+            }
         
             _coolTick = 0;
         }
@@ -259,19 +261,13 @@ namespace Server.Game
                     return;
                 }
             }
-
-        
+            
             _stunCoolTick = 0;
         }
         
         protected virtual void UpdateDead()
         {
-            
-        }
-
-        private void RunAway()
-        {
-            
+            Console.WriteLine("Finish!");
         }
     }
 }

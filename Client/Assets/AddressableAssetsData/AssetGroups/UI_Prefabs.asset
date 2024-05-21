@@ -35,6 +35,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da6bd44fc159b42c4b7939438c1fd09c
+    m_Address: UI_ToastMsgPopup.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:

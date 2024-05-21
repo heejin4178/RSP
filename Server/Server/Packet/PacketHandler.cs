@@ -62,6 +62,7 @@ class PacketHandler
 	
 	public static void C_EnterGameHandler(PacketSession session, IMessage packet)
 	{
+		C_EnterGame enterPacket = packet as C_EnterGame;
 		ClientSession clientSession = session as ClientSession;
 
 		Player player = clientSession.MyPlayer;
@@ -85,17 +86,7 @@ class PacketHandler
 		
 		Console.WriteLine($"FindRoom C_EnterGameHandler : {room.RoomId}");
 
-		// clientSession.MyPlayer = ObjectManager.Instance.Add<Player>();
-		// {
-		// 	clientSession.MyPlayer.Info.Name = $"Player_{clientSession.MyPlayer.Info.ObjectId}";
-		// 	clientSession.MyPlayer.State = CreatureState.Idle;
-		//
-		// 	StatInfo stat = null;
-		// 	DataManager.StatDict.TryGetValue(1, out stat);
-		// 	clientSession.MyPlayer.Stat.MergeFrom(stat);
-		// }
-		
-		// room.Push(room.ReplacePlayer, player); // 플레이어와 종족이 같은 AI 플레이와 교체함.
+		player.Info.Name = enterPacket.Name;
 		room.Push(room.EnterGame, player);
 		
 		if (room.RunTimer == false)

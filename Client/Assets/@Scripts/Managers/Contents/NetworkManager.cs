@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net;
 using UnityEngine;
 using Google.Protobuf;
+using Google.Protobuf.Protocol;
 
 public class NetworkManager
 {
@@ -31,7 +32,11 @@ public class NetworkManager
 		connector.Connect(endPoint,
 			() => { return _session; },
 			1);
-
+		
+		C_EnterGame enterPacket = new C_EnterGame();
+		enterPacket.Name = Managers.Game.NickName; // 닉네임 패킷에 포함
+		Managers.Network.Send(enterPacket);
+		
 		return true;
 	}
 

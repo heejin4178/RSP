@@ -46,6 +46,13 @@ public class ObjectManager
                 pc.Stat = info.StatInfo;
                 pc.SyncPos();
             }
+            
+            // 닉네임 표시
+            if (go.GetComponentInChildren<UI_NickNameText>() == null)
+            {
+                UI_NickNameText nickNameText = Managers.UI.MakeWorldSpaceUI<UI_NickNameText>(go.transform);
+                nickNameText.NickName = info.Name;
+            }
         }
         else if (objectType == GameObjectType.Aiplayer)
         {

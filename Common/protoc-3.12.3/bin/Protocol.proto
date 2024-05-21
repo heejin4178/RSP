@@ -62,6 +62,7 @@ message S_StopGame {
 }
 
 message C_EnterGame {
+  string name = 1;
 }
 
 message S_EnterGame {

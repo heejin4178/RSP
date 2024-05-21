@@ -41,6 +41,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1b0365ddb4e6d4c3bb2a84580ce4d257
+    m_Address: UI_NickNameText.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 98dffe8261c4b4142b9b3190e2eb1674, type: 2}
   m_SchemaSet:

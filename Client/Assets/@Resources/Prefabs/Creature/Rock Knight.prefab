@@ -1413,7 +1413,6 @@ GameObject:
   - component: {fileID: 6078419728971594105}
   - component: {fileID: 4238134949968303107}
   - component: {fileID: 780622000346171058}
-  - component: {fileID: -6102434655393849606}
   m_Layer: 0
   m_Name: Rock Knight
   m_TagString: Untagged
@@ -1488,29 +1487,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!136 &-6102434655393849606
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7062131647436884842}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2.5
-  m_Direction: 1
-  m_Center: {x: 0, y: 1.2, z: -0.02}
 --- !u!1 &7524565178654813953
 GameObject:
   m_ObjectHideFlags: 0

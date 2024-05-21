@@ -7,7 +7,21 @@ using UnityEngine;
 
 public class GameManager
 {
-    #region 재화
+    #region 공통
+    private string _nickName = null;
+    public event Action<string> OnNickNameChanged;
+
+    public string NickName
+    {
+        get => _nickName;
+        set
+        {
+            _nickName = value;
+            OnNickNameChanged?.Invoke(value);
+        }
+    }
+    
+    
     public int Gold { get; set; }
 
     private int _gem = 0;

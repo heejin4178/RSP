@@ -87,11 +87,11 @@ MonoBehaviour:
   m_PixelRect:
     serializedVersion: 2
     x: 1520
-    y: 54
+    y: 53
     width: 1920
     height: 1301
   m_ShowMode: 4
-  m_Title: Inspector
+  m_Title: Simulator
   m_RootView: {fileID: 16}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -115,8 +115,8 @@ MonoBehaviour:
     y: 0
     width: 641
     height: 603
-  m_MinSize: {x: 640, y: 601}
-  m_MaxSize: {x: 4000, y: 4021}
+  m_MinSize: {x: 640, y: 580}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 24}
   m_Panes:
   - {fileID: 24}
@@ -165,8 +165,8 @@ MonoBehaviour:
     y: 0
     width: 1010
     height: 878
-  m_MinSize: {x: 800, y: 271}
-  m_MaxSize: {x: 4000, y: 4021}
+  m_MinSize: {x: 800, y: 250}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 25}
   m_Panes:
   - {fileID: 25}
@@ -215,8 +215,8 @@ MonoBehaviour:
     y: 0
     width: 918
     height: 573
-  m_MinSize: {x: 280, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 280, y: 71}
+  m_MaxSize: {x: 4000, y: 4021}
   m_ActualView: {fileID: 26}
   m_Panes:
   - {fileID: 26}
@@ -267,9 +267,9 @@ MonoBehaviour:
     height: 496
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 28}
+  m_ActualView: {fileID: 35}
   m_Panes:
-  - {fileID: 28}
+  - {fileID: 35}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &12
@@ -296,7 +296,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 122
+  controlID: 130
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -318,10 +318,10 @@ MonoBehaviour:
     height: 755
   m_MinSize: {x: 201, y: 221}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 34}
+  m_ActualView: {fileID: 33}
   m_Panes:
-  - {fileID: 34}
-  - {fileID: 29}
+  - {fileID: 33}
+  - {fileID: 28}
   - {fileID: 27}
   m_Selected: 0
   m_LastSelected: 2
@@ -346,9 +346,9 @@ MonoBehaviour:
     height: 309
   m_MinSize: {x: 101, y: 121}
   m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 31}
+  m_ActualView: {fileID: 30}
   m_Panes:
-  - {fileID: 31}
+  - {fileID: 30}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &15
@@ -375,7 +375,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 225
+  controlID: 219
 --- !u!114 &16
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -451,7 +451,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 121
+  controlID: 129
 --- !u!114 &19
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -517,12 +517,12 @@ MonoBehaviour:
     y: 0
     width: 525
     height: 942
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_ActualView: {fileID: 32}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 31}
   m_Panes:
-  - {fileID: 32}
-  - {fileID: 30}
+  - {fileID: 31}
+  - {fileID: 29}
   m_Selected: 0
   m_LastSelected: 1
 --- !u!114 &22
@@ -546,9 +546,9 @@ MonoBehaviour:
     height: 533
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 35}
+  m_ActualView: {fileID: 34}
   m_Panes:
-  - {fileID: 35}
+  - {fileID: 34}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &23
@@ -572,9 +572,9 @@ MonoBehaviour:
     height: 718
   m_MinSize: {x: 232, y: 271}
   m_MaxSize: {x: 10002, y: 10021}
-  m_ActualView: {fileID: 33}
+  m_ActualView: {fileID: 32}
   m_Panes:
-  - {fileID: 33}
+  - {fileID: 32}
   m_Selected: 0
   m_LastSelected: 0
 --- !u!114 &24
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 1520
-    y: 84
+    y: 83
     width: 955
     height: 734
   m_SerializedDataModeController:
@@ -861,82 +861,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 13974, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
-  m_TitleContent:
-    m_Text: Simulator
-    m_Image: {fileID: 8720083202187608617, guid: 0000000000000000d000000000000000,
-      type: 0}
-    m_Tooltip: 
-  m_Pos:
-    serializedVersion: 2
-    x: 1520
-    y: 839
-    width: 955
-    height: 475
-  m_SerializedDataModeController:
-    m_DataMode: 0
-    m_PreferredDataMode: 0
-    m_SupportedDataModes: 
-    isAutomatic: 1
-  m_ViewDataDictionary: {fileID: 0}
-  m_OverlayCanvas:
-    m_LastAppliedPresetName: Default
-    m_SaveData: []
-    m_OverlaysVisible: 1
-  m_SerializedViewNames:
-  - UnityEditor.GameView
-  m_SerializedViewValues:
-  - /Users/heejinkim/Vampire-Survivors_unity/Client/Library/PlayModeViewStates/d07ebbc5c193842449ddc487a36080a9
-  m_PlayModeViewName: Device Simulator
-  m_ShowGizmos: 0
-  m_TargetDisplay: 0
-  m_ClearColor: {r: 0, g: 0, b: 0, a: 1}
-  m_TargetSize: {x: 1024, y: 768}
-  m_TextureFilterMode: 0
-  m_TextureHideFlags: 61
-  m_RenderIMGUI: 1
-  m_EnterPlayModeBehavior: 2
-  m_UseMipMap: 0
-  m_SimulatorState:
-    controlPanelVisible: 0
-    controlPanelWidth: 0
-    controlPanelFoldoutKeys:
-    - UnityEditor.AdaptivePerformance.Editor.AdaptivePerformanceUIExtension
-    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceGoogleUIExtension
-    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceVRRUIExtension
-    - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
-    controlPanelFoldoutValues: 00000000
-    pluginNames:
-    - UnityEditor.AdaptivePerformance.Editor.AdaptivePerformanceUIExtension
-    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceGoogleUIExtension
-    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceVRRUIExtension
-    - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
-    pluginStates:
-    - '{"m_SerializationStates":{"thermalFoldout":false,"performanceFoldout":false,"developerFoldout":false,"indexerFoldout":false,"scalersFoldout":false,"deviceSettingsFoldout":false}}'
-    - '{"m_SerializationStates":{"androidSystemFoldout":false}}'
-    - '{"m_SerializationStates":{"settingsFoldout":false,"vrrFoldout":false,"androidSystemFoldout":false}}'
-    - '{}'
-    scale: 24
-    fitToScreenEnabled: 0
-    rotationDegree: 270
-    highlightSafeAreaEnabled: 0
-    friendlyName: Samsung Galaxy Note20 Ultra 5G
-    screenIndex: 0
-    networkReachability: 1
-    systemLanguage: 10
---- !u!114 &29
-MonoBehaviour:
-  m_ObjectHideFlags: 52
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
   m_Script: {fileID: 12914, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
@@ -1034,7 +958,7 @@ MonoBehaviour:
   m_CurrentEditor: 1
   m_LayerEditor:
     m_SelectedLayerIndex: 0
---- !u!114 &30
+--- !u!114 &29
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1069,7 +993,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
     m_OverlaysVisible: 1
---- !u!114 &31
+--- !u!114 &30
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1091,7 +1015,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 2915
-    y: 1026
+    y: 1025
     width: 524
     height: 288
   m_SerializedDataModeController:
@@ -1104,7 +1028,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
     m_OverlaysVisible: 1
---- !u!114 &32
+--- !u!114 &31
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1126,7 +1050,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 2915
-    y: 84
+    y: 83
     width: 524
     height: 921
   m_SerializedDataModeController:
@@ -1152,7 +1076,7 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_PreviewWindow: {fileID: 0}
---- !u!114 &33
+--- !u!114 &32
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1174,7 +1098,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 2476
-    y: 617
+    y: 616
     width: 437
     height: 697
   m_SerializedDataModeController:
@@ -1198,7 +1122,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/@Resources/Sprites/UI
+    - Assets/@Resources/Prefabs/Creature
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1206,16 +1130,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/@Resources/Sprites/UI
+  - Assets/@Resources/Prefabs/Creature
   m_LastFoldersGridSize: 16
   m_LastProjectPath: /Users/heejinkim/RSP/Client
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: ccba0000
-    m_LastClickedID: 47820
-    m_ExpandedIDs: 00000000ae620000b0620000b2620000b4620000b6620000b8620000ba620000bc620000be620000c0620000c2620000c4620000c6620000c8620000ca620000cc620000ce620000d0620000d2620000d462000022630000ccba0000d0ba00009207010000ca9a3b
+    scrollPos: {x: 0, y: 21.000122}
+    m_SelectedIDs: 1e630000
+    m_LastClickedID: 25374
+    m_ExpandedIDs: 00000000b4620000b6620000b8620000ba620000bc620000be620000c0620000c2620000c4620000c6620000c8620000ca620000cc620000ce620000d0620000d2620000d4620000d6620000d8620000da620000dc620000de620000e0620000e26200007a6300004080000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1243,7 +1167,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000ae620000b0620000b2620000b4620000b6620000b8620000ba620000bc620000be620000c0620000c2620000c4620000c6620000c8620000ca620000cc620000ce620000d0620000d2620000d4620000
+    m_ExpandedIDs: 00000000b4620000b6620000b8620000ba620000bc620000be620000c0620000c2620000c4620000c6620000c8620000ca620000cc620000ce620000d0620000d2620000d4620000d6620000d8620000da620000dc620000de620000e0620000e2620000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1271,21 +1195,21 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000ae630000f05f000078d900007ad90000245d00009c610000285d0000f27b000090f5000034640000c8ba000000000000524b0100
+    m_ExpandedInstanceIDs: c6230000ae630000f05f000078d900007ad90000245d00009c610000285d0000f27b000090f5000034640000c8ba0000524b010000000000007d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: UI_NickNameText
+      m_OriginalName: UI_NickNameText
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 42748
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 23}
     m_CreateAssetUtility:
@@ -1299,7 +1223,7 @@ MonoBehaviour:
     m_GridSize: 16
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 149
---- !u!114 &34
+--- !u!114 &33
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1321,7 +1245,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 1520
-    y: 84
+    y: 83
     width: 955
     height: 734
   m_SerializedDataModeController:
@@ -1695,9 +1619,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -5.4043736, y: 1.8873024, z: -5.313078}
+    m_Target: {x: -8.816673, y: 6.0447726, z: -6.1868763}
     speed: 2
-    m_Value: {x: -5.4043736, y: 1.8873024, z: -5.313078}
+    m_Value: {x: -8.816673, y: 6.0447726, z: -6.1868763}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1743,13 +1667,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.45270762, y: 0.00534559, z: -0.0027135392, w: 0.8916379}
+    m_Target: {x: -0.22485973, y: 0.009351621, z: -0.002157887, w: -0.97434336}
     speed: 2
-    m_Value: {x: 0.452708, y: 0.0053455946, z: -0.0027135415, w: 0.89163864}
+    m_Value: {x: -0.22485985, y: 0.009351626, z: -0.0021578881, w: -0.9743439}
   m_Size:
-    m_Target: 8.849581
+    m_Target: 8.20506
     speed: 2
-    m_Value: 8.849581
+    m_Value: 8.20506
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1767,14 +1691,14 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: 0.10199567, y: -0.87571687, z: 0.4217344, w: 0.21179016}
+  m_LastSceneViewRotation: {x: -0.22485973, y: 0.009351621, z: -0.002157887, w: -0.97434336}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
   m_SceneVisActive: 1
   m_LastLockedObject: {fileID: 0}
   m_ViewIsLockedToObject: 0
---- !u!114 &35
+--- !u!114 &34
 MonoBehaviour:
   m_ObjectHideFlags: 52
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1796,7 +1720,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 2476
-    y: 84
+    y: 83
     width: 437
     height: 512
   m_SerializedDataModeController:
@@ -1812,9 +1736,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: a293e7ff
-      m_LastClickedID: -1600606
-      m_ExpandedIDs: 8e93e7ffa293e7ffa693e7ff2ea3e7ffbcabe8ffc6ace8ffb0afe8ff1a18e9ff1c19e9ff061ce9ff863de9ff903ee9ff9846e9ffaaa0e9ffb6a1e9ffbea9e9ff7485efff8a91efffe69fefffeea8efff7a6bf0ff640df4ffb419f4ffb61af4ffa01df4ffa464f4ff5092f4ffac9ef4ffae9ff4ff98a2f4ff1662f8ff0c8cf9ff2a92f9ff349bf9ff38bcf9ff2ec1f9ffcafcfaffe801fbffd405fbff7a20fbff8429fbff46c2fbff58c5fbff6cc9fbff6ed1fbfff401ffffd205ffff26fbfffff4ffffff
+      m_SelectedIDs: 76f9ffff
+      m_LastClickedID: 0
+      m_ExpandedIDs: 4611faff4e12faff3815faffc486fbffce87fbffb88afbffdeadfbffe4adfbffeeaefbff96b1fbffceb1fbff4678fcff4c78fcffa4d3fcfff2d9fcff26defcff5adefcff30dffcff38dffcff6cdffcff2ce3fcff8068fdff746cfdff9c83ffffb083ffffc483ffffc883ffff5093ffff26fbfffff4ffffffd4610000fc610000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1838,3 +1762,79 @@ MonoBehaviour:
       m_IsLocked: 0
     m_CurrentSortingName: TransformSorting
   m_WindowGUID: d98b0df90efc54d3e96b1eabc613529a
+--- !u!114 &35
+MonoBehaviour:
+  m_ObjectHideFlags: 52
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 13974, guid: 0000000000000000e000000000000000, type: 0}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+  m_TitleContent:
+    m_Text: Simulator
+    m_Image: {fileID: 8720083202187608617, guid: 0000000000000000d000000000000000,
+      type: 0}
+    m_Tooltip: 
+  m_Pos:
+    serializedVersion: 2
+    x: 1520
+    y: 838
+    width: 955
+    height: 475
+  m_SerializedDataModeController:
+    m_DataMode: 0
+    m_PreferredDataMode: 0
+    m_SupportedDataModes: 
+    isAutomatic: 1
+  m_ViewDataDictionary: {fileID: 0}
+  m_OverlayCanvas:
+    m_LastAppliedPresetName: Default
+    m_SaveData: []
+    m_OverlaysVisible: 1
+  m_SerializedViewNames:
+  - UnityEditor.GameView
+  m_SerializedViewValues:
+  - /Users/heejinkim/RSP/Client/Library/PlayModeViewStates/e0baad858ab944c419ac3d243ffb8592
+  m_PlayModeViewName: Device Simulator
+  m_ShowGizmos: 0
+  m_TargetDisplay: 0
+  m_ClearColor: {r: 0, g: 0, b: 0, a: 1}
+  m_TargetSize: {x: 1024, y: 768}
+  m_TextureFilterMode: 0
+  m_TextureHideFlags: 61
+  m_RenderIMGUI: 1
+  m_EnterPlayModeBehavior: 2
+  m_UseMipMap: 0
+  m_SimulatorState:
+    controlPanelVisible: 0
+    controlPanelWidth: 0
+    controlPanelFoldoutKeys:
+    - UnityEditor.AdaptivePerformance.Editor.AdaptivePerformanceUIExtension
+    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceGoogleUIExtension
+    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceVRRUIExtension
+    - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
+    controlPanelFoldoutValues: 00000000
+    pluginNames:
+    - UnityEditor.AdaptivePerformance.Editor.AdaptivePerformanceUIExtension
+    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceGoogleUIExtension
+    - UnityEditor.AdaptivePerformance.Samsung.Android.Editor.AdaptivePerformanceVRRUIExtension
+    - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
+    pluginStates:
+    - '{"m_SerializationStates":{"thermalFoldout":false,"performanceFoldout":false,"developerFoldout":false,"indexerFoldout":false,"scalersFoldout":false,"deviceSettingsFoldout":false}}'
+    - '{"m_SerializationStates":{"androidSystemFoldout":false}}'
+    - '{"m_SerializationStates":{"settingsFoldout":false,"vrrFoldout":false,"androidSystemFoldout":false}}'
+    - '{}'
+    scale: 24
+    fitToScreenEnabled: 0
+    rotationDegree: 270
+    highlightSafeAreaEnabled: 0
+    friendlyName: Samsung Galaxy Note20 Ultra 5G
+    screenIndex: 0
+    networkReachability: 1
+    systemLanguage: 10

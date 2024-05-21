@@ -211,7 +211,7 @@ namespace Server.Game
             AIPlayer aiPlayer = ObjectManager.Instance.Add<AIPlayer>();
 
             // 플레이어 정보 설정
-            aiPlayer.Info.Name = $"AI_{type.ToString()}_{aiPlayer.Info.ObjectId}";
+            aiPlayer.Info.Name = $"AI-{type.ToString()}";
             aiPlayer.State = CreatureState.Idle;
             aiPlayer.PlayerType = type;
             aiPlayer.Room = this;

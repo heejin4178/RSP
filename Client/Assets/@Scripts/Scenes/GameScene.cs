@@ -20,31 +20,10 @@ public class GameScene : BaseScene
         // 재접속 패킷을 보냄
         if (Managers.Network.Init() == false)
         {
-            C_EnterGame enter = new C_EnterGame();
-            Managers.Network.Send(enter);
+            C_EnterGame enterPacket = new C_EnterGame();
+            enterPacket.Name = Managers.Game.NickName; // 닉네임 패킷에 포함
+            Managers.Network.Send(enterPacket);
         }
-
-        // GameObject player = Managers.Resource.Instantiate("Creature/Player");
-        // player.name = "Player";
-        // Managers.Object.Add(player);
-        //
-        // for (int i = 0; i < 5; i++)
-        // {
-        //     GameObject monster = Managers.Resource.Instantiate("Creature/Monster");
-        //     player.name = $"Monster_{i + 1}";
-        //     
-        //     // 랜덤 위치 스폰
-        //     Vector3Int pos = new Vector3Int()
-        //     {
-        //         x = Random.Range(-8, 8),
-        //         y = Random.Range(-5, 5)
-        //     };
-        //
-        //     MonsterController mc = monster.GetComponent<MonsterController>();
-        //     mc.CellPos = pos;
-        //
-        //     Managers.Object.Add(monster);
-        // }
     }
     
     void StartLoaded()

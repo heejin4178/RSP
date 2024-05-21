@@ -58,4 +58,20 @@ public class UIManager
         else
             Time.timeScale = 1;
     }
+    
+    public T MakeWorldSpaceUI<T>(Transform parent = null, string name = null) where T : UI_Base
+    {
+        if (string.IsNullOrEmpty(name))
+            name = typeof(T).Name;
+
+        GameObject go = Managers.Resource.Instantiate($"{name}.prefab");
+        if (parent != null)
+            go.transform.SetParent(parent);
+
+        Canvas canvas = go.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+        canvas.worldCamera = Camera.main;
+
+        return Util.GetOrAddComponent<T>(go);
+    }
 }

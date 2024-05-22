@@ -81,7 +81,7 @@ namespace Server.Game
             }
 
             Console.WriteLine($"WaitPlayerTimer : {WaitTime}");
-            if (WaitTime < 3)
+            if (WaitTime < 5)
             {
                 WaitTime++;
                 PushAfter(1000, WaitPlayerTimer);
@@ -128,7 +128,7 @@ namespace Server.Game
             // Console.WriteLine($"GameTimer : {GameTime}");
             Console.WriteLine($"RockNum : {RockNum}, ScissorsNum : {ScissorsNum}, PaperNum : {PaperNum}");
 
-            if (GameTime < 11)
+            if (GameTime < 61)
             {
                 GameTime++;
                 PushAfter(1000, GameTimer);

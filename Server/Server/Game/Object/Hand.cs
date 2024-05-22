@@ -34,8 +34,6 @@ namespace Server.Game
             Vector3 characterForward = Vector3.Transform(Vector3.UnitZ, rotation);
             // 방향 벡터의 x, y 값을 서로 바꿔줍니다.
             (characterForward.X, characterForward.Y) = (-characterForward.Y, characterForward.X);
-                    
-            Vector3 skillPos = CellPos + characterForward;
 
             CellPos += characterForward;
             
@@ -58,7 +56,7 @@ namespace Server.Game
                 // 피격판정
                 target.OnHitProjectile(Owner);
                 
-                Console.WriteLine($"Hit Player!, CellPos : {CellPos}, SkillPos : {skillPos}, Rotation : {Info.PosInfo.Rotation}");
+                // Console.WriteLine($"Hit Player!, CellPos : {CellPos}, SkillPos : {skillPos}, Rotation : {Info.PosInfo.Rotation}");
 
                 // 소멸
                 Room.Push(Room.LeaveGame, Id);

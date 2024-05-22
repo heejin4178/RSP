@@ -34,7 +34,11 @@ public class ObjectManager
                 MyPlayer.PosInfo = info.PosInfo;
                 MyPlayer.Stat = info.StatInfo;
                 MyPlayer.SyncPos();
-                MyPlayer.transform.Find("UI_MyCharacterIndicator").gameObject.SetActive(true);
+                MyPlayer.transform.Find("UI_MyCharacterIndicator").gameObject.SetActive(true); // 내 캐릭터 indicator 표시
+                
+                // 체력바 표시
+                if (go.GetComponentInChildren<UI_HPBar>() == null)
+                    Managers.UI.MakeWorldSpaceUI<UI_HPBar>(go.transform);
 
                 Camera.main.gameObject.GetOrAddComponent<CameraController>().SetPlayer(go);
             }

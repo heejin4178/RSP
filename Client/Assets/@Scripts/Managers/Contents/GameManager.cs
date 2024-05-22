@@ -8,31 +8,18 @@ using UnityEngine;
 public class GameManager
 {
     #region 공통
-    private string _nickName = null;
-    public event Action<string> OnNickNameChanged;
+    public string NickName { get; set; }
 
-    public string NickName
+    
+    private int _hp = 0;
+    public event Action<int> OnHpChanged;
+    public int Hp
     {
-        get => _nickName;
+        get => _hp;
         set
         {
-            _nickName = value;
-            OnNickNameChanged?.Invoke(value);
-        }
-    }
-    
-    
-    public int Gold { get; set; }
-
-    private int _gem = 0;
-    public event Action<int> OnGemCountChanged;
-    public int Gem
-    {
-        get => _gem;
-        set
-        {
-            _gem = value;
-            OnGemCountChanged?.Invoke(value);
+            _hp = value;
+            OnHpChanged?.Invoke(value);
         }
     }
     #endregion

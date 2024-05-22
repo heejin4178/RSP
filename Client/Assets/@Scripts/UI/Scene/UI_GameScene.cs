@@ -42,29 +42,12 @@ public class UI_GameScene : UI_Base
         BindObject(typeof(GameObjects));
         BindText(typeof(Texts));
         
-        // BindButton(typeof(Buttons));
-        // GetButton((int)Buttons.CancelButton).gameObject.BindEvent(OnClickCancelButton);
-        
         OnOffJoystickUI(false);
 
         // 게임 시작전 3초 카운트다운
         CountDown();
-        
-        RefreshUI();
         return true;
     }
-
-    public void SetInfo()
-    {
-        RefreshUI();
-    }
-    
-    void RefreshUI()
-    {
-        if (_init == false)
-            return;
-    }
-
     
     private int _countDownTime = 3;
     
@@ -72,12 +55,6 @@ public class UI_GameScene : UI_Base
     private int curTime;
     int minute;
     int second;
-    
-    // public void SetCountDownTime(int time)
-    // {
-    //     _countDownTime = time;
-    //     SetInfo();
-    // }
 
     public void CountDown()
     {
@@ -102,7 +79,7 @@ public class UI_GameScene : UI_Base
     public void StartGameTimer()
     {
         OnOffJoystickUI(true);
-        time = 61;
+        time = 11;
         StartCoroutine("StartTimer");
     }
     
@@ -119,7 +96,7 @@ public class UI_GameScene : UI_Base
             if(curTime <= 0)
             {
                 OnOffJoystickUI(false);
-                Managers.UI.ShowPopup<UI_GameResultPopup>(); // 클라 타이머가 종료되면 자체적으로 게임을 멈춤.
+                // Managers.UI.ShowPopup<UI_GameResultPopup>(); // 클라 타이머가 종료되면 자체적으로 게임을 멈춤.
                 curTime = 0;
                 yield break;
             }

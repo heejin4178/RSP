@@ -1,28 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
-using UnityEngine.UI;
+using System.Drawing;
 using Utils;
 
 public class UI_GameResultPopup : UI_Base
 {
-    enum GameObjects
-    {
-        ContentObject,
-        ResultRewardScrollContentObject,
-        ResultGoldObject,
-        ResultKillObject,
-    }
-
     enum Texts
     {
-        GameResultPopupTitleText,
         ResultStageValueText,
-        ResultSurvivalTimeText,
-        ResultSurvivalTimeValueText,
-        ResultGoldValueText,
         ResultKillValueText,
+        ResultDeathValueText,
         ConfirmButtonText,
     }
 
@@ -36,15 +21,13 @@ public class UI_GameResultPopup : UI_Base
     {
         if (base.Init() == false)
             return false;
-
-        BindObject(typeof(GameObjects));
+        
         BindText(typeof(Texts));
         BindButton(typeof(Buttons));
-
-        GetButton((int)Buttons.StatisticsButton).gameObject.BindEvent(OnClickStatisticsButton);
+        
         GetButton((int)Buttons.ConfirmButton).gameObject.BindEvent(OnClickConfirmButton);
 
-        RefreshUI();
+        SetInfo();
         return true;
     }
 
@@ -58,24 +41,54 @@ public class UI_GameResultPopup : UI_Base
         if (_init == false)
             return;
         
-        GetText((int)Texts.GameResultPopupTitleText).text = "Game Result";
-        GetText((int)Texts.ResultStageValueText).text = "4 STAGE";
-        GetText((int)Texts.ResultSurvivalTimeText).text = "Survival Time";
-        GetText((int)Texts.ResultSurvivalTimeValueText).text = "14:23";
-        GetText((int)Texts.ResultGoldValueText).text = "200";
-        GetText((int)Texts.ResultKillValueText).text = "100";
+        GetText((int)Texts.ResultStageValueText).text = SetWinnerText(Managers.Game.Winner);
+        GetText((int)Texts.ResultStageValueText).color = SetWinnerColor(Managers.Game.Winner);
+        GetText((int)Texts.ResultKillValueText).text = Managers.Game.KillCount.ToString();
+        GetText((int)Texts.ResultDeathValueText).text = Managers.Game.DeathCount.ToString();
         GetText((int)Texts.ConfirmButtonText).text = "OK";
     }
 
-    void OnClickStatisticsButton()
+    public string SetWinnerText(int winner)
     {
-        Debug.Log("OnClickStatisticsButton");
+        switch (winner)
+        {
+            case 0:
+                return "Draw!";
+            case 1:
+                return "Rock Win!";
+            case 2:
+                return "Scissors Win!";
+            case 3:
+                return "Paper Win!";
+        }
+
+        return null;
+    }
+    
+    public UnityEngine.Color SetWinnerColor(int winner)
+    {
+        switch (winner)
+        {
+            case 0:
+                return UnityEngine.Color.green;
+            case 1:
+                return UnityEngine.Color.black;
+            case 2:
+                return UnityEngine.Color.yellow;
+            case 3:
+                return UnityEngine.Color.white;
+        }
+
+        return UnityEngine.Color.green;
     }
 
     void OnClickConfirmButton()
     {
-		Debug.Log("OnClickConfirmButton");
-        
+        // 킬&데스 카운트 초기화
+        Managers.Game.KillCount = 0;
+        Managers.Game.DeathCount = 0;
+        Managers.Game.Winner = 0;
+
         // 게임 결과 팝업 닫기
         Managers.UI.ClosePopup();
         

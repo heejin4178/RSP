@@ -59,6 +59,7 @@ message S_StartGame {
 }
 
 message S_StopGame {
+  int32 winner = 1;
 }
 
 message C_EnterGame {

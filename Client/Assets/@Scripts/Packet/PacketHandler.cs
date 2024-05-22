@@ -116,13 +116,16 @@ class PacketHandler
 		GameObject go = Managers.Object.FindById(diePacket.ObjectId);
 		if (go == null)
 			return;
+
+		if (diePacket.AttackerId == Managers.Object.MyPlayer.Id)
+			Managers.Game.KillCount++;
+		
+		if (diePacket.ObjectId == Managers.Object.MyPlayer.Id)
+			Managers.Game.DeathCount++;
 		
 		CreatureController cc = go.GetComponent<CreatureController>();
 		if (cc != null)
-		{
 			cc.Hp = 0;
-			// cc.OnDead();
-		}
 	}
 	
 	public static void S_ReadyGameHandler(PacketSession session, IMessage packet)
@@ -139,8 +142,12 @@ class PacketHandler
 	
 	public static void S_StopGameHandler(PacketSession session, IMessage packet)
 	{
+		S_StopGame stopGamePacket = packet as S_StopGame;
+
 		// 여기서 시간 멈추고 게임 결과 UI 보여준다.
-		// Time.timeScale = 0; // 혹시 모르니 서버에서도 게임이 종료되었다고 알려주고, 게임이 중단되지 않았다면 게임을 중단.
+		Managers.Game.Winner = stopGamePacket.Winner;
+		Debug.Log($"stopGamePacket {Managers.Game.Winner}");
+		Managers.UI.ShowPopup<UI_GameResultPopup>();
 	}
 	
 	public static void S_StunHandler(PacketSession session, IMessage packet)

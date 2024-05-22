@@ -44,17 +44,11 @@ public class UI_HPBar : UI_Base
         {
             case 0:
                 GetImage((int)Images.Cell1).color = Color.gray;
-                GetImage((int)Images.Cell2).color = Color.gray;
-                GetImage((int)Images.Cell3).color = Color.gray;
                 break;
             case 1:
-                GetImage((int)Images.Cell1).color = Color.green;
                 GetImage((int)Images.Cell2).color = Color.gray;
-                GetImage((int)Images.Cell3).color = Color.gray;
                 break;
             case 2:
-                GetImage((int)Images.Cell1).color = Color.green;
-                GetImage((int)Images.Cell2).color = Color.green;
                 GetImage((int)Images.Cell3).color = Color.gray;
                 break;
             case 3:

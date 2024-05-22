@@ -9,6 +9,7 @@ public class GameManager
 {
     #region 공통
     public string NickName { get; set; }
+    public int Winner { get; set; }
 
     
     private int _hp = 0;
@@ -25,6 +26,10 @@ public class GameManager
     #endregion
 
     #region 전투
+    public int KillCount { get; set; }
+    
+    public int DeathCount { get; set; }
+    
     private int _playerCount;
     public event Action<int> OnPlayerCountChanged;
 

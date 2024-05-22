@@ -16,9 +16,48 @@ namespace Server.Game
         public int WaitTime { get; set; } = 1;
         public int GameTime { get; set; } = 1;
 
-        public UInt16 RockNum { get; private set; }
-        public UInt16 ScissorsNum { get; private set; }
-        public UInt16 PaperNum { get; private set; }
+        public UInt16 RockNum 
+        {
+            get
+            {
+                UInt16 count = 0;
+                foreach (var player in _allPlayers.Values)
+                {
+                    if (player.PlayerType == PlayerType.Rock)
+                        count++;
+                }
+
+                return count;
+            }
+        }
+        public UInt16 ScissorsNum 
+        {
+            get
+            {
+                UInt16 count = 0;
+                foreach (var player in _allPlayers.Values)
+                {
+                    if (player.PlayerType == PlayerType.Scissors)
+                        count++;
+                }
+
+                return count;
+            }
+        }
+        public UInt16 PaperNum 
+        {
+            get
+            {
+                UInt16 count = 0;
+                foreach (var player in _allPlayers.Values)
+                {
+                    if (player.PlayerType == PlayerType.Paper)
+                        count++;
+                }
+
+                return count;
+            }
+        }
         public UInt16 PlayersCount { get => (ushort)_players.Count; }
         
         private Dictionary<int, Player> _players = new Dictionary<int, Player>();
@@ -86,8 +125,10 @@ namespace Server.Game
                 return;
             }
             
-            Console.WriteLine($"GameTimer : {GameTime}");
-            if (GameTime < 61)
+            // Console.WriteLine($"GameTimer : {GameTime}");
+            Console.WriteLine($"RockNum : {RockNum}, ScissorsNum : {ScissorsNum}, PaperNum : {PaperNum}");
+
+            if (GameTime < 11)
             {
                 GameTime++;
                 PushAfter(1000, GameTimer);
@@ -154,20 +195,6 @@ namespace Server.Game
                     int selectedIndex = Array.IndexOf(counts, minCount);
                     replacePlayer.PlayerType = (PlayerType)selectedIndex + 1;
                 }
-            }
-            
-            // 종족 수 업데이트
-            switch (replacePlayer.PlayerType)
-            {
-                case PlayerType.Paper:
-                    PaperNum++;
-                    break;
-                case PlayerType.Scissors:
-                    ScissorsNum++;
-                    break;
-                case PlayerType.Rock:
-                    RockNum++;
-                    break;
             }
 
             foreach (var aiPlayer in _aiPlayers.Values)
@@ -387,12 +414,32 @@ namespace Server.Game
         public void StopGame()
         {
             S_StopGame stopPacket = new S_StopGame();
+            stopPacket.Winner = FindWinner(); // 승리 종족 넣어주기
             Broadcast(stopPacket);
             
             S_LeaveGame leavePacket = new S_LeaveGame();
             Broadcast(leavePacket);
             
             ClearRoom();
+        }
+
+        private int FindWinner()
+        {
+            // 종족별 인원수를 배열에 담습니다.
+            int[] counts = { RockNum, ScissorsNum, PaperNum };
+
+            // 종족 중 인원이 가장 많은 종족을 찾습니다.
+            int maxCount = counts.Max();
+            
+            // 세 종족의 인원 수가 모두 같은지 확인합니다.
+            bool allEqual = counts.Distinct().Count() == 1;
+            
+            // 모든 종족의 수가 같다면
+            if (allEqual)
+                return 0; // draw!
+            
+            // 수가 가장 많은 종족을 선택합니다.
+            return Array.IndexOf(counts, maxCount) + 1;
         }
         
         public void EnterGame(GameObject gameObject)
@@ -546,6 +593,13 @@ namespace Server.Game
             S_Spawn spawnPacket = new S_Spawn();
             spawnPacket.Objects.Add(gameObject.Info);
             Broadcast(spawnPacket);
+            
+            // 한 종족이 12명이 되면 최종 승리하고 게임을 종료한다.
+            if (RockNum == 12 || ScissorsNum == 12 || PaperNum == 12)
+            {
+                Push(StopGame); // 게임 종료 패킷 전송
+                GameTime = 1;
+            }
         }
         
         public void DeSpawnGame(int objectId)

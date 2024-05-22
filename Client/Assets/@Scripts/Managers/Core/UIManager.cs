@@ -33,6 +33,9 @@ public class UIManager
 
     public T ShowPopup<T>() where T : UI_Base
     {
+        if (_uiStack.Count > 0)
+            return null;
+        
         string key = typeof(T).Name + ".prefab";
         T ui = Managers.Resource.Instantiate(key, pooling: false).GetOrAddComponent<T>();
         _uiStack.Push(ui);

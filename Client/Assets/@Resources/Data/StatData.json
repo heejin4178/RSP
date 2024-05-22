@@ -2,7 +2,7 @@
     "stats": [
         {
             "level": "1",
-            "maxHp": "2",
+            "maxHp": "3",
             "attack": "1",
             "speed": "7.0",
             "totalExp": "0"

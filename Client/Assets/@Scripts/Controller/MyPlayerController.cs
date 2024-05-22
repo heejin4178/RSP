@@ -180,4 +180,14 @@ public class MyPlayerController : CreatureController
             _updated = false;
         }
     }
+
+    public override int Hp
+    {
+        get { return Stat.Hp; }
+        set
+        {
+            Stat.Hp = value;
+            Managers.Game.Hp = value;
+        }
+    }
 }

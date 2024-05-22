@@ -34,7 +34,7 @@ public class UI_NickNameText : UI_Base
     private void Update()
     {
         Transform parent = transform.parent;
-        transform.position = parent.position + Vector3.up * 3.5f;
+        transform.position = parent.position + Vector3.up * 4.5f;
         transform.rotation = Camera.main.transform.rotation;
     }
 }

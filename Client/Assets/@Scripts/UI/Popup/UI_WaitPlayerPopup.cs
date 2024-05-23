@@ -56,6 +56,7 @@ public class UI_WaitPlayerPopup : UI_Base
         
         // 기존 변수 초기화
         Managers.Game.PlayerCount = 0;
+        Managers.Game.NickName = null;
         Managers.Object.Clear();
         
         // 웨이팅 화면 닫기

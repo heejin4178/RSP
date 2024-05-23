@@ -19,8 +19,7 @@ public class UI_ProjectileJoystick : MonoBehaviour, IPointerClickHandler, IPoint
     void Start()
     {
         _joystickRadius = _background.gameObject.GetComponent<RectTransform>().sizeDelta.y / 2;
-                
-        Managers.Game.OnCoolTimeValueChanged -= OnCoolTimeValueChanged;
+        
         Managers.Game.OnCoolTimeValueChanged += OnCoolTimeValueChanged;
         
         _coolTimeBar.fillAmount = 0;

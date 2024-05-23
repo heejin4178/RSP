@@ -88,6 +88,7 @@ public class UI_GameResultPopup : UI_Base
         Managers.Game.KillCount = 0;
         Managers.Game.DeathCount = 0;
         Managers.Game.Winner = 0;
+        Managers.Game.NickName = null;
 
         // 게임 결과 팝업 닫기
         Managers.UI.ClosePopup();

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Managers : MonoBehaviour
@@ -75,5 +76,11 @@ public class Managers : MonoBehaviour
         // Scene.Clear();
         // UI.Clear();
         // Pool.Clear();
+    }
+
+    private void OnApplicationQuit()
+    {
+        Debug.Log("Game Quit!!");
+        Network.Disconnect();
     }
 }

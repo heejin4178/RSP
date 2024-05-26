@@ -49,6 +49,21 @@ public class UI_WaitPlayerPopup : UI_Base
 
     void OnClickCancelButton()
     {
+        if (Managers.Object.MyPlayer == null)
+        {
+            if (Managers.UI.GetSceneUI<UI_ToastMsgPopup>() != null)
+            {
+                Managers.UI.GetSceneUI<UI_ToastMsgPopup>().SetToastMessage("Network failure occurs");
+            
+                // 웨이팅 화면 닫기
+                Managers.UI.CloseSceneUI();
+            
+                // 로그인 씬으로 이동
+                Managers.Scene.LoadScene(Define.Scene.Login);
+            }
+            return;
+        }
+        
         // 게임 룸 접속 종료 패킷 보내기
         C_LeaveGame leave = new C_LeaveGame();
         leave.ObjectId = Managers.Object.MyPlayer.Id;

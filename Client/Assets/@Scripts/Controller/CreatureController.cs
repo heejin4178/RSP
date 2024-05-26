@@ -112,10 +112,10 @@ public class CreatureController : BaseController
     
     IEnumerator CoStartHitReact(float time)
     {
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(0.3f);
         PlayFlashEffect(Color.red);
         _animator.Play("REACT");
-        yield return new WaitForSeconds(time);
+        yield return new WaitForSeconds(0.2f);
         StopFlashEffect();
         State = CreatureState.Idle;
         _coHitCoolTime = null;
@@ -124,7 +124,7 @@ public class CreatureController : BaseController
     IEnumerator CoStartStunReact(float time)
     {
         PlayFlashEffect(Color.blue);
-        _animator.Play("REACT"); // TODO : 스턴 애니메이션 변경하기
+        _animator.Play("STUN");
         yield return new WaitForSeconds(time);
         StopFlashEffect();
         State = CreatureState.Idle;

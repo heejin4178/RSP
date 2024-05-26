@@ -24,8 +24,12 @@ public class NetworkManager
 		
 		// DNS (Domain Name System)
 		// IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
-		IPAddress ipAddr = IPAddress.Parse("192.168.45.71");
+		IPAddress ipAddr = IPAddress.Parse("192.168.45.142");
 		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+		
+		// IPHostEntry hostEntry = Dns.GetHostEntry("ec2-52-79-185-94.ap-northeast-2.compute.amazonaws.com");
+		// IPAddress ipAddr = hostEntry.AddressList[0]; // 첫 번째 IP 주소 사용
+		// IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 		Connector connector = new Connector();
 
@@ -56,6 +60,9 @@ public class NetworkManager
 
 	public void Disconnect()
 	{
+		if (_session == null)
+			return;
+		
 		_session.Disconnect();
 	}
 

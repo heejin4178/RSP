@@ -3,7 +3,7 @@
     "m_SelectedProcess": {
         "deviceId": "R3CTC05C3WZ",
         "name": "com.DefaultCompany.Client",
-        "processId": 11276,
+        "processId": 20633,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -11,37 +11,37 @@
         {
             "deviceId": "R3CTC05C3WZ",
             "name": "com.DefaultCompany.Client",
-            "processId": 9122,
+            "processId": 19622,
             "exited": true
         },
         {
             "deviceId": "R3CTC05C3WZ",
             "name": "com.DefaultCompany.Client",
-            "processId": 11095,
+            "processId": 20272,
             "exited": true
         },
         {
             "deviceId": "R3CTC05C3WZ",
             "name": "com.DefaultCompany.Client",
-            "processId": 12024,
+            "processId": 21353,
             "exited": true
         },
         {
             "deviceId": "R3CTC05C3WZ",
             "name": "com.DefaultCompany.Client",
-            "processId": 13071,
+            "processId": 21675,
+            "exited": true
+        },
+        {
+            "deviceId": "R3CTC05C3WZ",
+            "name": "com.sec.android.app.launcher",
+            "processId": 4241,
             "exited": false
         },
         {
             "deviceId": "R3CTC05C3WZ",
             "name": "com.DefaultCompany.Client",
-            "processId": 13905,
-            "exited": false
-        },
-        {
-            "deviceId": "R3CTC05C3WZ",
-            "name": "com.DefaultCompany.Client",
-            "processId": 11276,
+            "processId": 20633,
             "exited": false
         }
     ],

@@ -35,9 +35,9 @@ public class UI_ToastMsgPopup : UI_Base
         return true;
     }
 
-    public void SetInfo()
+    public void SetToastMessage(string msg)
     {
-        RefreshUI();
+        GetText((int)Texts.ToastMsgText).text = msg;
     }
 
     void RefreshUI()

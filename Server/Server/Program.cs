@@ -34,15 +34,19 @@ namespace Server
 
 		static void Main(string[] args)
 		{
-			ConfigManager.LoadConfig();
+			// ConfigManager.LoadConfig();
 			DataManager.LoadData();
 			
 			// GameRoom room = RoomManager.Instance.Add(1);
 			// TickRoom(room, 50);
 			
 			// DNS (Domain Name System)
-			IPAddress ipAddr = IPAddress.Parse("192.168.45.71");
+			IPAddress ipAddr = IPAddress.Parse("192.168.45.142");
 			IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+			
+			// IPHostEntry hostEntry = Dns.GetHostEntry("ec2-52-79-185-94.ap-northeast-2.compute.amazonaws.com");
+			// IPAddress ipAddr = hostEntry.AddressList[0]; // 첫 번째 IP 주소 사용
+			// IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 			_listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
 			Console.WriteLine("Listening...");

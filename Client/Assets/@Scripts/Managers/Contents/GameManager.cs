@@ -52,7 +52,7 @@ public class GameManager
         set
         {
             _attackKeyPressed = value;
-            onAttackPointerUp.Invoke();
+            onAttackPointerUp?.Invoke();
         }
     }
     public SkillType SkillType { get; set; }
@@ -65,7 +65,7 @@ public class GameManager
         set
         {
             _coolTimeValue = value;
-            OnCoolTimeValueChanged.Invoke(value);
+            OnCoolTimeValueChanged?.Invoke(value);
         }
     }
 
@@ -80,7 +80,7 @@ public class GameManager
         set
         {
             _moveDir = value;
-            onMoveDirChanged.Invoke(_moveDir);
+            onMoveDirChanged?.Invoke(_moveDir);
         }
     }
     
@@ -93,7 +93,7 @@ public class GameManager
         set
         {
             _moveKeyPressed = value;
-            onMovePointerUp.Invoke();
+            onMovePointerUp?.Invoke();
         }
     }
     

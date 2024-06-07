@@ -29,6 +29,12 @@ public class MultiplayerBuildAndRun
         PerformMacOsBuild(4);
     }
     
+    [MenuItem("Tools/Run Multiplayer/8 Players")]
+    static void PerformMacOsBuild8()
+    {
+        PerformMacOsBuild(8);
+    }
+    
     static void PerformMacOsBuild(int playerCount)
     {
         EditorUserBuildSettings.SwitchActiveBuildTarget(

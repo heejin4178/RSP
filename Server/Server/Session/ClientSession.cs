@@ -34,23 +34,6 @@ namespace Server
 		public override void OnConnected(EndPoint endPoint)
 		{
 			Console.WriteLine($"OnConnected : {endPoint}");
-			
-			// // 아직 플레이전인 룸을 찾고, 없다면 새로운 룸을 생성한다.
-			// GameRoom room = RoomManager.Instance.FindCanPlayRoom();
-			//
-			// // 룸이 없다면 새로생성 & AI 플레이어 넣어줌
-			// if (room == null)
-			// {
-			// 	room = RoomManager.Instance.Add();
-			// 	Program.TickRoom(room, 50);
-			// }
-			// // 룸이 있고 내가 첫번째 입장 유저라면, AI 플레이어 넣어줌
-			// else if (room.PlayersCount == 0)
-			// {
-			// 	room.Push(room.Init);
-			// }
-			//
-			// Console.WriteLine($"FindRoom OnConnected : {room.RoomId}");
 
 			MyPlayer = ObjectManager.Instance.Add<Player>();
 			{
@@ -62,15 +45,6 @@ namespace Server
 
 				MyPlayer.Session = this;
 			}
-
-			// room.Push(room.EnterGame, MyPlayer);
-			//
-			// if (room.RunTimer == false)
-			// 	room.Push(room.ResetWaitTime);
-			//
-			// // 내가 첫번째로 들어가는 거라면, 웨이팅 타이머 실행
-			// if (room.PlayersCount == 0)
-			// 	room.Push(room.WaitPlayerTimer);
 		}
 
 		public override void OnRecvPacket(ArraySegment<byte> buffer)

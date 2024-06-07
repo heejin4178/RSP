@@ -148,21 +148,6 @@ public class ObjectManager
         _objects.TryGetValue(id, out go);
         return go;
     }
-
-    // public GameObject FindCreature(Vector3Int cellPos)
-    // {
-    //     foreach (GameObject obj in _objects.Values)
-    //     {
-    //         CreatureController cc = obj.GetComponent<CreatureController>();
-    //         if (cc == null)
-    //             continue;
-    //
-    //         if (cc.CellPos == cellPos)
-    //             return obj;
-    //     }
-    //
-    //     return null;
-    // }
     
     public GameObject Find(Func<GameObject, bool> condition)
     {

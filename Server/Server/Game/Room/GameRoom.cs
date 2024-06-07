@@ -373,6 +373,8 @@ namespace Server.Game
             _aiPlayers.Clear();
             _allPlayers.Clear();
             _projectiles.Clear();
+            
+            RoomManager.Instance.Remove(RoomId);
         }
         
         /// <summary>
@@ -733,10 +735,6 @@ namespace Server.Game
                 return;
 
             ObjectInfo info = aiPlayer.Info;
-            // if (info.PosInfo.State != CreatureState.Idle)
-            //     return;
-            
-            // TODO : 스킬 사용 가능 여부 체크
             
             info.PosInfo.State = CreatureState.Skill;
             

@@ -22,14 +22,9 @@ public class NetworkManager
 		if (_session.SessionSocket != null)
 			return false;
 		
-		// DNS (Domain Name System)
-		// IPAddress ipAddr = IPAddress.Parse("127.0.0.1");
-		IPAddress ipAddr = IPAddress.Parse("192.168.45.142");
+		IPHostEntry hostEntry = Dns.GetHostEntry("rspgame.net");
+		IPAddress ipAddr = hostEntry.AddressList[0]; // 첫 번째 IP 주소 사용
 		IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
-		
-		// IPHostEntry hostEntry = Dns.GetHostEntry("ec2-52-79-185-94.ap-northeast-2.compute.amazonaws.com");
-		// IPAddress ipAddr = hostEntry.AddressList[0]; // 첫 번째 IP 주소 사용
-		// IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
 
 		Connector connector = new Connector();
 

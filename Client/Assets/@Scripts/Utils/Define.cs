@@ -1,12 +1,6 @@
 
 public class Define
 {
-    public enum WorldObject
-    {
-        Unknown,
-        Player,
-        Monster,
-    }
     public enum Layer
     {
         Moster = 8,
@@ -20,12 +14,6 @@ public class Define
         Lobby,
         Game,
     }
-    public enum Sound
-    {
-        Bgm,
-        Effect,
-        MaxCount
-    }
     
     public enum UIEvent
     {
@@ -37,13 +25,7 @@ public class Define
         Drag,
         EndDrag,
     }
-    public enum MouseEvent
-    {
-        Press,
-        PointerDown,
-        PointerUp,
-        Click,
-    }
+    
     public enum CameraMode
     {
         QuarterView,

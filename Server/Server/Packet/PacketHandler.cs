@@ -15,8 +15,6 @@ class PacketHandler
 		C_Move movePacket = packet as C_Move;
 		ClientSession clientSession = session as ClientSession;
 
-		// Console.WriteLine($"C_Move({movePacket.PosInfo.PosX}, {movePacket.PosInfo.PosZ})");
-
 		Player player = clientSession.MyPlayer;
 		if (player == null)
 			return;
@@ -87,7 +85,7 @@ class PacketHandler
 		Console.WriteLine($"FindRoom C_EnterGameHandler : {room.RoomId}");
 
 		player.Info.Name = enterPacket.Name;
-		room.Push(room.EnterGame, player);
+		room.Push(room.EnterGame, player); // 룸에 플레이어를 접속 시킴
 		
 		if (room.RunTimer == false)
 			room.Push(room.ResetWaitTime);

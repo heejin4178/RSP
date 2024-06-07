@@ -139,7 +139,6 @@ message StatInfo {
   int32 maxHp = 3;
   int32 attack = 4;
   float speed = 5;
-  int32 totalExp = 6;
 }
 
 message SkillInfo {

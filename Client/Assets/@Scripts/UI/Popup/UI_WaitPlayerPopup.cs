@@ -43,8 +43,6 @@ public class UI_WaitPlayerPopup : UI_Base
     {
         if (_init == false)
             return;
-
-        // 정보 취합
     }
 
     void OnClickCancelButton()

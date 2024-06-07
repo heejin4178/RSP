@@ -14,7 +14,7 @@ public class GameScene : BaseScene
     protected override void Init()
     {
         SceneType = Define.Scene.Game;
-        // Screen.SetResolution(1024, 768, false);
+        Screen.SetResolution(1920, 1080, false);
         StartLoaded();
         
         // 재접속 패킷을 보냄

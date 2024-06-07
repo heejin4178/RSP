@@ -56,58 +56,73 @@ class PacketHandler
 				Managers.Game.PlayerCount--;
 		}
 	}
-
-	public static void S_MoveHandler(PacketSession session, IMessage packet)
-	{
-		S_Move movePacket = packet as S_Move;
-
-		GameObject go = Managers.Object.FindById(movePacket.ObjectId);
-		if (go == null)
-			return;
-		
-		if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
-			return;
-
-		BaseController bc = go.GetComponent<BaseController>();
-		if (bc == null)
-			return;
-
-		bc.PosInfo = movePacket.PosInfo;
-	}
 	
-	public static void S_SkillHandler(PacketSession session, IMessage packet)
-	{
-		S_Skill skillPacket = packet as S_Skill;
+public static void S_MoveHandler(PacketSession session, IMessage packet)
+{
+    // 패킷을 S_Move로 캐스팅하여 이동 패킷 객체를 가져옵니다.
+    S_Move movePacket = packet as S_Move;
 
-		GameObject go = Managers.Object.FindById(skillPacket.ObjectId);
-		if (go == null)
-			return;
-		
-		if (Managers.Object.MyPlayer.Id == skillPacket.ObjectId)
-			return;
+    // 이동 대상의 게임 오브젝트를 찾습니다.
+    GameObject go = Managers.Object.FindById(movePacket.ObjectId);
+    if (go == null)
+        return;
 
-		PlayerController pc = go.GetComponent<PlayerController>();
-		if (pc != null)
-		{
-			pc.State = CreatureState.Skill;
-		}
-	}
-	
-	public static void S_ChangeHpHandler(PacketSession session, IMessage packet)
-	{
-		S_ChangeHp changePacket = packet as S_ChangeHp;
+    // 이동 대상이 자신의 플레이어인 경우 처리를 종료합니다.
+    if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
+        return;
 
-		GameObject go = Managers.Object.FindById(changePacket.ObjectId);
-		if (go == null)
-			return;
+    // 이동 대상의 BaseController 컴포넌트를 가져옵니다.
+    BaseController bc = go.GetComponent<BaseController>();
+    if (bc == null)
+        return;
 
-		CreatureController cc = go.GetComponent<CreatureController>();
-		if (cc != null)
-		{
-			cc.State = CreatureState.Hit;
-			cc.Hp = changePacket.Hp;
-		}
-	}
+    // 이동 패킷에서 받은 위치 정보를 이동 대상의 위치 정보로 설정합니다.
+    bc.PosInfo = movePacket.PosInfo;
+}
+
+public static void S_SkillHandler(PacketSession session, IMessage packet)
+{
+    // 패킷을 S_Skill로 캐스팅하여 스킬 패킷 객체를 가져옵니다.
+    S_Skill skillPacket = packet as S_Skill;
+
+    // 스킬을 사용하는 대상의 게임 오브젝트를 찾습니다.
+    GameObject go = Managers.Object.FindById(skillPacket.ObjectId);
+    if (go == null)
+        return;
+
+    // 스킬을 사용하는 대상이 자신의 플레이어인 경우 처리를 종료합니다.
+    if (Managers.Object.MyPlayer.Id == skillPacket.ObjectId)
+        return;
+
+    // 스킬을 사용하는 대상의 PlayerController 컴포넌트를 가져옵니다.
+    PlayerController pc = go.GetComponent<PlayerController>();
+    if (pc != null)
+    {
+        // 대상의 상태를 스킬 상태로 변경합니다.
+        pc.State = CreatureState.Skill;
+    }
+}
+
+public static void S_ChangeHpHandler(PacketSession session, IMessage packet)
+{
+    // 패킷을 S_ChangeHp로 캐스팅하여 체력 변화 패킷 객체를 가져옵니다.
+    S_ChangeHp changePacket = packet as S_ChangeHp;
+
+    // 체력 변화 대상의 게임 오브젝트를 찾습니다.
+    GameObject go = Managers.Object.FindById(changePacket.ObjectId);
+    if (go == null)
+        return; // 대상이 존재하지 않으면 처리 종료합니다.
+
+    // 체력 변화 대상의 CreatureController 컴포넌트를 가져옵니다.
+    CreatureController cc = go.GetComponent<CreatureController>();
+    if (cc != null)
+    {
+        // 대상의 상태를 피격 상태로 변경하고 체력을 업데이트합니다.
+        cc.State = CreatureState.Hit;
+        cc.Hp = changePacket.Hp;
+    }
+}
+
 	
 	public static void S_DieHandler(PacketSession session, IMessage packet)
 	{

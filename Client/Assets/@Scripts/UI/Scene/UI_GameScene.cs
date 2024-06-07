@@ -7,12 +7,6 @@ using Utils;
 
 public class UI_GameScene : UI_Base
 {
-    // 여기에 필요한 UI
-    // 3분 타이머 -> 완료
-    // 현재 각 종족별 인원 수
-    // 나의 킬수
-    
-
     private TextMeshProUGUI _gameTimerDisplay;
     private TextMeshProUGUI _countDownDisplay;
     
